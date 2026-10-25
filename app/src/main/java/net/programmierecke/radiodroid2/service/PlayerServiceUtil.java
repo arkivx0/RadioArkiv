@@ -285,11 +285,23 @@ public class PlayerServiceUtil {
         if (fromUrl.trim().equals("")) return;
         Resources r = mainContext.getResources();
         final float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 70, r.getDisplayMetrics());
-        final Drawable stationImagePlaceholder = AppCompatResources.getDrawable(holder.getContext(), R.drawable.ic_photo_24dp);
+        final Drawable stationImagePlaceholder = net.programmierecke.radiodroid2.station.StationIcons.placeholder(holder.getContext());
+        // placeholder undimmed; the loaded logo is dimmed in dark themes (Settings -> Appearance)
+        holder.clearColorFilter();
+        final Callback dimOnLoad = new Callback() {
+            @Override
+            public void onSuccess() {
+                net.programmierecke.radiodroid2.station.StationIcons.applyLogoFilter(holder);
+            }
+
+            @Override
+            public void onError(Exception e) { }
+        };
 
         Callback imageLoadCallback = new Callback() {
             @Override
             public void onSuccess() {
+                net.programmierecke.radiodroid2.station.StationIcons.applyLogoFilter(holder);
             }
 
             @Override
@@ -299,7 +311,7 @@ public class PlayerServiceUtil {
                         .placeholder(stationImagePlaceholder)
                         .resize((int) px, 0)
                         .networkPolicy(NetworkPolicy.NO_CACHE)
-                        .into(holder);
+                        .into(holder, dimOnLoad);
             }
         };
 

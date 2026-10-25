@@ -93,6 +93,8 @@
     <string name="searchpreference_search">Search…</string>
     <string name="settings_appearance">Appearance</string>
     <string name="settings_theme_selection_title">Theme</string>
+    <string name="settings_dim_station_logos">Dim station logos in dark themes</string>
+    <string name="settings_dim_station_logos_desc">Slightly darkens station logos in lists and the player bar so bright logos do not glare</string>
     <string name="theme_light">Light</string>
     <string name="theme_dark">Dark</string>
     <string name="settings_circular_icons">Use circular icons</string>

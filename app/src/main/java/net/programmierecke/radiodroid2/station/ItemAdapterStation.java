@@ -274,7 +274,7 @@ public class ItemAdapterStation
                 setupIcon(useCircularIcons, holder.imageViewIcon, holder.transparentImageView);
                 PlayerServiceUtil.getStationIcon(holder.imageViewIcon, station.IconUrl);
             } else {
-                holder.imageViewIcon.setImageDrawable(stationImagePlaceholder);
+                StationIcons.showPlaceholder(holder.imageViewIcon);
             }
 
             if (prefs.getBoolean("compact_style", false))

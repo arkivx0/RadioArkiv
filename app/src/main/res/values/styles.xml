@@ -7,6 +7,8 @@
     </style>
 
     <style name="MyMaterialTheme.Base" parent="Theme.MaterialComponents.Light">
+        <item name="stationIconBackground">#FFFFFFFF</item>
+        <item name="stationIconPlaceholderTint">#FF9E9E9E</item>
         <item name="actionBarPopupTheme">@style/ThemeOverlay.AppCompat.Light</item>
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
@@ -53,6 +55,8 @@
     </style>
 
     <style name="MyMaterialTheme.Base.Dark" parent="Theme.MaterialComponents">
+        <item name="stationIconBackground">#FF2A2A2A</item>
+        <item name="stationIconPlaceholderTint">#FF8A8A8A</item>
         <item name="actionBarPopupTheme">@style/ThemeOverlay.AppCompat.Dark</item>
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>

@@ -20,6 +20,12 @@
             android:summary="%s"/>
 
         <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="dim_station_logos"
+            android:title="@string/settings_dim_station_logos"
+            android:summary="@string/settings_dim_station_logos_desc" />
+
+        <CheckBoxPreference
             android:defaultValue="false"
             android:key="circular_icons"
             android:title="@string/settings_circular_icons" />

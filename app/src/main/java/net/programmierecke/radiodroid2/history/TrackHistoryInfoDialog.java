@@ -59,7 +59,7 @@ public class TrackHistoryInfoDialog extends BottomSheetDialogFragment {
         final float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 200, resource.getDisplayMetrics());
         Picasso.get()
                 .load(historyEntry.artUrl)
-                .placeholder(AppCompatResources.getDrawable(getContext(), R.drawable.ic_photo_24dp))
+                .placeholder(net.programmierecke.radiodroid2.station.StationIcons.placeholder(requireContext()))
                 .resize((int) px, 0)
                 .into(imageViewTrackArt);
 

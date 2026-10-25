@@ -263,6 +263,7 @@ public class FragmentPlayerSmall extends Fragment {
             PlayerServiceUtil.getStationIcon(imageViewIcon, station.IconUrl);
         } else {
             imageViewIcon.setVisibility(View.VISIBLE);
+            imageViewIcon.clearColorFilter();
             imageViewIcon.setImageResource(R.drawable.ic_launcher);
         }
 

@@ -83,7 +83,7 @@ public class ItemAdapterIconOnlyStation extends ItemAdapaterContextMenuStation i
             setupIcon(useCircularIcons, holder.imageViewIcon, holder.transparentImageView);
             PlayerServiceUtil.getStationIcon(holder.imageViewIcon, station.IconUrl);
         } else {
-            holder.imageViewIcon.setImageDrawable(stationImagePlaceholder);
+            StationIcons.showPlaceholder(holder.imageViewIcon);
         }
 
         TypedValue tv = new TypedValue();

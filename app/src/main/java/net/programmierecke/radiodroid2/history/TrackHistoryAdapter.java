@@ -77,7 +77,7 @@ public class TrackHistoryAdapter extends PagedListAdapter<TrackHistoryEntry, Tra
                 //setupIcon(useCircularIcons, holder.imageViewIcon, holder.transparentImageView);
                 PlayerServiceUtil.getStationIcon(holder.imageViewStationIcon, historyEntry.stationIconUrl);
             } else {
-                holder.imageViewStationIcon.setImageDrawable(stationImagePlaceholder);
+                net.programmierecke.radiodroid2.station.StationIcons.showPlaceholder(holder.imageViewStationIcon);
             }
         } else {
             holder.imageViewStationIcon.setVisibility(View.GONE);

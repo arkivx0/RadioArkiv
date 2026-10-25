@@ -14,6 +14,8 @@
         <item name="android:itemBackground">@color/skin_omarchy_bg</item>
         <item name="android:colorBackground">@color/skin_omarchy_bg</item>
         <item name="colorSurface">@color/skin_omarchy_surface</item>
+        <item name="stationIconBackground">@color/skin_omarchy_surface</item>
+        <item name="stationIconPlaceholderTint">@color/skin_omarchy_muted</item>
         <item name="colorOnSurface">@color/skin_omarchy_fg</item>
         <item name="colorPrimary">@color/skin_omarchy_bar</item>
         <item name="colorPrimaryDark">@color/skin_omarchy_bar</item>
@@ -81,6 +83,8 @@
         <item name="android:itemBackground">@color/skin_amoled_bg</item>
         <item name="android:colorBackground">@color/skin_amoled_bg</item>
         <item name="colorSurface">@color/skin_amoled_surface</item>
+        <item name="stationIconBackground">@color/skin_amoled_surface</item>
+        <item name="stationIconPlaceholderTint">@color/skin_amoled_muted</item>
         <item name="colorOnSurface">@color/skin_amoled_fg</item>
         <item name="colorPrimary">@color/skin_amoled_bar</item>
         <item name="colorPrimaryDark">@color/skin_amoled_bar</item>
@@ -148,6 +152,8 @@
         <item name="android:itemBackground">@color/skin_gruvbox_bg</item>
         <item name="android:colorBackground">@color/skin_gruvbox_bg</item>
         <item name="colorSurface">@color/skin_gruvbox_surface</item>
+        <item name="stationIconBackground">@color/skin_gruvbox_surface</item>
+        <item name="stationIconPlaceholderTint">@color/skin_gruvbox_muted</item>
         <item name="colorOnSurface">@color/skin_gruvbox_fg</item>
         <item name="colorPrimary">@color/skin_gruvbox_bar</item>
         <item name="colorPrimaryDark">@color/skin_gruvbox_bar</item>
@@ -215,6 +221,8 @@
         <item name="android:itemBackground">@color/skin_catppuccin_bg</item>
         <item name="android:colorBackground">@color/skin_catppuccin_bg</item>
         <item name="colorSurface">@color/skin_catppuccin_surface</item>
+        <item name="stationIconBackground">@color/skin_catppuccin_surface</item>
+        <item name="stationIconPlaceholderTint">@color/skin_catppuccin_muted</item>
         <item name="colorOnSurface">@color/skin_catppuccin_fg</item>
         <item name="colorPrimary">@color/skin_catppuccin_bar</item>
         <item name="colorPrimaryDark">@color/skin_catppuccin_bar</item>
@@ -282,6 +290,8 @@
         <item name="android:itemBackground">@color/skin_nord_bg</item>
         <item name="android:colorBackground">@color/skin_nord_bg</item>
         <item name="colorSurface">@color/skin_nord_surface</item>
+        <item name="stationIconBackground">@color/skin_nord_surface</item>
+        <item name="stationIconPlaceholderTint">@color/skin_nord_muted</item>
         <item name="colorOnSurface">@color/skin_nord_fg</item>
         <item name="colorPrimary">@color/skin_nord_bar</item>
         <item name="colorPrimaryDark">@color/skin_nord_bar</item>
@@ -349,6 +359,8 @@
         <item name="android:itemBackground">@color/skin_dracula_bg</item>
         <item name="android:colorBackground">@color/skin_dracula_bg</item>
         <item name="colorSurface">@color/skin_dracula_surface</item>
+        <item name="stationIconBackground">@color/skin_dracula_surface</item>
+        <item name="stationIconPlaceholderTint">@color/skin_dracula_muted</item>
         <item name="colorOnSurface">@color/skin_dracula_fg</item>
         <item name="colorPrimary">@color/skin_dracula_bar</item>
         <item name="colorPrimaryDark">@color/skin_dracula_bar</item>
@@ -416,6 +428,8 @@
         <item name="android:itemBackground">@color/skin_enclave_bg</item>
         <item name="android:colorBackground">@color/skin_enclave_bg</item>
         <item name="colorSurface">@color/skin_enclave_surface</item>
+        <item name="stationIconBackground">@color/skin_enclave_surface</item>
+        <item name="stationIconPlaceholderTint">@color/skin_enclave_muted</item>
         <item name="colorOnSurface">@color/skin_enclave_fg</item>
         <item name="colorPrimary">@color/skin_enclave_bar</item>
         <item name="colorPrimaryDark">@color/skin_enclave_bar</item>
@@ -484,6 +498,8 @@
         <item name="android:itemBackground">@color/skin_terminal_bg</item>
         <item name="android:colorBackground">@color/skin_terminal_bg</item>
         <item name="colorSurface">@color/skin_terminal_surface</item>
+        <item name="stationIconBackground">@color/skin_terminal_surface</item>
+        <item name="stationIconPlaceholderTint">@color/skin_terminal_muted</item>
         <item name="colorOnSurface">@color/skin_terminal_fg</item>
         <item name="colorPrimary">@color/skin_terminal_bar</item>
         <item name="colorPrimaryDark">@color/skin_terminal_bar</item>
@@ -552,6 +568,8 @@
         <item name="android:itemBackground">@color/skin_vintage_bg</item>
         <item name="android:colorBackground">@color/skin_vintage_bg</item>
         <item name="colorSurface">@color/skin_vintage_surface</item>
+        <item name="stationIconBackground">@color/skin_vintage_surface</item>
+        <item name="stationIconPlaceholderTint">@color/skin_vintage_muted</item>
         <item name="colorOnSurface">@color/skin_vintage_fg</item>
         <item name="colorPrimary">@color/skin_vintage_bar</item>
         <item name="colorPrimaryDark">@color/skin_vintage_bar</item>
