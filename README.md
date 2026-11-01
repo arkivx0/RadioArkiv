@@ -71,8 +71,8 @@ Download `RadioArkiv.apk` from [Releases](../../releases). APKs are signed with 
 
 - Signing certificate SHA-256:
   `291e1bccf7a19a6d0542a0a4c1af02aef42d305216534d798a85dc4187254861`
-- APK SHA-256 for 1.0.4:
-  `35d92a13cefd0c5519e967b6470dd2db99f5bb70ca03d1abd1226ba97a054ab7`
+- APK SHA-256 for 1.0.6:
+  `72311a241c4d49f045ff35fdc30363db7265a4ee20b1c7645b06c84c16e25082`
 
 Verify before installing:
 ```
