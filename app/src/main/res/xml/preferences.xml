@@ -291,6 +291,14 @@
         <Preference
             android:key="settings_proxy"
             android:title="@string/settings_proxy" />
+        <Preference
+            android:key="stations_backup_export"
+            android:title="@string/settings_backup_export"
+            android:summary="@string/settings_backup_export_summary" />
+        <Preference
+            android:key="stations_backup_import"
+            android:title="@string/settings_backup_import"
+            android:summary="@string/settings_backup_import_summary" />
     </PreferenceScreen>
 
     <PreferenceScreen android:title="@string/settings_other"

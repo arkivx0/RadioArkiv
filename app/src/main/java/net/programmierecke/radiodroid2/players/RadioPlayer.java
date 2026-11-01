@@ -201,6 +201,26 @@ public class RadioPlayer implements PlayerWrapper.PlayListener, Recordable {
         }
     }
 
+    /**
+     * Fully tears down the current stream and starts it again from the station URL,
+     * like a manual stop + play, without going through the Idle state.
+     */
+    public final void restart(final DataRadioStation station) {
+        cancelStationLinkRetrieval();
+        playerThreadHandler.post(() -> {
+            try {
+                currentPlayer.pause();
+            } catch (Exception e) {
+                Log.w(TAG, "teardown before restart failed", e);
+            }
+        });
+        if (station.playableUrl != null && !station.playableUrl.isEmpty()) {
+            play(station.playableUrl, station.Name, false);
+        } else {
+            play(station, false);
+        }
+    }
+
     public final void pause() {
         cancelStationLinkRetrieval();
 

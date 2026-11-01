@@ -33,6 +33,30 @@ import static net.programmierecke.radiodroid2.ActivityMain.FRAGMENT_FROM_BACKSTA
 
 public class FragmentSettings extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener, IApplicationSelected, PreferenceFragmentCompat.OnPreferenceStartScreenCallback  {
 
+    private final androidx.activity.result.ActivityResultLauncher<String> backupExportLauncher =
+            registerForActivityResult(new androidx.activity.result.contract.ActivityResultContracts.CreateDocument(), uri -> {
+                if (uri == null) return;
+                try {
+                    OfflineStationCache.exportBackup(requireContext(), uri);
+                    Toast.makeText(requireContext(), R.string.backup_export_done, Toast.LENGTH_SHORT).show();
+                } catch (Exception e) {
+                    Log.e("SETTINGS", "backup export failed", e);
+                    Toast.makeText(requireContext(), R.string.backup_failed, Toast.LENGTH_LONG).show();
+                }
+            });
+
+    private final androidx.activity.result.ActivityResultLauncher<String[]> backupImportLauncher =
+            registerForActivityResult(new androidx.activity.result.contract.ActivityResultContracts.OpenDocument(), uri -> {
+                if (uri == null) return;
+                try {
+                    int added = OfflineStationCache.importBackup(requireContext(), uri);
+                    Toast.makeText(requireContext(), getString(R.string.backup_import_done, added), Toast.LENGTH_SHORT).show();
+                } catch (Exception e) {
+                    Log.e("SETTINGS", "backup import failed", e);
+                    Toast.makeText(requireContext(), R.string.backup_failed, Toast.LENGTH_LONG).show();
+                }
+            });
+
     public static FragmentSettings openNewSettingsSubFragment(ActivityMain activity, String key) {
         FragmentSettings f = new FragmentSettings();
         Bundle args = new Bundle();
@@ -140,6 +164,15 @@ public class FragmentSettings extends PreferenceFragmentCompat implements Shared
                     proxySettingsDialog.show(getFragmentManager(), "");
                     return false;
                 }
+            });
+
+            findPreference("stations_backup_export").setOnPreferenceClickListener(preference -> {
+                backupExportLauncher.launch("radio-arkiv-stations-backup.json");
+                return true;
+            });
+            findPreference("stations_backup_import").setOnPreferenceClickListener(preference -> {
+                backupImportLauncher.launch(new String[]{"application/json", "text/plain", "application/octet-stream"});
+                return true;
             });
 
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {

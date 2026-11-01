@@ -14,6 +14,14 @@ import java.util.Vector;
 public class RadioBrowserServerManager {
     static String currentServer = null;
     static String[] serverList = null;
+    static final String[] KNOWN_MIRRORS = {
+            "de1.api.radio-browser.info",
+            "de2.api.radio-browser.info",
+            "fi1.api.radio-browser.info",
+            "nl1.api.radio-browser.info",
+            "at1.api.radio-browser.info",
+            "all.api.radio-browser.info"
+    };
 
     /**
      * Blocking: do dns request do get a list of all available servers
@@ -38,10 +46,11 @@ public class RadioBrowserServerManager {
         } catch (UnknownHostException e) {
             e.printStackTrace();
         }
-        if (listResult.size() == 0){
-            // should we inform people that their internet provider is not able to do reverse lookups? (= is shit)
-            Log.w("DNS", "Fallback to de1.api.radio-browser.info because dns call did not work.");
-            listResult.add("de1.api.radio-browser.info");
+        // always append the known public mirrors so they are tried when DNS fails or listed servers are down
+        for (String mirror : KNOWN_MIRRORS) {
+            if (!listResult.contains(mirror)) {
+                listResult.add(mirror);
+            }
         }
         Log.d("DNS", "doDnsServerListing() Found servers: " + listResult.size());
         return listResult.toArray(new String[0]);

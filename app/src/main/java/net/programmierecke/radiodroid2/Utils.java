@@ -197,36 +197,37 @@ public class Utils {
     }
 
     public static String downloadFeedRelative(OkHttpClient httpClient, Context ctx, String theRelativeUri, boolean forceUpdate, Map<String, String> dictParams) {
-        // try current server for download
-        String currentServer = RadioBrowserServerManager.getCurrentServer();
-        if (currentServer == null) {
-            return null;
-        }
-
-        String endpoint = RadioBrowserServerManager.constructEndpoint(currentServer, theRelativeUri);
-        String result = downloadFeed(httpClient, ctx, endpoint, forceUpdate, dictParams);
+        String offlineKey = OfflineStationCache.key(theRelativeUri, dictParams);
+        String result = downloadFeedRelativeOnline(httpClient, ctx, theRelativeUri, forceUpdate, dictParams);
         if (result != null) {
+            OfflineStationCache.put(ctx, offlineKey, result);
             return result;
         }
+        // all servers failed: fall back to the last successful response stored on the device
+        return OfflineStationCache.get(ctx, offlineKey);
+    }
 
-        // get a list of all servers
-        String[] serverList = RadioBrowserServerManager.getServerList(false);
-
-        // try all other servers for download
-        for (String newServer : serverList) {
-            if (newServer.equals(currentServer)) {
-                continue;
-            }
-
-            endpoint = RadioBrowserServerManager.constructEndpoint(newServer, theRelativeUri);
-            result = downloadFeed(httpClient, ctx, endpoint, forceUpdate, dictParams);
+    private static String downloadFeedRelativeOnline(OkHttpClient httpClient, Context ctx, String theRelativeUri, boolean forceUpdate, Map<String, String> dictParams) {
+        String currentServer = RadioBrowserServerManager.getCurrentServer();
+        String result;
+        if (currentServer != null) {
+            result = downloadFeed(httpClient, ctx, RadioBrowserServerManager.constructEndpoint(currentServer, theRelativeUri), forceUpdate, dictParams);
             if (result != null) {
-                // set the working server as new current server
-                RadioBrowserServerManager.setCurrentServer(newServer);
                 return result;
             }
         }
 
+        // try all other servers (DNS discovered plus known mirrors)
+        for (String newServer : RadioBrowserServerManager.getServerList(false)) {
+            if (newServer.equals(currentServer)) {
+                continue;
+            }
+            result = downloadFeed(httpClient, ctx, RadioBrowserServerManager.constructEndpoint(newServer, theRelativeUri), forceUpdate, dictParams);
+            if (result != null) {
+                RadioBrowserServerManager.setCurrentServer(newServer);
+                return result;
+            }
+        }
         return null;
     }
 

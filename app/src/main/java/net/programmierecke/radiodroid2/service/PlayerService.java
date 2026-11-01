@@ -381,7 +381,7 @@ public class PlayerService extends JobIntentService implements RadioPlayer.Playe
                             if (pauseReason == PauseReason.FOCUS_LOSS_TRANSIENT) {
                                 try {
                                     enableMediaSession();
-                                    resume();
+                                    resumeAfterFocusGain();
                                 } catch (Exception e) {
                                     Log.e(TAG, "resume after focus gain failed", e);
                                 }
@@ -680,6 +680,7 @@ public class PlayerService extends JobIntentService implements RadioPlayer.Playe
         }
 
         this.pauseReason = pauseReason;
+        cancelFocusResumeWatchdog();
 
         forceStopAudioWarning();
 
@@ -732,6 +733,70 @@ public class PlayerService extends JobIntentService implements RadioPlayer.Playe
         }
     }
 
+    private static final long FOCUS_RESUME_CHECK_MS = 6000;
+    private static final int FOCUS_RESUME_MAX_RETRIES = 2;
+    private int focusResumeAttempt = 0;
+    private DataRadioStation focusResumeStation = null;
+
+    private final Runnable focusResumeWatchdog = new Runnable() {
+        @Override
+        public void run() {
+            if (focusResumeStation == null || pauseReason != PauseReason.NONE
+                    || focusResumeStation != currentStation) {
+                cancelFocusResumeWatchdog();
+                return;
+            }
+            if (radioPlayer.getPlayState() == PlayState.Playing) {
+                if (BuildConfig.DEBUG) Log.d(TAG, "resume after focus gain: playing");
+                cancelFocusResumeWatchdog();
+                return;
+            }
+            if (focusResumeAttempt >= FOCUS_RESUME_MAX_RETRIES) {
+                Log.w(TAG, "resume after focus gain: giving up after " + focusResumeAttempt + " restarts");
+                cancelFocusResumeWatchdog();
+                return;
+            }
+            focusResumeAttempt++;
+            Log.w(TAG, "resume after focus gain stalled (" + radioPlayer.getPlayState() + "), restarting stream, attempt " + focusResumeAttempt);
+            restartStreamForResume();
+        }
+    };
+
+    private void cancelFocusResumeWatchdog() {
+        focusResumeStation = null;
+        focusResumeAttempt = 0;
+        if (handler != null) handler.removeCallbacks(focusResumeWatchdog);
+    }
+
+    private void restartStreamForResume() {
+        if (acquireAudioFocus() != AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
+            cancelFocusResumeWatchdog();
+            return;
+        }
+        enableMediaSession();
+        acquireWakeLockAndWifiLock();
+        liveInfo = new StreamLiveInfo(null);
+        streamInfo = null;
+        radioPlayer.restart(focusResumeStation);
+        handler.removeCallbacks(focusResumeWatchdog);
+        handler.postDelayed(focusResumeWatchdog, FOCUS_RESUME_CHECK_MS);
+    }
+
+    /** Resume after a transient focus loss (e.g. phone call) with a fresh stream and a stall watchdog. */
+    private void resumeAfterFocusGain() {
+        DataRadioStation station = currentStation;
+        if (station == null || radioPlayer.isPlaying() || station.isLocalFile()) {
+            resume();
+            return;
+        }
+        forceStopAudioWarning();
+        this.pauseReason = PauseReason.NONE;
+        cancelFocusResumeWatchdog();
+        focusResumeStation = station;
+        // the old connection is usually dead after a call, so start from a clean stream right away
+        restartStreamForResume();
+    }
+
     public void resume() {
         if (BuildConfig.DEBUG) Log.d(TAG, "resuming playback.");
 
@@ -774,6 +839,7 @@ public class PlayerService extends JobIntentService implements RadioPlayer.Playe
 
     public void stop() {
         if (BuildConfig.DEBUG) Log.d(TAG, "stopping playback.");
+        cancelFocusResumeWatchdog();
         if (scheduledStop != null) {
             handler.removeCallbacks(scheduledStop);
             scheduledStop = null;
@@ -1415,7 +1481,13 @@ public class PlayerService extends JobIntentService implements RadioPlayer.Playe
                         }
 
                         if (state == PlayState.Idle) {
-                            stop();
+                            if (focusResumeStation != null && focusResumeAttempt < FOCUS_RESUME_MAX_RETRIES) {
+                                // stream failed while resuming after a call: restart soon instead of stopping
+                                handler.removeCallbacks(focusResumeWatchdog);
+                                handler.postDelayed(focusResumeWatchdog, 1000);
+                            } else {
+                                stop();
+                            }
                         }
 
                         break;
@@ -1447,6 +1519,10 @@ public class PlayerService extends JobIntentService implements RadioPlayer.Playe
     public void onPlayerError(int messageId) {
         handler.post(() -> {
             PlayerService.this.lastErrorFromPlayer = messageId;
+            if (focusResumeStation != null) {
+                handler.removeCallbacks(focusResumeWatchdog);
+                handler.postDelayed(focusResumeWatchdog, 1000);
+            }
 
             toastOnUi(messageId);
             updateNotification();

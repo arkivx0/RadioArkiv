@@ -164,6 +164,13 @@
     <string name="settings_retry_timeout">Retry timeout</string>
     <string name="settings_retry_delay">Reconnection delay</string>
     <string name="settings_proxy">Proxy</string>
+    <string name="settings_backup_export">Export stations backup</string>
+    <string name="settings_backup_export_summary">Save favourites, history and offline station lists to a JSON file</string>
+    <string name="settings_backup_import">Import stations backup</string>
+    <string name="settings_backup_import_summary">Restore favourites, history and offline station lists from a JSON file</string>
+    <string name="backup_export_done">Stations backup exported</string>
+    <string name="backup_import_done">Stations backup imported (%d new favourites)</string>
+    <string name="backup_failed">Stations backup failed</string>
     <string name="settings_proxy_login">Username</string>
     <string name="settings_proxy_password">Password</string>
     <string name="settings_proxy_action_test">Test</string>
