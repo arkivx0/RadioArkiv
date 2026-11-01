@@ -204,7 +204,26 @@ public class Utils {
             return result;
         }
         // all servers failed: fall back to the last successful response stored on the device
-        return OfflineStationCache.get(ctx, offlineKey);
+        String offline = OfflineStationCache.get(ctx, offlineKey);
+        if (offline != null) {
+            showOfflineHint(ctx, OfflineStationCache.lastServedOfflineTime);
+        }
+        return offline;
+    }
+
+    private static long lastOfflineHintAt = 0;
+
+    private static void showOfflineHint(final Context ctx, final long cachedAt) {
+        if (ctx == null) return;
+        long now = System.currentTimeMillis();
+        if (now - lastOfflineHintAt < 60_000) return;
+        lastOfflineHintAt = now;
+        final Context app = ctx.getApplicationContext();
+        new android.os.Handler(android.os.Looper.getMainLooper()).post(() -> {
+            String when = android.text.format.DateUtils.getRelativeTimeSpanString(cachedAt, System.currentTimeMillis(),
+                    android.text.format.DateUtils.MINUTE_IN_MILLIS).toString();
+            android.widget.Toast.makeText(app, app.getString(R.string.offline_copy_hint, when), android.widget.Toast.LENGTH_LONG).show();
+        });
     }
 
     private static String downloadFeedRelativeOnline(OkHttpClient httpClient, Context ctx, String theRelativeUri, boolean forceUpdate, Map<String, String> dictParams) {

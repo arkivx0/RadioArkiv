@@ -171,6 +171,9 @@
     <string name="backup_export_done">Stations backup exported</string>
     <string name="backup_import_done">Stations backup imported (%d new favourites)</string>
     <string name="backup_failed">Stations backup failed</string>
+    <string name="backup_invalid">Not a valid stations backup (or larger than 5 MB)</string>
+    <string name="backup_import_confirm">The backup contains %1$d favourites, %2$d history entries and %3$d saved station lists. Missing favourites and history entries will be added; nothing is removed. Import?</string>
+    <string name="offline_copy_hint">Servers unreachable, showing offline copy from %s</string>
     <string name="settings_proxy_login">Username</string>
     <string name="settings_proxy_password">Password</string>
     <string name="settings_proxy_action_test">Test</string>

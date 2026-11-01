@@ -17,9 +17,6 @@ public class RadioBrowserServerManager {
     static final String[] KNOWN_MIRRORS = {
             "de1.api.radio-browser.info",
             "de2.api.radio-browser.info",
-            "fi1.api.radio-browser.info",
-            "nl1.api.radio-browser.info",
-            "at1.api.radio-browser.info",
             "all.api.radio-browser.info"
     };
 

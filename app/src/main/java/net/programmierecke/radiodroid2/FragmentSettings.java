@@ -33,29 +33,56 @@ import static net.programmierecke.radiodroid2.ActivityMain.FRAGMENT_FROM_BACKSTA
 
 public class FragmentSettings extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener, IApplicationSelected, PreferenceFragmentCompat.OnPreferenceStartScreenCallback  {
 
+    private static final java.util.concurrent.ExecutorService backupExecutor =
+            java.util.concurrent.Executors.newSingleThreadExecutor();
+
+    private void backupToast(final Context ctx, final String msg) {
+        new android.os.Handler(android.os.Looper.getMainLooper()).post(() ->
+                Toast.makeText(ctx, msg, Toast.LENGTH_LONG).show());
+    }
+
     private final androidx.activity.result.ActivityResultLauncher<String> backupExportLauncher =
             registerForActivityResult(new androidx.activity.result.contract.ActivityResultContracts.CreateDocument(), uri -> {
                 if (uri == null) return;
-                try {
-                    OfflineStationCache.exportBackup(requireContext(), uri);
-                    Toast.makeText(requireContext(), R.string.backup_export_done, Toast.LENGTH_SHORT).show();
-                } catch (Exception e) {
-                    Log.e("SETTINGS", "backup export failed", e);
-                    Toast.makeText(requireContext(), R.string.backup_failed, Toast.LENGTH_LONG).show();
-                }
+                final Context app = requireContext().getApplicationContext();
+                backupExecutor.execute(() -> {
+                    try {
+                        OfflineStationCache.exportBackup(app, uri);
+                        backupToast(app, app.getString(R.string.backup_export_done));
+                    } catch (Throwable e) {
+                        Log.e("SETTINGS", "backup export failed", e);
+                        backupToast(app, app.getString(R.string.backup_failed));
+                    }
+                });
             });
 
     private final androidx.activity.result.ActivityResultLauncher<String[]> backupImportLauncher =
             registerForActivityResult(new androidx.activity.result.contract.ActivityResultContracts.OpenDocument(), uri -> {
                 if (uri == null) return;
-                try {
-                    int added = OfflineStationCache.importBackup(requireContext(), uri);
-                    Toast.makeText(requireContext(), getString(R.string.backup_import_done, added), Toast.LENGTH_SHORT).show();
-                } catch (Exception e) {
-                    Log.e("SETTINGS", "backup import failed", e);
-                    Toast.makeText(requireContext(), R.string.backup_failed, Toast.LENGTH_LONG).show();
-                }
+                final Context app = requireContext().getApplicationContext();
+                backupExecutor.execute(() -> {
+                    try {
+                        final OfflineStationCache.Backup backup = OfflineStationCache.readBackup(app, uri);
+                        new android.os.Handler(android.os.Looper.getMainLooper()).post(() -> confirmImport(backup));
+                    } catch (Throwable e) {
+                        Log.e("SETTINGS", "backup import failed", e);
+                        backupToast(app, app.getString(R.string.backup_invalid));
+                    }
+                });
             });
+
+    private void confirmImport(final OfflineStationCache.Backup backup) {
+        if (!isAdded()) return;
+        new androidx.appcompat.app.AlertDialog.Builder(requireContext())
+                .setTitle(R.string.settings_backup_import)
+                .setMessage(getString(R.string.backup_import_confirm, backup.favouriteCount, backup.historyCount, backup.cacheCount))
+                .setNegativeButton(android.R.string.cancel, null)
+                .setPositiveButton(android.R.string.ok, (d, w) -> {
+                    int added = OfflineStationCache.applyBackup(requireContext(), backup);
+                    Toast.makeText(requireContext(), getString(R.string.backup_import_done, added), Toast.LENGTH_SHORT).show();
+                })
+                .show();
+    }
 
     public static FragmentSettings openNewSettingsSubFragment(ActivityMain activity, String key) {
         FragmentSettings f = new FragmentSettings();

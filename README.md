@@ -3,7 +3,7 @@
 **Radio Arkiv** (formerly "Radio") is an unofficial fork of [RadioDroid](https://github.com/segler-alex/RadioDroid)
 by segler-alex and contributors, an Android internet-radio app built on the free
 [Radio Browser](https://www.radio-browser.info) station directory.
-Current version: **1.0.4** (based on RadioDroid 0.86).
+Current version: **1.0.6** (based on RadioDroid 0.86).
 It installs alongside upstream (`applicationId io.github.arkivx0.radio`).
 All credit for the app itself goes to the RadioDroid project. Licensed GPL-3.0 like upstream.
 
@@ -16,6 +16,12 @@ All credit for the app itself goes to the RadioDroid project. Licensed GPL-3.0 l
 <p align="center"><em>Stations shown are a random selection picked from the public directory for screenshots and testing, not an endorsement.</em></p>
 
 ## What this fork adds
+- **Offline station backup** (new in 1.0.5/1.0.6): station lists and browse results are kept on the device, so
+  the app keeps working when the Radio Browser servers are unreachable (other mirrors are tried first, and a
+  short hint shows when an offline copy is used). Favourites, history and recordings never depend on the servers.
+- **Export / import stations backup** (Settings → Connectivity): save favourites, history and station lists to a
+  JSON file and restore them later; import asks for confirmation and only adds what is missing.
+- **Reliable resume after phone calls**: if playback stalls after a call, the stream is restarted automatically.
 - **Incoming-call crash fix**: audio-focus loss (e.g. a call) no longer kills the service on Android 12+;
   playback pauses cleanly and resumes after the call.
 - **11 skins** with swatch previews in Settings → Appearance → Theme: Omarchy / Tokyo Night (default), AMOLED Black,

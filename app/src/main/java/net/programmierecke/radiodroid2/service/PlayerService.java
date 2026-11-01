@@ -526,6 +526,7 @@ public class PlayerService extends JobIntentService implements RadioPlayer.Playe
     @Override
     public void onDestroy() {
         if (BuildConfig.DEBUG) Log.d(TAG, "PlayService should be destroyed.");
+        cancelFocusResumeWatchdog();
 
         stop();
 
@@ -733,10 +734,16 @@ public class PlayerService extends JobIntentService implements RadioPlayer.Playe
         }
     }
 
-    private static final long FOCUS_RESUME_CHECK_MS = 6000;
+    private static final long FOCUS_RESUME_CHECK_MS = 8000;
+    // while the player is still buffering/preparing we keep waiting up to this long per attempt
+    private static final long FOCUS_RESUME_BUFFERING_GRACE_MS = 25000;
+    // Idle/error events this soon after our own teardown belong to the old stream and are ignored
+    private static final long FOCUS_RESUME_TEARDOWN_IGNORE_MS = 1500;
     private static final int FOCUS_RESUME_MAX_RETRIES = 2;
     private int focusResumeAttempt = 0;
     private DataRadioStation focusResumeStation = null;
+    private long focusResumeStartedAt = 0;
+    private boolean focusResumeFailed = false;
 
     private final Runnable focusResumeWatchdog = new Runnable() {
         @Override
@@ -746,25 +753,43 @@ public class PlayerService extends JobIntentService implements RadioPlayer.Playe
                 cancelFocusResumeWatchdog();
                 return;
             }
-            if (radioPlayer.getPlayState() == PlayState.Playing) {
-                if (BuildConfig.DEBUG) Log.d(TAG, "resume after focus gain: playing");
+            PlayState st = radioPlayer.getPlayState();
+            if (st == PlayState.Playing) {
                 cancelFocusResumeWatchdog();
+                return;
+            }
+            long elapsed = System.currentTimeMillis() - focusResumeStartedAt;
+            if (st == PlayState.PrePlaying && !focusResumeFailed && elapsed < FOCUS_RESUME_BUFFERING_GRACE_MS) {
+                // still connecting/buffering: that is progress, give it more time
+                handler.postDelayed(this, 2000);
                 return;
             }
             if (focusResumeAttempt >= FOCUS_RESUME_MAX_RETRIES) {
-                Log.w(TAG, "resume after focus gain: giving up after " + focusResumeAttempt + " restarts");
+                Log.w(TAG, "resume after focus gain failed, stopping");
                 cancelFocusResumeWatchdog();
+                stop();
                 return;
             }
             focusResumeAttempt++;
-            Log.w(TAG, "resume after focus gain stalled (" + radioPlayer.getPlayState() + "), restarting stream, attempt " + focusResumeAttempt);
             restartStreamForResume();
         }
     };
 
+    private boolean isOwnTeardownEvent() {
+        return focusResumeStation != null
+                && System.currentTimeMillis() - focusResumeStartedAt < FOCUS_RESUME_TEARDOWN_IGNORE_MS;
+    }
+
+    private void onFocusResumeFailure() {
+        focusResumeFailed = true;
+        handler.removeCallbacks(focusResumeWatchdog);
+        handler.postDelayed(focusResumeWatchdog, 1000);
+    }
+
     private void cancelFocusResumeWatchdog() {
         focusResumeStation = null;
         focusResumeAttempt = 0;
+        focusResumeFailed = false;
         if (handler != null) handler.removeCallbacks(focusResumeWatchdog);
     }
 
@@ -777,6 +802,8 @@ public class PlayerService extends JobIntentService implements RadioPlayer.Playe
         acquireWakeLockAndWifiLock();
         liveInfo = new StreamLiveInfo(null);
         streamInfo = null;
+        focusResumeStartedAt = System.currentTimeMillis();
+        focusResumeFailed = false;
         radioPlayer.restart(focusResumeStation);
         handler.removeCallbacks(focusResumeWatchdog);
         handler.postDelayed(focusResumeWatchdog, FOCUS_RESUME_CHECK_MS);
@@ -1481,10 +1508,11 @@ public class PlayerService extends JobIntentService implements RadioPlayer.Playe
                         }
 
                         if (state == PlayState.Idle) {
-                            if (focusResumeStation != null && focusResumeAttempt < FOCUS_RESUME_MAX_RETRIES) {
+                            if (isOwnTeardownEvent()) {
+                                // Idle from tearing down the old stream, the new one is starting
+                            } else if (focusResumeStation != null && focusResumeAttempt < FOCUS_RESUME_MAX_RETRIES) {
                                 // stream failed while resuming after a call: restart soon instead of stopping
-                                handler.removeCallbacks(focusResumeWatchdog);
-                                handler.postDelayed(focusResumeWatchdog, 1000);
+                                onFocusResumeFailure();
                             } else {
                                 stop();
                             }
@@ -1519,9 +1547,8 @@ public class PlayerService extends JobIntentService implements RadioPlayer.Playe
     public void onPlayerError(int messageId) {
         handler.post(() -> {
             PlayerService.this.lastErrorFromPlayer = messageId;
-            if (focusResumeStation != null) {
-                handler.removeCallbacks(focusResumeWatchdog);
-                handler.postDelayed(focusResumeWatchdog, 1000);
+            if (focusResumeStation != null && !isOwnTeardownEvent()) {
+                onFocusResumeFailure();
             }
 
             toastOnUi(messageId);
