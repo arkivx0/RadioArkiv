@@ -8,7 +8,7 @@ import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.IBinder;
 import android.os.RemoteException;
-import android.util.Log;
+import net.programmierecke.radiodroid2.utils.AppLog;
 import android.util.TypedValue;
 import android.widget.ImageView;
 
@@ -72,7 +72,7 @@ public class PlayerServiceUtil {
         if (mainContext != null) {
             try {
                 if (BuildConfig.DEBUG) {
-                    Log.d("PlayerServiceUtil", "PlayerServiceUtil: shutdownService");
+                    AppLog.d("PlayerServiceUtil", "PlayerServiceUtil: shutdownService");
                 }
 
                 Intent anIntent = new Intent(mainContext, PlayerService.class);
@@ -82,7 +82,7 @@ public class PlayerServiceUtil {
                 serviceConnection = null;
             } catch (Exception e) {
                 if (BuildConfig.DEBUG) {
-                    Log.d("PlayerServiceUtil", "PlayerServiceUtil: shutdownService E001:" + e.getMessage());
+                    AppLog.d("PlayerServiceUtil", "PlayerServiceUtil: shutdownService E001:" + e.getMessage());
                 }
             }
         }
@@ -94,7 +94,7 @@ public class PlayerServiceUtil {
         return new ServiceConnection() {
             public void onServiceConnected(ComponentName className, IBinder binder) {
                 if (BuildConfig.DEBUG) {
-                    Log.d("PLAYER", "Service came online");
+                    AppLog.d("PLAYER", "Service came online");
                 }
                 itsPlayerService = IPlayerService.Stub.asInterface(binder);
 
@@ -105,7 +105,7 @@ public class PlayerServiceUtil {
 
             public void onServiceDisconnected(ComponentName className) {
                 if (BuildConfig.DEBUG) {
-                    Log.d("PLAYER", "Service offline");
+                    AppLog.d("PLAYER", "Service offline");
                 }
                 unBind(mainContext);
                 itsPlayerService = null;
@@ -142,7 +142,7 @@ public class PlayerServiceUtil {
             try {
                 itsPlayerService.Stop();
             } catch (RemoteException e) {
-                Log.e("", "" + e);
+                AppLog.e("", "" + e);
             }
         }
     }
@@ -157,7 +157,7 @@ public class PlayerServiceUtil {
                 itsPlayerService.SetStation(station);
                 itsPlayerService.Play(false);
             } catch (RemoteException e) {
-                Log.e("", "" + e);
+                AppLog.e("", "" + e);
             }
         }
     }
@@ -167,7 +167,7 @@ public class PlayerServiceUtil {
             try {
                 itsPlayerService.SetStation(station);
             } catch (RemoteException e) {
-                Log.e("", "" + e);
+                AppLog.e("", "" + e);
             }
         }
     }
@@ -177,7 +177,7 @@ public class PlayerServiceUtil {
             try {
                 itsPlayerService.SkipToNext();
             } catch (RemoteException e) {
-                Log.e("", "" + e);
+                AppLog.e("", "" + e);
             }
         }
     }
@@ -187,7 +187,7 @@ public class PlayerServiceUtil {
             try {
                 itsPlayerService.SkipToPrevious();
             } catch (RemoteException e) {
-                Log.e("", "" + e);
+                AppLog.e("", "" + e);
             }
         }
     }
@@ -197,7 +197,7 @@ public class PlayerServiceUtil {
             try {
                 itsPlayerService.Pause(pauseReason);
             } catch (RemoteException e) {
-                Log.e("", "" + e);
+                AppLog.e("", "" + e);
             }
         }
     }
@@ -207,7 +207,7 @@ public class PlayerServiceUtil {
             try {
                 itsPlayerService.Resume();
             } catch (RemoteException e) {
-                Log.e("", "" + e);
+                AppLog.e("", "" + e);
             }
         }
     }
@@ -217,7 +217,7 @@ public class PlayerServiceUtil {
             try {
                 itsPlayerService.clearTimer();
             } catch (RemoteException e) {
-                Log.e("", "" + e);
+                AppLog.e("", "" + e);
             }
         }
     }
@@ -227,7 +227,7 @@ public class PlayerServiceUtil {
             try {
                 itsPlayerService.addTimer(secondsAdd);
             } catch (RemoteException e) {
-                Log.e("", "" + e);
+                AppLog.e("", "" + e);
             }
         }
     }
@@ -237,7 +237,7 @@ public class PlayerServiceUtil {
             try {
                 return itsPlayerService.getTimerSeconds();
             } catch (RemoteException e) {
-                Log.e("", "" + e);
+                AppLog.e("", "" + e);
             }
         }
         return 0;
@@ -249,7 +249,7 @@ public class PlayerServiceUtil {
             try {
                 return itsPlayerService.getMetadataLive();
             } catch (RemoteException e) {
-                Log.e("", "" + e);
+                AppLog.e("", "" + e);
             }
         }
         return new StreamLiveInfo(null);
@@ -260,7 +260,7 @@ public class PlayerServiceUtil {
             try {
                 return itsPlayerService.getCurrentStationID();
             } catch (RemoteException e) {
-                Log.e("", "" + e);
+                AppLog.e("", "" + e);
             }
         }
         return null;
@@ -271,7 +271,7 @@ public class PlayerServiceUtil {
             try {
                 return itsPlayerService.getCurrentStation();
             } catch (RemoteException e) {
-                Log.e("", "" + e);
+                AppLog.e("", "" + e);
             }
         }
         return null;
@@ -328,7 +328,7 @@ public class PlayerServiceUtil {
             try {
                 return itsPlayerService.getShoutcastInfo();
             } catch (RemoteException e) {
-                Log.e("", "" + e);
+                AppLog.e("", "" + e);
             }
         }
         return null;
@@ -339,7 +339,7 @@ public class PlayerServiceUtil {
             try {
                 itsPlayerService.startRecording();
             } catch (RemoteException e) {
-                Log.e("", "" + e);
+                AppLog.e("", "" + e);
             }
         }
     }
@@ -349,20 +349,20 @@ public class PlayerServiceUtil {
             try {
                 itsPlayerService.stopRecording();
             } catch (RemoteException e) {
-                Log.e("", "" + e);
+                AppLog.e("", "" + e);
             }
         }
     }
 
     public static void shiftBy(long deltaMs) {
         if (itsPlayerService != null) {
-            try { itsPlayerService.shiftBy(deltaMs); } catch (RemoteException e) { Log.e("", "" + e); }
+            try { itsPlayerService.shiftBy(deltaMs); } catch (RemoteException e) { AppLog.e("", "" + e); }
         }
     }
 
     public static long getBehindLiveMs() {
         if (itsPlayerService != null) {
-            try { return itsPlayerService.getBehindLiveMs(); } catch (RemoteException e) { Log.e("", "" + e); }
+            try { return itsPlayerService.getBehindLiveMs(); } catch (RemoteException e) { AppLog.e("", "" + e); }
         }
         return 0;
     }
@@ -372,7 +372,7 @@ public class PlayerServiceUtil {
             try {
                 return itsPlayerService.isRecording();
             } catch (RemoteException e) {
-                Log.e("", "" + e);
+                AppLog.e("", "" + e);
             }
         }
         return false;
@@ -383,7 +383,7 @@ public class PlayerServiceUtil {
             try {
                 return itsPlayerService.getCurrentRecordFileName();
             } catch (RemoteException e) {
-                Log.e("", "" + e);
+                AppLog.e("", "" + e);
             }
         }
         return null;
@@ -394,7 +394,7 @@ public class PlayerServiceUtil {
             try {
                 return itsPlayerService.getIsHls();
             } catch (RemoteException e) {
-                Log.e("", "" + e);
+                AppLog.e("", "" + e);
             }
         }
         return false;
@@ -405,7 +405,7 @@ public class PlayerServiceUtil {
             try {
                 return itsPlayerService.getTransferredBytes();
             } catch (RemoteException e) {
-                Log.e("", "" + e);
+                AppLog.e("", "" + e);
             }
         }
         return 0;
@@ -416,7 +416,7 @@ public class PlayerServiceUtil {
             try {
                 return itsPlayerService.getBufferedSeconds();
             } catch (RemoteException e) {
-                Log.e("", "" + e);
+                AppLog.e("", "" + e);
             }
         }
         return 0;
@@ -427,7 +427,7 @@ public class PlayerServiceUtil {
             try {
                 return itsPlayerService.getLastPlayStartTime();
             } catch (RemoteException e) {
-                Log.e("", "" + e);
+                AppLog.e("", "" + e);
             }
         }
         return 0;
@@ -438,7 +438,7 @@ public class PlayerServiceUtil {
             try {
                 return itsPlayerService.getPauseReason();
             } catch (RemoteException e) {
-                Log.e("", "" + e);
+                AppLog.e("", "" + e);
             }
         }
         return PauseReason.NONE;
@@ -449,7 +449,7 @@ public class PlayerServiceUtil {
             try {
                 itsPlayerService.enableMPD(hostname, port);
             } catch (RemoteException e) {
-                Log.e("", "" + e);
+                AppLog.e("", "" + e);
             }
         }
     }
@@ -459,7 +459,7 @@ public class PlayerServiceUtil {
             try {
                 itsPlayerService.disableMPD();
             } catch (RemoteException e) {
-                Log.e("", "" + e);
+                AppLog.e("", "" + e);
             }
         }
     }
@@ -469,7 +469,7 @@ public class PlayerServiceUtil {
             try {
                 itsPlayerService.warnAboutMeteredConnection(playerType);
             } catch (RemoteException e) {
-                Log.e("", "" + e);
+                AppLog.e("", "" + e);
             }
         }
     }
@@ -479,7 +479,7 @@ public class PlayerServiceUtil {
             try {
                 return itsPlayerService.isNotificationActive();
             } catch (RemoteException e) {
-                Log.e("", "" + e);
+                AppLog.e("", "" + e);
             }
         }
         return false;

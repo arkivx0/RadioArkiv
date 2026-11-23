@@ -2,7 +2,7 @@ package net.programmierecke.radiodroid2.station;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
+import net.programmierecke.radiodroid2.utils.AppLog;
 
 import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import me.xdrop.fuzzywuzzy.FuzzySearch;
 import okhttp3.OkHttpClient;
@@ -64,7 +65,29 @@ public class StationsFilter extends CustomFilter {
     private List<DataRadioStation> filteredStationsList;
     private SearchStatus lastRemoteSearchStatus = SearchStatus.SUCCESS;
 
-    private static final int MAX_NAME_SEARCH_RESULTS = 1000;
+    static final int MAX_REMOTE_SEARCH_RESULTS = 1000;
+
+    /**
+     * Cap every directory search style. Popular tags, countries and languages can
+     * return tens of thousands of stations, which used to crash the app (see #1216)
+     * the same way short name queries did (#1241).
+     */
+    static void applyRemoteResultLimit(SearchStyle searchStyle, Map<String, String> params) {
+        if (searchStyle == null || params == null) {
+            return;
+        }
+        switch (searchStyle) {
+            case ByName:
+            case ByTagExact:
+            case ByCountryCodeExact:
+            case ByLanguageExact:
+                params.put("limit", Integer.toString(MAX_REMOTE_SEARCH_RESULTS));
+                break;
+            default:
+                break;
+        }
+    }
+
 
     private SearchStyle searchStyle = SearchStyle.ByName;
 
@@ -85,13 +108,13 @@ public class StationsFilter extends CustomFilter {
     }
 
     public void setSearchStyle(SearchStyle searchStyle){
-        Log.d("FILTER","Changed search style:" + searchStyle);
+        AppLog.d("FILTER","Changed search style:" + searchStyle);
         this.searchStyle = searchStyle;
     }
 
     private @NonNull
     List<DataRadioStation> searchGlobal(final @NotNull String query) {
-        Log.d("FILTER", "searchGlobal 1:" + query);
+        AppLog.d("FILTER", "searchGlobal 1:" + query);
         RadioDroidApp radioDroidApp = (RadioDroidApp) context.getApplicationContext();
         // TODO: use http client with custom timeouts
         OkHttpClient httpClient = radioDroidApp.getHttpClient();
@@ -112,9 +135,6 @@ public class StationsFilter extends CustomFilter {
             switch (searchStyle){
                 case ByName:
                     searchUrl = "json/stations/byname/" + queryEncoded;
-                    // Short, common substrings (e.g. "rad") match tens of thousands of stations
-                    // and the app ran out of memory. Results are sorted by popularity, so cap them.
-                    p.put("limit", "" + MAX_NAME_SEARCH_RESULTS);
                     break;
                 case ByCountryCodeExact:
                     searchUrl = "json/stations/bycountrycodeexact/" + queryEncoded;
@@ -126,21 +146,23 @@ public class StationsFilter extends CustomFilter {
                     searchUrl = "json/stations/bytagexact/" + queryEncoded;
                     break;
                 default:
-                    Log.d("FILTER", "unknown search style: "+searchStyle);
+                    AppLog.d("FILTER", "unknown search style: "+searchStyle);
                     lastRemoteSearchStatus = SearchStatus.ERROR;
                     return new ArrayList<>();
             }
 
-            Log.d("FILTER", "searchGlobal 2:" + query);
+            applyRemoteResultLimit(searchStyle, p);
+
+            AppLog.d("FILTER", "searchGlobal 2:" + query);
 
             String resultString = Utils.downloadFeedRelative(httpClient, radioDroidApp, searchUrl, false, p);
             if (resultString != null) {
-                Log.d("FILTER", "searchGlobal 3a:" + query);
+                AppLog.d("FILTER", "searchGlobal 3a:" + query);
                 List<DataRadioStation> result = DataRadioStation.DecodeJson(resultString);
                 lastRemoteSearchStatus = SearchStatus.SUCCESS;
                 return result;
             }else{
-                Log.d("FILTER", "searchGlobal 3b:" + query);
+                AppLog.d("FILTER", "searchGlobal 3b:" + query);
                 lastRemoteSearchStatus = SearchStatus.ERROR;
                 return new ArrayList<>();
             }
@@ -152,32 +174,32 @@ public class StationsFilter extends CustomFilter {
     }
 
     public void clearList(){
-        Log.d("FILTER", "forced refetch");
+        AppLog.d("FILTER", "forced refetch");
         lastRemoteQuery = "";
     }
 
     @Override
     protected FilterResults performFiltering(CharSequence constraint) {
         final String query = constraint.toString().toLowerCase();
-        Log.d("FILTER", "performFiltering() " + query);
+        AppLog.d("FILTER", "performFiltering() " + query);
 
         if (searchStyle == SearchStyle.ByName && (query.isEmpty() || (query.length() < 2 && filterType == FilterType.GLOBAL))) {
-            Log.d("FILTER", "performFiltering() 2 " + query);
+            AppLog.d("FILTER", "performFiltering() 2 " + query);
             filteredStationsList = dataProvider.getOriginalStationList();
             lastRemoteQuery = "";
         } else {
-            Log.d("FILTER", "performFiltering() 3 " + query);
+            AppLog.d("FILTER", "performFiltering() 3 " + query);
             List<DataRadioStation> stationsToFilter;
 
             boolean needsFiltering = false;
 
             if (!lastRemoteQuery.isEmpty() && query.startsWith(lastRemoteQuery) && lastRemoteSearchStatus != SearchStatus.ERROR) {
-                Log.d("FILTER", "performFiltering() 3a " + query + " lastRemoteQuery=" + lastRemoteQuery);
+                AppLog.d("FILTER", "performFiltering() 3a " + query + " lastRemoteQuery=" + lastRemoteQuery);
                 // We can filter already existing list without making costly http call.
                 stationsToFilter = filteredStationsList;
                 needsFiltering = true;
             } else {
-                Log.d("FILTER", "performFiltering() 3b " + query);
+                AppLog.d("FILTER", "performFiltering() 3b " + query);
                 switch (filterType) {
 
                     case LOCAL:
@@ -195,7 +217,7 @@ public class StationsFilter extends CustomFilter {
             }
 
             if (needsFiltering) {
-                Log.d("FILTER", "performFiltering() 4a " + query);
+                AppLog.d("FILTER", "performFiltering() 4a " + query);
                 ArrayList<WeightedStation> filteredStations = new ArrayList<>();
 
                 for (DataRadioStation station : stationsToFilter) {
@@ -219,7 +241,7 @@ public class StationsFilter extends CustomFilter {
                     filteredStationsList.add(weightedStation.station);
                 }
             } else {
-                Log.d("FILTER", "performFiltering() 4b " + query);
+                AppLog.d("FILTER", "performFiltering() 4b " + query);
                 filteredStationsList = stationsToFilter;
             }
         }

@@ -3,7 +3,7 @@ package net.programmierecke.radiodroid2.recording;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Environment;
-import android.util.Log;
+import net.programmierecke.radiodroid2.utils.AppLog;
 
 import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
@@ -167,7 +167,7 @@ public class RecordingsManager {
         File folder = new File(pathRecordings);
         if (!folder.exists()) {
             if (!folder.mkdirs()) {
-                Log.e(TAG, "could not create dir:" + pathRecordings);
+                AppLog.e(TAG, "could not create dir:" + pathRecordings);
             }
         }
         return pathRecordings;
@@ -176,7 +176,7 @@ public class RecordingsManager {
     public void updateRecordingsList() {
         String path = getRecordDir();
         if (BuildConfig.DEBUG) {
-            Log.d(TAG, "Updating recordings from " + path);
+            AppLog.d(TAG, "Updating recordings from " + path);
         }
 
         savedRecordings.clear();
@@ -193,7 +193,7 @@ public class RecordingsManager {
 
             Collections.sort(savedRecordings, (o1, o2) -> Long.compare(o2.Time.getTime(), o1.Time.getTime()));
         } else {
-            Log.e(TAG, "Could not enumerate files in recordings directory");
+            AppLog.e(TAG, "Could not enumerate files in recordings directory");
         }
 
         savedRecordingsObservable.notifyObservers();

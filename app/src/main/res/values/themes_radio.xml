@@ -6,7 +6,7 @@
     <color name="skin_omarchy_surface">#24283b</color>
     <color name="skin_omarchy_fg">#c0caf5</color>
     <color name="skin_omarchy_accent">#7aa2f7</color>
-    <color name="skin_omarchy_muted">#565f89</color>
+    <color name="skin_omarchy_muted">#8c94c0</color>
     <color name="skin_omarchy_accent2">#7dcfff</color>
     <color name="skin_omarchy_danger">#f7768e</color>
     <style name="MyMaterialTheme.SkinOmarchy" parent="MyMaterialTheme.Dark">
@@ -29,6 +29,7 @@
         <item name="android:textColorPrimary">@color/skin_omarchy_fg</item>
         <item name="android:textColorSecondary">@color/skin_omarchy_muted</item>
         <item name="android:textColorHint">@color/skin_omarchy_muted</item>
+        <item name="android:textColorLink">@color/skin_omarchy_accent2</item>
         <item name="android:statusBarColor">@color/skin_omarchy_bar</item>
         <item name="android:navigationBarColor">@color/skin_omarchy_bar</item>
         <item name="android:fontFamily">monospace</item>
@@ -75,7 +76,7 @@
     <color name="skin_amoled_surface">#121212</color>
     <color name="skin_amoled_fg">#ffffff</color>
     <color name="skin_amoled_accent">#4fc3f7</color>
-    <color name="skin_amoled_muted">#8a8a8a</color>
+    <color name="skin_amoled_muted">#9e9e9e</color>
     <color name="skin_amoled_accent2">#80deea</color>
     <color name="skin_amoled_danger">#ff5252</color>
     <style name="MyMaterialTheme.SkinAmoled" parent="MyMaterialTheme.Dark">
@@ -98,6 +99,7 @@
         <item name="android:textColorPrimary">@color/skin_amoled_fg</item>
         <item name="android:textColorSecondary">@color/skin_amoled_muted</item>
         <item name="android:textColorHint">@color/skin_amoled_muted</item>
+        <item name="android:textColorLink">@color/skin_amoled_accent2</item>
         <item name="android:statusBarColor">@color/skin_amoled_bar</item>
         <item name="android:navigationBarColor">@color/skin_amoled_bar</item>
         <item name="android:fontFamily">monospace</item>
@@ -144,7 +146,7 @@
     <color name="skin_gruvbox_surface">#3c3836</color>
     <color name="skin_gruvbox_fg">#ebdbb2</color>
     <color name="skin_gruvbox_accent">#fabd2f</color>
-    <color name="skin_gruvbox_muted">#928374</color>
+    <color name="skin_gruvbox_muted">#a89984</color>
     <color name="skin_gruvbox_accent2">#8ec07c</color>
     <color name="skin_gruvbox_danger">#fb4934</color>
     <style name="MyMaterialTheme.SkinGruvbox" parent="MyMaterialTheme.Dark">
@@ -167,6 +169,7 @@
         <item name="android:textColorPrimary">@color/skin_gruvbox_fg</item>
         <item name="android:textColorSecondary">@color/skin_gruvbox_muted</item>
         <item name="android:textColorHint">@color/skin_gruvbox_muted</item>
+        <item name="android:textColorLink">@color/skin_gruvbox_accent2</item>
         <item name="android:statusBarColor">@color/skin_gruvbox_bar</item>
         <item name="android:navigationBarColor">@color/skin_gruvbox_bar</item>
         <item name="android:fontFamily">monospace</item>
@@ -213,7 +216,7 @@
     <color name="skin_catppuccin_surface">#313244</color>
     <color name="skin_catppuccin_fg">#cdd6f4</color>
     <color name="skin_catppuccin_accent">#cba6f7</color>
-    <color name="skin_catppuccin_muted">#6c7086</color>
+    <color name="skin_catppuccin_muted">#9399b2</color>
     <color name="skin_catppuccin_accent2">#89dceb</color>
     <color name="skin_catppuccin_danger">#f38ba8</color>
     <style name="MyMaterialTheme.SkinCatppuccin" parent="MyMaterialTheme.Dark">
@@ -236,6 +239,7 @@
         <item name="android:textColorPrimary">@color/skin_catppuccin_fg</item>
         <item name="android:textColorSecondary">@color/skin_catppuccin_muted</item>
         <item name="android:textColorHint">@color/skin_catppuccin_muted</item>
+        <item name="android:textColorLink">@color/skin_catppuccin_accent2</item>
         <item name="android:statusBarColor">@color/skin_catppuccin_bar</item>
         <item name="android:navigationBarColor">@color/skin_catppuccin_bar</item>
         <item name="android:fontFamily">monospace</item>
@@ -282,7 +286,7 @@
     <color name="skin_nord_surface">#3b4252</color>
     <color name="skin_nord_fg">#eceff4</color>
     <color name="skin_nord_accent">#88c0d0</color>
-    <color name="skin_nord_muted">#616e88</color>
+    <color name="skin_nord_muted">#8a96b3</color>
     <color name="skin_nord_accent2">#81a1c1</color>
     <color name="skin_nord_danger">#bf616a</color>
     <style name="MyMaterialTheme.SkinNord" parent="MyMaterialTheme.Dark">
@@ -305,6 +309,7 @@
         <item name="android:textColorPrimary">@color/skin_nord_fg</item>
         <item name="android:textColorSecondary">@color/skin_nord_muted</item>
         <item name="android:textColorHint">@color/skin_nord_muted</item>
+        <item name="android:textColorLink">@color/skin_nord_accent2</item>
         <item name="android:statusBarColor">@color/skin_nord_bar</item>
         <item name="android:navigationBarColor">@color/skin_nord_bar</item>
         <item name="android:fontFamily">monospace</item>
@@ -351,7 +356,7 @@
     <color name="skin_dracula_surface">#44475a</color>
     <color name="skin_dracula_fg">#f8f8f2</color>
     <color name="skin_dracula_accent">#bd93f9</color>
-    <color name="skin_dracula_muted">#6272a4</color>
+    <color name="skin_dracula_muted">#9aa3cf</color>
     <color name="skin_dracula_accent2">#8be9fd</color>
     <color name="skin_dracula_danger">#ff5555</color>
     <style name="MyMaterialTheme.SkinDracula" parent="MyMaterialTheme.Dark">
@@ -374,6 +379,7 @@
         <item name="android:textColorPrimary">@color/skin_dracula_fg</item>
         <item name="android:textColorSecondary">@color/skin_dracula_muted</item>
         <item name="android:textColorHint">@color/skin_dracula_muted</item>
+        <item name="android:textColorLink">@color/skin_dracula_accent2</item>
         <item name="android:statusBarColor">@color/skin_dracula_bar</item>
         <item name="android:navigationBarColor">@color/skin_dracula_bar</item>
         <item name="android:fontFamily">monospace</item>
@@ -420,7 +426,7 @@
     <color name="skin_enclave_surface">#121a2b</color>
     <color name="skin_enclave_fg">#d6e2f0</color>
     <color name="skin_enclave_accent">#5f8fd6</color>
-    <color name="skin_enclave_muted">#4a5a73</color>
+    <color name="skin_enclave_muted">#8b9bb8</color>
     <color name="skin_enclave_accent2">#5f8fd6</color>
     <color name="skin_enclave_danger">#c0392b</color>
     <style name="MyMaterialTheme.SkinEnclave" parent="MyMaterialTheme.Dark">
@@ -443,6 +449,7 @@
         <item name="android:textColorPrimary">@color/skin_enclave_fg</item>
         <item name="android:textColorSecondary">@color/skin_enclave_muted</item>
         <item name="android:textColorHint">@color/skin_enclave_muted</item>
+        <item name="android:textColorLink">@color/skin_enclave_accent2</item>
         <item name="android:statusBarColor">@color/skin_enclave_bar</item>
         <item name="android:navigationBarColor">@color/skin_enclave_bar</item>
         <item name="android:fontFamily">monospace</item>
@@ -489,7 +496,7 @@
     <color name="skin_terminal_surface">#06140a</color>
     <color name="skin_terminal_fg">#33ff66</color>
     <color name="skin_terminal_accent">#7dff9a</color>
-    <color name="skin_terminal_muted">#1a7a33</color>
+    <color name="skin_terminal_muted">#2fbf52</color>
     <color name="skin_terminal_accent2">#7dff9a</color>
     <color name="skin_terminal_danger">#ffb000</color>
     <style name="MyMaterialTheme.SkinTerminal" parent="MyMaterialTheme.Dark">
@@ -513,6 +520,7 @@
         <item name="android:textColorPrimary">@color/skin_terminal_fg</item>
         <item name="android:textColorSecondary">@color/skin_terminal_muted</item>
         <item name="android:textColorHint">@color/skin_terminal_muted</item>
+        <item name="android:textColorLink">@color/skin_terminal_accent2</item>
         <item name="android:statusBarColor">@color/skin_terminal_bar</item>
         <item name="android:navigationBarColor">@color/skin_terminal_bar</item>
         <item name="android:fontFamily">@font/vt323</item>
@@ -560,7 +568,7 @@
     <color name="skin_vintage_surface">#3b2416</color>
     <color name="skin_vintage_fg">#f1e3c6</color>
     <color name="skin_vintage_accent">#ffb347</color>
-    <color name="skin_vintage_muted">#8a6a4a</color>
+    <color name="skin_vintage_muted">#b08a62</color>
     <color name="skin_vintage_accent2">#c9a24a</color>
     <color name="skin_vintage_danger">#b5452f</color>
     <style name="MyMaterialTheme.SkinVintage" parent="MyMaterialTheme.Dark">
@@ -583,6 +591,7 @@
         <item name="android:textColorPrimary">@color/skin_vintage_fg</item>
         <item name="android:textColorSecondary">@color/skin_vintage_muted</item>
         <item name="android:textColorHint">@color/skin_vintage_muted</item>
+        <item name="android:textColorLink">@color/skin_vintage_accent2</item>
         <item name="android:statusBarColor">@color/skin_vintage_bar</item>
         <item name="android:navigationBarColor">@color/skin_vintage_bar</item>
         <item name="android:fontFamily">serif</item>

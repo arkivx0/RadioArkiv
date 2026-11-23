@@ -15,7 +15,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.DocumentsContract;
 import android.text.TextUtils;
-import android.util.Log;
+import net.programmierecke.radiodroid2.utils.AppLog;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -175,8 +175,8 @@ public class ActivityMain extends AppCompatActivity implements SearchView.OnQuer
             androidx.core.app.ActivityCompat.requestPermissions(this, new String[]{"android.permission.POST_NOTIFICATIONS"}, 4711);
         }
 
-        Log.d(TAG, "FilesDir: "+getFilesDir().getAbsolutePath());
-        Log.d(TAG, "CacheDir: "+getCacheDir().getAbsolutePath());
+        AppLog.d(TAG, "FilesDir: "+getFilesDir().getAbsolutePath());
+        AppLog.d(TAG, "CacheDir: "+getCacheDir().getAbsolutePath());
         try {
             File dir = new File(getFilesDir().getAbsolutePath());
             if (dir.isDirectory()) {
@@ -184,7 +184,7 @@ public class ActivityMain extends AppCompatActivity implements SearchView.OnQuer
                 String[] children = dir.list();
                 for (String aChildren : children) {
                     if (BuildConfig.DEBUG) {
-                        Log.d(TAG, "delete file:" + aChildren);
+                        AppLog.d(TAG, "delete file:" + aChildren);
                     }
                     try {
                         new File(dir, aChildren).delete();
@@ -465,7 +465,7 @@ public class ActivityMain extends AppCompatActivity implements SearchView.OnQuer
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
         if (BuildConfig.DEBUG) {
-            Log.d(TAG, "on request permissions result:" + requestCode);
+            AppLog.d(TAG, "on request permissions result:" + requestCode);
         }
 
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -475,7 +475,7 @@ public class ActivityMain extends AppCompatActivity implements SearchView.OnQuer
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     LoadFavourites();
                 } else {
-                    Log.w(TAG,"permission not granted -> simple load");
+                    AppLog.w(TAG,"permission not granted -> simple load");
                     LoadFavouritesSimple();
                 }
                 return;
@@ -484,7 +484,7 @@ public class ActivityMain extends AppCompatActivity implements SearchView.OnQuer
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     SaveFavourites();
                 } else {
-                    Log.w(TAG,"permission not granted -> simple save");
+                    AppLog.w(TAG,"permission not granted -> simple save");
                     SaveFavouritesSimple();
                 }
                 return;
@@ -512,7 +512,7 @@ public class ActivityMain extends AppCompatActivity implements SearchView.OnQuer
         ed.apply();
 
         if (BuildConfig.DEBUG) {
-            Log.d(TAG, "PAUSED");
+            AppLog.d(TAG, "PAUSED");
         }
 
         LocalBroadcastManager.getInstance(this).unregisterReceiver(broadcastReceiver);
@@ -604,9 +604,9 @@ public class ActivityMain extends AppCompatActivity implements SearchView.OnQuer
             }.execute();
         } else {
             final String searchTag = extras.getString(EXTRA_SEARCH_TAG);
-            Log.d("MAIN","received search request for tag 1: "+searchTag);
+            AppLog.d("MAIN","received search request for tag 1: "+searchTag);
             if (searchTag != null) {
-                Log.d("MAIN","received search request for tag 2: "+searchTag);
+                AppLog.d("MAIN","received search request for tag 2: "+searchTag);
                 Search(StationsFilter.SearchStyle.ByTagExact, searchTag);
             }
         }
@@ -617,7 +617,7 @@ public class ActivityMain extends AppCompatActivity implements SearchView.OnQuer
         super.onResume();
 
         if (BuildConfig.DEBUG) {
-            Log.d(TAG, "RESUMED");
+            AppLog.d(TAG, "RESUMED");
         }
 
         setupBroadcastReceiver();
@@ -768,7 +768,7 @@ public class ActivityMain extends AppCompatActivity implements SearchView.OnQuer
             Uri uri = null;
             if (resultData != null) {
                 uri = resultData.getData();
-                Log.d(TAG, "Choosen save path: " + uri);
+                AppLog.d(TAG, "Choosen save path: " + uri);
                 RadioDroidApp radioDroidApp = (RadioDroidApp) getApplication();
                 FavouriteManager favouriteManager = radioDroidApp.getFavouriteManager();
                 HistoryManager historyManager = radioDroidApp.getHistoryManager();
@@ -782,7 +782,7 @@ public class ActivityMain extends AppCompatActivity implements SearchView.OnQuer
                     }
                 }
                 catch (Exception e){
-                    Log.e(TAG, "Unable to write to file " + e);
+                    AppLog.e(TAG, "Unable to write to file " + e);
                 }
             }
         }
@@ -790,7 +790,7 @@ public class ActivityMain extends AppCompatActivity implements SearchView.OnQuer
             Uri uri = null;
             if (resultData != null) {
                 uri = resultData.getData();
-                Log.d(TAG, "Choosen load path: " + uri);
+                AppLog.d(TAG, "Choosen load path: " + uri);
                 RadioDroidApp radioDroidApp = (RadioDroidApp) getApplication();
                 FavouriteManager favouriteManager = radioDroidApp.getFavouriteManager();
                 try{
@@ -799,7 +799,7 @@ public class ActivityMain extends AppCompatActivity implements SearchView.OnQuer
                     favouriteManager.LoadM3USimple(reader);
                 }
                 catch (Exception e){
-                    Log.e(TAG, "Unable to load to file " + e);
+                    AppLog.e(TAG, "Unable to load to file " + e);
                 }
             }
         }
@@ -808,7 +808,7 @@ public class ActivityMain extends AppCompatActivity implements SearchView.OnQuer
     @Override
     public void onFileSelected(FileDialog dialog, File file) {
         try {
-            Log.i("MAIN", "save to " + file.getParent() + "/" + file.getName());
+            AppLog.i("MAIN", "save to " + file.getParent() + "/" + file.getName());
             RadioDroidApp radioDroidApp = (RadioDroidApp) getApplication();
             FavouriteManager favouriteManager = radioDroidApp.getFavouriteManager();
             HistoryManager historyManager = radioDroidApp.getHistoryManager();
@@ -823,7 +823,7 @@ public class ActivityMain extends AppCompatActivity implements SearchView.OnQuer
                 favouriteManager.LoadM3U(file.getParent(), file.getName());
             }
         } catch (Exception e) {
-            Log.e("MAIN", e.toString());
+            AppLog.e("MAIN", e.toString());
         }
     }
 
@@ -894,7 +894,7 @@ public class ActivityMain extends AppCompatActivity implements SearchView.OnQuer
                         SaveFavourites();
                     }
                 } catch (Exception e) {
-                    Log.e("MAIN", e.toString());
+                    AppLog.e("MAIN", e.toString());
                 }
 
                 return true;
@@ -904,7 +904,7 @@ public class ActivityMain extends AppCompatActivity implements SearchView.OnQuer
                         LoadFavourites();
                     }
                 } catch (Exception e) {
-                    Log.e("MAIN", e.toString());
+                    AppLog.e("MAIN", e.toString());
                 }
                 return true;
             case R.id.action_set_sleep_timer:
@@ -1054,7 +1054,7 @@ public class ActivityMain extends AppCompatActivity implements SearchView.OnQuer
     }
 
     public void Search(StationsFilter.SearchStyle searchStyle, String query) {
-        Log.d("MAIN", "Search() searchstyle=" + searchStyle + " query=" + query);
+        AppLog.d("MAIN", "Search() searchstyle=" + searchStyle + " query=" + query);
         Fragment currentFragment = mFragmentManager.getFragments().get(mFragmentManager.getFragments().size() - 1);
         if (currentFragment instanceof FragmentTabs) {
             ((FragmentTabs) currentFragment).Search(searchStyle, query);
@@ -1078,7 +1078,7 @@ public class ActivityMain extends AppCompatActivity implements SearchView.OnQuer
     }
 
     public void SearchStations(@NonNull String query) {
-        Log.d("MAIN", "SearchStations() " + query);
+        AppLog.d("MAIN", "SearchStations() " + query);
         Fragment currentFragment = mFragmentManager.getFragments().get(mFragmentManager.getFragments().size() - 1);
         if (currentFragment instanceof IFragmentSearchable) {
             ((IFragmentSearchable) currentFragment).Search(StationsFilter.SearchStyle.ByName, query);
@@ -1174,7 +1174,7 @@ public class ActivityMain extends AppCompatActivity implements SearchView.OnQuer
                             }
                             break;
                         default:
-                            Log.e(TAG, String.format("broadcastReceiver unexpected PlayerType '%s'", playerType.toString()));
+                            AppLog.e(TAG, String.format("broadcastReceiver unexpected PlayerType '%s'", playerType.toString()));
                     }
                 } else if (intent.getAction().equals(PlayerService.PLAYER_SERVICE_STATE_CHANGE)) {
                     if (PlayerServiceUtil.isPlaying()) {

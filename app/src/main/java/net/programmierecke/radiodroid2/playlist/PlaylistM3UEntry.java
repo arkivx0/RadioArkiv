@@ -1,6 +1,6 @@
 package net.programmierecke.radiodroid2.playlist;
 
-import android.util.Log;
+import net.programmierecke.radiodroid2.utils.AppLog;
 
 import net.programmierecke.radiodroid2.BuildConfig;
 
@@ -42,14 +42,14 @@ public class PlaylistM3UEntry {
             return;
         }
         if (header.startsWith(EXTINF)) {
-            if(BuildConfig.DEBUG) { Log.d(TAG,"found EXTINF:"+header); }
+            if(BuildConfig.DEBUG) { AppLog.d(TAG,"found EXTINF:"+header); }
             String attributes = header.substring(EXTINF.length());
             int sep = attributes.indexOf(",");
             String timeStr = attributes.substring(0, sep);
             length = Integer.getInteger(timeStr, -1);
             title = attributes.substring(sep + 1);
         } else if (header.startsWith(STREAMINF)) {
-            if(BuildConfig.DEBUG) { Log.d(TAG,"found STREAMINFO:"+header); }
+            if(BuildConfig.DEBUG) { AppLog.d(TAG,"found STREAMINFO:"+header); }
             isStreamInfo = true;
             String attributes = header.substring(STREAMINF.length());
             String[] attributesList = attributes.split(",");

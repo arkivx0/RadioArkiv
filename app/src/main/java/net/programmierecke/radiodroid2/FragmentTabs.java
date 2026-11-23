@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
-import android.util.Log;
+import net.programmierecke.radiodroid2.utils.AppLog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -75,7 +75,7 @@ public class FragmentTabs extends Fragment implements IFragmentRefreshable, IFra
         setupViewPager(viewPager);
 
         if (queuedSearchQuery != null) {
-            Log.d("TABS", "do queued search by name:"+ queuedSearchQuery);
+            AppLog.d("TABS", "do queued search by name:"+ queuedSearchQuery);
             Search(queuedSearchStyle, queuedSearchQuery);
             queuedSearchQuery = null;
             queuedSearchStyle = StationsFilter.SearchStyle.ByName;
@@ -120,18 +120,18 @@ public class FragmentTabs extends Fragment implements IFragmentRefreshable, IFra
         if (ctx != null) {
             TelephonyManager tm = (TelephonyManager) ctx.getSystemService(Context.TELEPHONY_SERVICE);
             countryCode = tm.getNetworkCountryIso();
-            Log.d("MAIN", "Network country code: '" + countryCode + "'");
+            AppLog.d("MAIN", "Network country code: '" + countryCode + "'");
             if (countryCode != null && countryCode.length() == 2) {
                 return countryCode;
             }
             countryCode = tm.getSimCountryIso();
-            Log.d("MAIN", "Sim country code: '" + countryCode + "'");
+            AppLog.d("MAIN", "Sim country code: '" + countryCode + "'");
             if (countryCode != null && countryCode.length() == 2) {
                 return countryCode;
             }
             countryCode = ctx.getResources().getConfiguration().locale.getCountry();
             addresses[IDX_LOCAL] = "json/stations/bycountrycodeexact/?order=clickcount&reverse=true";
-            Log.d("MAIN", "Locale: '" + countryCode + "'");
+            AppLog.d("MAIN", "Locale: '" + countryCode + "'");
             if (countryCode != null && countryCode.length() == 2) {
                 return countryCode;
             }
@@ -188,13 +188,13 @@ public class FragmentTabs extends Fragment implements IFragmentRefreshable, IFra
     }
 
     public void Search(StationsFilter.SearchStyle searchStyle, final String query) {
-        Log.d("TABS","Search = "+ query + " searchStyle="+searchStyle);
+        AppLog.d("TABS","Search = "+ query + " searchStyle="+searchStyle);
         if (viewPager != null) {
-            Log.d("TABS","a Search = "+ query);
+            AppLog.d("TABS","a Search = "+ query);
             viewPager.setCurrentItem(IDX_SEARCH, false);
             ((IFragmentSearchable)fragments[IDX_SEARCH]).Search(searchStyle, query);
         } else {
-            Log.d("TABS","b Search = "+ query);
+            AppLog.d("TABS","b Search = "+ query);
             queuedSearchQuery = query;
             queuedSearchStyle = searchStyle;
         }

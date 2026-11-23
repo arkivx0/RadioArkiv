@@ -100,7 +100,7 @@
                     android:ellipsize="end"
                     android:lines="1"
                     android:scrollbars="none"
-                    android:textColor="@color/textColorSecondary"
+                    android:textColor="?android:attr/textColorSecondary"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
         </LinearLayout>

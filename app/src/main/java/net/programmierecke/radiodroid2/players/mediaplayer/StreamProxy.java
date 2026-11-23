@@ -1,6 +1,6 @@
 package net.programmierecke.radiodroid2.players.mediaplayer;
 
-import android.util.Log;
+import net.programmierecke.radiodroid2.utils.AppLog;
 
 import androidx.annotation.NonNull;
 
@@ -51,16 +51,16 @@ public class StreamProxy implements Recordable {
     }
 
     private void createProxy() {
-        if (BuildConfig.DEBUG) Log.d(TAG, "thread started");
+        if (BuildConfig.DEBUG) AppLog.d(TAG, "thread started");
 
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
                     connectToStream();
-                    if (BuildConfig.DEBUG) Log.d(TAG, "createProxy() ended");
+                    if (BuildConfig.DEBUG) AppLog.d(TAG, "createProxy() ended");
                 } catch (Exception e) {
-                    Log.e(TAG, "", e);
+                    AppLog.e(TAG, "", e);
                 }
             }
         }, "StreamProxy").start();
@@ -119,7 +119,7 @@ public class StreamProxy implements Recordable {
         int readBytesBufferMetadata = 0;
         int readBytes;
 
-        if (BuildConfig.DEBUG) Log.d(TAG, "metadata size:" + metadataBytes);
+        if (BuildConfig.DEBUG) AppLog.d(TAG, "metadata size:" + metadataBytes);
         if (metadataBytes > 0) {
             Arrays.fill(readBuffer, (byte) 0);
             while (true) {
@@ -134,10 +134,10 @@ public class StreamProxy implements Recordable {
                 readBytesBufferMetadata += readBytes;
                 if (metadataBytesToRead <= 0) {
                     String s = new String(readBuffer, 0, metadataBytes, "utf-8");
-                    if (BuildConfig.DEBUG) Log.d(TAG, "METADATA:" + s);
+                    if (BuildConfig.DEBUG) AppLog.d(TAG, "METADATA:" + s);
                     Map<String, String> rawMetadata = decodeShoutcastMetadata(s);
                     StreamLiveInfo streamLiveInfo = new StreamLiveInfo(rawMetadata);
-                    if (BuildConfig.DEBUG) Log.d(TAG, "META:" + streamLiveInfo.getTitle());
+                    if (BuildConfig.DEBUG) AppLog.d(TAG, "META:" + streamLiveInfo.getTitle());
                     callback.onFoundLiveStreamInfo(streamLiveInfo);
                     break;
                 }
@@ -156,7 +156,7 @@ public class StreamProxy implements Recordable {
         ServerSocket proxyServer = null;
 
         try {
-            if (BuildConfig.DEBUG) Log.d(TAG, "creating local proxy");
+            if (BuildConfig.DEBUG) AppLog.d(TAG, "creating local proxy");
 
             // Create proxy stream which media player will connect to.
 
@@ -179,7 +179,7 @@ public class StreamProxy implements Recordable {
 
                 try {
                     if (BuildConfig.DEBUG) {
-                        Log.d(TAG, "connecting to stream (try=" + retry + "):" + uri);
+                        AppLog.d(TAG, "connecting to stream (try=" + retry + "):" + uri);
                     }
 
                     Response response = httpClient.newCall(request).execute();
@@ -188,10 +188,10 @@ public class StreamProxy implements Recordable {
 
                     final MediaType contentType = responseBody.contentType();
 
-                    if (BuildConfig.DEBUG) Log.d(TAG, "waiting...");
+                    if (BuildConfig.DEBUG) AppLog.d(TAG, "waiting...");
 
                     if (isStopped) {
-                        if (BuildConfig.DEBUG) Log.d(TAG, "stopped from the outside");
+                        if (BuildConfig.DEBUG) AppLog.d(TAG, "stopped from the outside");
                         break;
                     }
 
@@ -210,7 +210,7 @@ public class StreamProxy implements Recordable {
                     socketProxy = proxyServer.accept();
 
                     // send ok message to local mediaplayer
-                    if (BuildConfig.DEBUG) Log.d(TAG, "sending OK to the local media player");
+                    if (BuildConfig.DEBUG) AppLog.d(TAG, "sending OK to the local media player");
                     outputStream = socketProxy.getOutputStream();
                     outputStream.write(("HTTP/1.0 200 OK\r\n" +
                             "Pragma: no-cache\r\n" +
@@ -219,10 +219,10 @@ public class StreamProxy implements Recordable {
 
                     final String type = contentType.toString().toLowerCase();
 
-                    if (BuildConfig.DEBUG) Log.d(TAG, "Content Type: " + type);
+                    if (BuildConfig.DEBUG) AppLog.d(TAG, "Content Type: " + type);
 
                     if (type.equals("application/vnd.apple.mpegurl") || type.equals("application/x-mpegurl")) {
-                        Log.e(TAG, "Cannot play HLS streams through proxy!");
+                        AppLog.e(TAG, "Cannot play HLS streams through proxy!");
                     } else {
                         // try to get shoutcast information from stream connection
                         final ShoutcastInfo info = ShoutcastInfo.Decode(response);
@@ -232,11 +232,11 @@ public class StreamProxy implements Recordable {
                     // reset retry count, if connection was ok
                     retry = MAX_RETRIES;
                 } catch (ProtocolException protocolException) {
-                    Log.e(TAG, "connecting to stream failed due to protocol exception, will NOT retry.", protocolException);
+                    AppLog.e(TAG, "connecting to stream failed due to protocol exception, will NOT retry.", protocolException);
                     break;
                 } catch (SocketTimeoutException ignored) {
                 } catch (Exception e) {
-                    Log.e(TAG, "exception occurred inside the connection loop, retry.", e);
+                    AppLog.e(TAG, "exception occurred inside the connection loop, retry.", e);
                 } finally {
                     if (responseBody != null) {
                         responseBody.close();
@@ -251,7 +251,7 @@ public class StreamProxy implements Recordable {
                 Thread.sleep(1000);
             }
         } catch (InterruptedException e) {
-            Log.e(TAG, "Interrupted ex Proxy() ", e);
+            AppLog.e(TAG, "Interrupted ex Proxy() ", e);
         } finally {
             try {
                 if (proxyServer != null) {
@@ -265,7 +265,7 @@ public class StreamProxy implements Recordable {
                     outputStream.close();
                 }
             } catch (IOException e) {
-                Log.e(TAG, "exception occurred while closing resources.", e);
+                AppLog.e(TAG, "exception occurred while closing resources.", e);
             }
         }
 
@@ -307,7 +307,7 @@ public class StreamProxy implements Recordable {
     }
 
     public void stop() {
-        if (BuildConfig.DEBUG) Log.d(TAG, "stopping proxy.");
+        if (BuildConfig.DEBUG) AppLog.d(TAG, "stopping proxy.");
 
         isStopped = true;
 

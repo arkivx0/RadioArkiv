@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
+import net.programmierecke.radiodroid2.utils.AppLog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,7 +62,7 @@ public class FragmentStations extends FragmentBase implements IFragmentSearchabl
             return;
         }
 
-        if (BuildConfig.DEBUG) Log.d(TAG, "refreshing the stations list.");
+        if (BuildConfig.DEBUG) AppLog.d(TAG, "refreshing the stations list.");
 
         Context ctx = getContext();
         if (sharedPref == null) {
@@ -76,7 +76,7 @@ public class FragmentStations extends FragmentBase implements IFragmentSearchabl
         queue.clear();
         queue.addAll(radioStations);
 
-        if (BuildConfig.DEBUG) Log.d(TAG, "station count:" + radioStations.size());
+        if (BuildConfig.DEBUG) AppLog.d(TAG, "station count:" + radioStations.size());
 
         for (DataRadioStation station : radioStations) {
             if (show_broken || station.Working) {
@@ -96,7 +96,7 @@ public class FragmentStations extends FragmentBase implements IFragmentSearchabl
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Log.d("STATIONS","onCreateView()");
+        AppLog.d("STATIONS","onCreateView()");
         queue = new StationSaveManager(getContext());
         Bundle bundle = getArguments();
         if (bundle != null) {
@@ -185,7 +185,7 @@ public class FragmentStations extends FragmentBase implements IFragmentSearchabl
         RefreshListGui();
 
         if (lastQuery != null && stationsFilter != null){
-            Log.d("STATIONS", "do queued search for: "+lastQuery + " style="+lastSearchStyle);
+            AppLog.d("STATIONS", "do queued search for: "+lastQuery + " style="+lastSearchStyle);
             stationsFilter.clearList();
             Search(lastSearchStyle, lastQuery);
         }
@@ -201,12 +201,12 @@ public class FragmentStations extends FragmentBase implements IFragmentSearchabl
 
     @Override
     public void Search(StationsFilter.SearchStyle searchStyle, String query) {
-        Log.d("STATIONS", "query = "+query + " searchStyle="+searchStyle);
+        AppLog.d("STATIONS", "query = "+query + " searchStyle="+searchStyle);
         lastQuery = query;
         lastSearchStyle = searchStyle;
 
         if (rvStations != null && searchEnabled) {
-            Log.d("STATIONS", "query a = "+query);
+            AppLog.d("STATIONS", "query a = "+query);
             if (!TextUtils.isEmpty(query)) {
                 LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent(ActivityMain.ACTION_SHOW_LOADING));
             }
@@ -214,7 +214,7 @@ public class FragmentStations extends FragmentBase implements IFragmentSearchabl
             stationsFilter.setSearchStyle(searchStyle);
             stationsFilter.filter(query);
         }else{
-            Log.d("STATIONS", "query b = "+query + " " + searchEnabled + " ");
+            AppLog.d("STATIONS", "query b = "+query + " " + searchEnabled + " ");
         }
     }
 

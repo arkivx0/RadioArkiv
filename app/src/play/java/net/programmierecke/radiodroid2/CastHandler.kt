@@ -2,7 +2,7 @@ package net.programmierecke.radiodroid2
 
 import android.content.Context
 import android.net.Uri
-import android.util.Log
+import net.programmierecke.radiodroid2.utils.AppLog
 import android.view.Menu
 import android.view.MenuItem
 import com.google.android.gms.cast.MediaInfo
@@ -40,19 +40,19 @@ private object CastUnavailable : CastState() {
     }
 
     override fun onSessionStarted(session: Session) {
-        Log.e(TAG, "onSessionStarted: Illegal operation")
+        AppLog.e(TAG, "onSessionStarted: Illegal operation")
     }
 
     override fun onSessionResumed(session: Session) {
-        Log.e(TAG, "onSessionResumed: Illegal operation")
+        AppLog.e(TAG, "onSessionResumed: Illegal operation")
     }
 
     override fun onSessionLost() {
-        Log.e(TAG, "onSessionLost: Illegal operation")
+        AppLog.e(TAG, "onSessionLost: Illegal operation")
     }
 
     override fun play(title: String, url: String, iconurl: String?) {
-        Log.e(TAG, "play: Illegal operation")
+        AppLog.e(TAG, "play: Illegal operation")
     }
 }
 
@@ -160,7 +160,7 @@ public class CastHandler {
                 this.castState = castState
             }
         } catch (e: Exception) {
-            Log.e(TAG, e.toString())
+            AppLog.e(TAG, e.toString())
         }
     }
 
@@ -187,56 +187,56 @@ public class CastHandler {
     }
 
     fun playRemote(title: String, url: String, iconurl: String?) {
-        Log.i(TAG, title)
+        AppLog.i(TAG, title)
 
         castState.play(title, url, iconurl)
     }
 
     inner class SessionManagerListenerImpl : SessionManagerListener<Session> {
         override fun onSessionStarting(session: Session) {
-            Log.i(TAG, "onSessionStarting")
+            AppLog.i(TAG, "onSessionStarting")
         }
 
         override fun onSessionStarted(session: Session, sessionId: String) {
-            Log.i(TAG, "onSessionStarted")
+            AppLog.i(TAG, "onSessionStarted")
 
             castState.onSessionStarted(session)
         }
 
         override fun onSessionStartFailed(session: Session, i: Int) {
-            Log.i(TAG, "onSessionStartFailed")
+            AppLog.i(TAG, "onSessionStartFailed")
         }
 
         override fun onSessionEnding(session: Session) {
-            Log.i(TAG, "onSessionEnding")
+            AppLog.i(TAG, "onSessionEnding")
         }
 
         override fun onSessionResumed(session: Session, wasSuspended: Boolean) {
-            Log.i(TAG, "onSessionStarting")
+            AppLog.i(TAG, "onSessionStarting")
 
             castState.onSessionResumed(session)
         }
 
         override fun onSessionResumeFailed(session: Session, i: Int) {
-            Log.i(TAG, "onSessionResumeFailed")
+            AppLog.i(TAG, "onSessionResumeFailed")
 
             castState.onSessionLost()
         }
 
         override fun onSessionSuspended(session: Session, i: Int) {
-            Log.i(TAG, "onSessionSuspended")
+            AppLog.i(TAG, "onSessionSuspended")
 
             castState.onSessionLost()
         }
 
         override fun onSessionEnded(session: Session, error: Int) {
-            Log.i(TAG, "onSessionEnded")
+            AppLog.i(TAG, "onSessionEnded")
 
             castState.onSessionLost()
         }
 
         override fun onSessionResuming(session: Session, s: String) {
-            Log.i(TAG, "onSessionResuming")
+            AppLog.i(TAG, "onSessionResuming")
         }
     }
 }

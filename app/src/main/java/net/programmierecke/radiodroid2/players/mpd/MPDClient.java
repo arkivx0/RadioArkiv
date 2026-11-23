@@ -2,7 +2,7 @@ package net.programmierecke.radiodroid2.players.mpd;
 
 import android.content.Context;
 import android.os.Handler;
-import android.util.Log;
+import net.programmierecke.radiodroid2.utils.AppLog;
 
 import androidx.annotation.NonNull;
 import androidx.arch.core.util.Function;
@@ -73,7 +73,7 @@ public class MPDClient {
 
     public void enqueueTask(@NonNull MPDServerData server, @NonNull final MPDAsyncTask task) {
         if (!mpdEnabled) {
-            Log.e(TAG, "Trying to enqueue task when mpd is not enabled!");
+            AppLog.e(TAG, "Trying to enqueue task when mpd is not enabled!");
             return;
         }
 
@@ -86,7 +86,7 @@ public class MPDClient {
     public void enableAutoUpdate() {
         if (!mpdEnabled) {
             setMPDEnabled(true);
-            Log.w(TAG, "enableAutoUpdate called with mpd disabled, enabling mpd");
+            AppLog.w(TAG, "enableAutoUpdate called with mpd disabled, enabling mpd");
         }
 
         autoUpdateEnabled = true;
@@ -109,7 +109,7 @@ public class MPDClient {
 
     public void launchQuickCheck() {
         if (!autoUpdateEnabled) {
-            Log.e(TAG, "Trying to launch quick servers check while autoUpdateEnabled = false!");
+            AppLog.e(TAG, "Trying to launch quick servers check while autoUpdateEnabled = false!");
             return;
         }
 

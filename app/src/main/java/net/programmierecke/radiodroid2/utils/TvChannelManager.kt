@@ -4,7 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.database.Cursor
 import android.os.Build
-import android.util.Log
+import net.programmierecke.radiodroid2.utils.AppLog
 import androidx.annotation.RequiresApi
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.graphics.drawable.toBitmap
@@ -56,7 +56,7 @@ class TvChannelManager(val app: RadioDroidApp) : Observer {
         }
         helper.publishChannel(channel)
     } catch (e: IOException) {
-        Log.e(TAG, "Failed to create a channel", e)
+        AppLog.e(TAG, "Failed to create a channel", e)
         INVALID_CONTENT_ID
     }
 
@@ -109,21 +109,21 @@ class TvChannelManager(val app: RadioDroidApp) : Observer {
             }
 
             if (existingProgram == null) {
-                Log.d(TAG, "Adding $station")
+                AppLog.d(TAG, "Adding $station")
                 helper.publishPreviewProgram(program)
             } else {
-                Log.d(TAG, "Updating $station")
+                AppLog.d(TAG, "Updating $station")
                 helper.updatePreviewProgram(existingProgram.id, program)
                 starredPrograms.remove(existingProgram.contentId)
             }
         }
 
         for (program in starredPrograms.values) {
-            Log.d(TAG, "Deleting programme $program")
+            AppLog.d(TAG, "Deleting programme $program")
             helper.deletePreviewProgram(program.id)
         }
         if (app.favouriteManager.list.any()) {
-            Log.d(TAG, "Requesting channel to be browseable")
+            AppLog.d(TAG, "Requesting channel to be browseable")
             TvContractCompat.requestChannelBrowsable(app, channelId)
         }
     }

@@ -18,7 +18,7 @@ import androidx.preference.PreferenceScreen;
 
 import android.os.PowerManager;
 import android.provider.Settings;
-import android.util.Log;
+import net.programmierecke.radiodroid2.utils.AppLog;
 import android.widget.Toast;
 
 import com.mikepenz.iconics.typeface.library.community.material.CommunityMaterial;
@@ -50,7 +50,7 @@ public class FragmentSettings extends PreferenceFragmentCompat implements Shared
                         OfflineStationCache.exportBackup(app, uri);
                         backupToast(app, app.getString(R.string.backup_export_done));
                     } catch (Throwable e) {
-                        Log.e("SETTINGS", "backup export failed", e);
+                        AppLog.e("SETTINGS", "backup export failed", e);
                         backupToast(app, app.getString(R.string.backup_failed));
                     }
                 });
@@ -65,7 +65,7 @@ public class FragmentSettings extends PreferenceFragmentCompat implements Shared
                         final OfflineStationCache.Backup backup = OfflineStationCache.readBackup(app, uri);
                         new android.os.Handler(android.os.Looper.getMainLooper()).post(() -> confirmImport(backup));
                     } catch (Throwable e) {
-                        Log.e("SETTINGS", "backup import failed", e);
+                        AppLog.e("SETTINGS", "backup import failed", e);
                         backupToast(app, app.getString(R.string.backup_invalid));
                     }
                 });
@@ -337,7 +337,7 @@ public class FragmentSettings extends PreferenceFragmentCompat implements Shared
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
                                           String key) {
         if (BuildConfig.DEBUG) {
-            Log.d("AAA", "changed key:" + key);
+            AppLog.d("AAA", "changed key:" + key);
         }
         if (key.equals("alarm_external")) {
             boolean active = sharedPreferences.getBoolean(key, false);
@@ -382,7 +382,7 @@ public class FragmentSettings extends PreferenceFragmentCompat implements Shared
     @Override
     public void onAppSelected(String packageName, String activityName) {
         if (BuildConfig.DEBUG) {
-            Log.d("SEL", "selected:" + packageName + "/" + activityName);
+            AppLog.d("SEL", "selected:" + packageName + "/" + activityName);
         }
         SharedPreferences.Editor ed = getPreferenceManager().getSharedPreferences().edit();
         ed.putString("shareapp_package", packageName);

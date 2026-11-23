@@ -14,7 +14,7 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.Icon;
 import android.os.Build;
 import android.text.TextUtils;
-import android.util.Log;
+import net.programmierecke.radiodroid2.utils.AppLog;
 
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
@@ -220,12 +220,12 @@ public class DataRadioStation implements Parcelable {
 
 							aList.add(aStation);
 						}catch(Exception e){
-							Log.e(TAG, "DecodeJson() #2 "+e);
+							AppLog.e(TAG, "DecodeJson() #2 "+e);
 						}
 					}
 
 				} catch (JSONException e) {
-					Log.e(TAG, "DecodeJson() #1 "+e);
+					AppLog.e(TAG, "DecodeJson() #1 "+e);
 				}
 			}
 		}
@@ -289,7 +289,7 @@ public class DataRadioStation implements Parcelable {
 
 					return aStation;
 				} catch (JSONException e) {
-					Log.e(TAG, "DecodeJsonSingle() "+e);
+					AppLog.e(TAG, "DecodeJsonSingle() "+e);
 				}
 			}
 		}
@@ -326,7 +326,7 @@ public class DataRadioStation implements Parcelable {
 			obj.put("DeletedOnServer",DeletedOnServer ? "1" : "0");
 			return obj;
 		} catch (JSONException e) {
-			Log.e(TAG, "toJson() "+e);
+			AppLog.e(TAG, "toJson() "+e);
 		}
 
 		return null;

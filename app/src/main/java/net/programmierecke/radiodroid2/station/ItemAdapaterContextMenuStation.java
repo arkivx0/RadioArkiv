@@ -1,6 +1,6 @@
 package net.programmierecke.radiodroid2.station;
 
-import android.util.Log;
+import net.programmierecke.radiodroid2.utils.AppLog;
 import android.view.View;
 
 import androidx.fragment.app.FragmentActivity;
@@ -35,7 +35,7 @@ public class ItemAdapaterContextMenuStation extends ItemAdapterStation implement
         } else if (stationViewHolder.contextMenu == null) {
             // long-press inside distance tolerance but menu is not yet created
             if (System.currentTimeMillis() > timeLastDragEnded + MIN_INTERVAL_BETWEEN_DRAG_AND_MENU_OPEN) {
-                Log.d(TAG, "Creating contextMenu from onDragged");
+                AppLog.d(TAG, "Creating contextMenu from onDragged");
                 stationViewHolder.onCreateContextMenu(null, foregroundView, null);
             }
         } else {

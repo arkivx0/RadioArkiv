@@ -10,7 +10,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.text.TextUtils;
-import android.util.Log;
+import net.programmierecke.radiodroid2.utils.AppLog;
 import android.view.View;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -46,7 +46,7 @@ public class StationActions {
 
         final TimePickerFragment newFragment = new TimePickerFragment();
         newFragment.setCallback((timePicker, hourOfDay, minute) -> {
-            Log.i(TAG, String.format("Alarm time picked %d:%d", hourOfDay, minute));
+            AppLog.i(TAG, String.format("Alarm time picked %d:%d", hourOfDay, minute));
             radioDroidApp.getAlarmManager().add(station, hourOfDay, minute);
         });
         newFragment.show(activity.getSupportFragmentManager(), "timePicker");
@@ -121,7 +121,7 @@ public class StationActions {
                         CharSequence toastText = ctx.getResources().getText(R.string.notify_stream_url_copied);
                         Toast.makeText(ctx.getApplicationContext(), toastText, Toast.LENGTH_SHORT).show();
                     } else {
-                        Log.e(TAG, "Clipboard is NULL!");
+                        AppLog.e(TAG, "Clipboard is NULL!");
                         // TODO: toast general error
                     }
                 } else {

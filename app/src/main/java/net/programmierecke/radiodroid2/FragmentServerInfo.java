@@ -3,7 +3,7 @@ package net.programmierecke.radiodroid2;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
+import net.programmierecke.radiodroid2.utils.AppLog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -68,7 +68,7 @@ public class FragmentServerInfo extends Fragment implements IFragmentRefreshable
                         toast.show();
                     }
                     catch(Exception e){
-                        Log.e("ERR",e.toString());
+                        AppLog.e("ERR",e.toString());
                     }
                 }
                 super.onPostExecute(result);

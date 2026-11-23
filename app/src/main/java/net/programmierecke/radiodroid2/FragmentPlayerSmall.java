@@ -5,7 +5,6 @@ import android.app.Application;
 import android.content.*;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.*;
 import android.widget.*;
 

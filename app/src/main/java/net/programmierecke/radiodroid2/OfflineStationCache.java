@@ -2,7 +2,7 @@ package net.programmierecke.radiodroid2;
 
 import android.content.Context;
 import android.net.Uri;
-import android.util.Log;
+import net.programmierecke.radiodroid2.utils.AppLog;
 
 import androidx.annotation.Nullable;
 
@@ -95,7 +95,7 @@ public class OfflineStationCache {
                 trim(ctx);
             }
         } catch (Exception e) {
-            Log.w(TAG, "put failed: " + e);
+            AppLog.w(TAG, "put failed: " + e);
         }
     }
 

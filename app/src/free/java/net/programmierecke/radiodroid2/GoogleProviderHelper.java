@@ -1,10 +1,10 @@
 package net.programmierecke.radiodroid2;
 
 import android.content.Context;
-import android.util.Log;
+import net.programmierecke.radiodroid2.utils.AppLog;
 
 public class GoogleProviderHelper{
     public static void use(Context ctx){
-        Log.i("HLP","Google helper not installed because compiled as FREE version.");
+        AppLog.i("HLP","Google helper not installed because compiled as FREE version.");
     }
 }

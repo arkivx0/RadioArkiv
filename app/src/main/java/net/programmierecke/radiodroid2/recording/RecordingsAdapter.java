@@ -8,7 +8,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Build;
-import android.util.Log;
+import net.programmierecke.radiodroid2.utils.AppLog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -127,7 +127,7 @@ public class RecordingsAdapter extends RecyclerView.Adapter<RecordingsAdapter.Re
     void openRecording(DataRecording theData) {
         File file = new File(RecordingsManager.getRecordDir() + "/" + theData.Name);
         if (BuildConfig.DEBUG) {
-            Log.d(TAG, "play: " + file);
+            AppLog.d(TAG, "play: " + file);
         }
         net.programmierecke.radiodroid2.service.PlayerServiceUtil.play(
                 DataRadioStation.fromLocalFile(Uri.fromFile(file).toString(), theData.Name));
@@ -140,7 +140,7 @@ public class RecordingsAdapter extends RecyclerView.Adapter<RecordingsAdapter.Re
         try {
             fileUri = FileProvider.getUriForFile(context, context.getPackageName() + ".fileprovider", file);
         } catch (IllegalArgumentException e) {
-            Log.e(TAG, "cannot share recording", e);
+            AppLog.e(TAG, "cannot share recording", e);
             return;
         }
         Intent i = new Intent(Intent.ACTION_VIEW);

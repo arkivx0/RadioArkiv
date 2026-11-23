@@ -3,7 +3,7 @@
 **Radio Arkiv** (formerly "Radio") is an unofficial fork of [RadioDroid](https://github.com/segler-alex/RadioDroid)
 by segler-alex and contributors, an Android internet-radio app built on the free
 [Radio Browser](https://www.radio-browser.info) station directory.
-Current version: **1.0.6** (based on RadioDroid 0.86).
+Current version: **1.0.7** (based on RadioDroid 0.86).
 It installs alongside upstream (`applicationId io.github.arkivx0.radio`).
 All credit for the app itself goes to the RadioDroid project. Licensed GPL-3.0 like upstream.
 
@@ -16,6 +16,7 @@ All credit for the app itself goes to the RadioDroid project. Licensed GPL-3.0 l
 <p align="center"><em>Stations shown are a random selection picked from the public directory for screenshots and testing, not an endorsement.</em></p>
 
 ## What this fork adds
+- **1.0.7 player and catalogue polish**: the full player fits a typical phone screen without scrolling (swipe for track history and recordings), song titles are shown from Vorbis/Ogg comments and ID3 (including HLS ID3) as well as ICY, tag/country/language searches no longer crash on huge result lists, and dark themes have clearer secondary text and link colors with larger touch targets.
 - **Offline station backup** (new in 1.0.5/1.0.6): station lists and browse results are kept on the device, so
   the app keeps working when the Radio Browser servers are unreachable (other mirrors are tried first, and a
   short hint shows when an offline copy is used). Favourites, history and recordings never depend on the servers.
@@ -52,7 +53,11 @@ All credit for the app itself goes to the RadioDroid project. Licensed GPL-3.0 l
   [#1261](https://github.com/segler-alex/RadioDroid/issues/1261) favourite star not updating,
   [#1241](https://github.com/segler-alex/RadioDroid/issues/1241) crash searching short names like "rad",
   [#1222](https://github.com/segler-alex/RadioDroid/issues/1222) silent failure adding an alarm,
-  [#349](https://github.com/segler-alex/RadioDroid/issues/349) stream format details.
+  [#349](https://github.com/segler-alex/RadioDroid/issues/349) stream format details,
+  [#1216](https://github.com/segler-alex/RadioDroid/issues/1216) crash opening a tag with a huge station list,
+  [#1209](https://github.com/segler-alex/RadioDroid/issues/1209) missing Vorbis/Ogg and ID3 song titles,
+  [#1149](https://github.com/segler-alex/RadioDroid/issues/1149) HLS ID3 titles (when ExoPlayer provides them),
+  [#1228](https://github.com/segler-alex/RadioDroid/issues/1228) missing content description on the record button.
 - **About screen** works again and shows this fork's info.
 
 ## Themes
@@ -71,8 +76,8 @@ Download `RadioArkiv.apk` from [Releases](../../releases). APKs are signed with 
 
 - Signing certificate SHA-256:
   `291e1bccf7a19a6d0542a0a4c1af02aef42d305216534d798a85dc4187254861`
-- APK SHA-256 for 1.0.6:
-  `72311a241c4d49f045ff35fdc30363db7265a4ee20b1c7645b06c84c16e25082`
+- APK SHA-256 for 1.0.7:
+  `0073a9d70d9f45a9369a1d2e810e061a595b95d566be07da07db3990405e35a9`
 
 Verify before installing:
 ```

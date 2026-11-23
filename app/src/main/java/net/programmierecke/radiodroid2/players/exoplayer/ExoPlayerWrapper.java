@@ -10,7 +10,7 @@ import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
+import net.programmierecke.radiodroid2.utils.AppLog;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -45,6 +45,7 @@ import net.programmierecke.radiodroid2.players.PlayState;
 import net.programmierecke.radiodroid2.players.PlayerWrapper;
 import net.programmierecke.radiodroid2.recording.RecordableListener;
 import net.programmierecke.radiodroid2.station.live.ShoutcastInfo;
+import net.programmierecke.radiodroid2.station.live.LiveMetadata;
 import net.programmierecke.radiodroid2.station.live.StreamLiveInfo;
 
 import java.io.IOException;
@@ -71,6 +72,7 @@ public class ExoPlayerWrapper implements PlayerWrapper, IcyDataSource.IcyDataSou
 
     private boolean isHls;
     private boolean isPlayingFlag;
+    private StreamLiveInfo currentLiveInfo;
 
     private Handler playerThreadHandler;
 
@@ -86,7 +88,7 @@ public class ExoPlayerWrapper implements PlayerWrapper, IcyDataSource.IcyDataSou
         @Override
         public void onReceive(Context context, Intent intent) {
             if (!localFile && fullStopTask != null && player != null && audioSource != null && Utils.hasAnyConnection(context)) {
-                Log.i(TAG, "Regained connection. Resuming playback.");
+                AppLog.i(TAG, "Regained connection. Resuming playback.");
 
                 cancelStopTask();
 
@@ -108,6 +110,7 @@ public class ExoPlayerWrapper implements PlayerWrapper, IcyDataSource.IcyDataSou
         this.context = context;
         this.streamUrl = streamUrl;
         isHls = Utils.urlIndicatesHlsStream(streamUrl);
+        currentLiveInfo = null;
 
         cancelStopTask();
 
@@ -203,7 +206,7 @@ public class ExoPlayerWrapper implements PlayerWrapper, IcyDataSource.IcyDataSou
             try {
                 store = new RingStore.Disk(new java.io.File(context.getCacheDir(), "timeshift.buf"), capacity);
             } catch (java.io.IOException e) {
-                Log.w(TAG, "disk time-shift buffer unavailable, using RAM", e);
+                AppLog.w(TAG, "disk time-shift buffer unavailable, using RAM", e);
             }
         }
         if (store == null) {
@@ -270,7 +273,7 @@ public class ExoPlayerWrapper implements PlayerWrapper, IcyDataSource.IcyDataSou
         // read-ahead. Using only the last requested shift made Back 5s land near the live edge.
         long played = Math.max(0, player.getCurrentPosition());
         shiftMs = timeShift.shift(played, deltaMs);
-        Log.d(TimeShiftBuffer.LOG, "tap delta=" + deltaMs + " playerPositionMs=" + played
+        AppLog.d(TimeShiftBuffer.LOG, "tap delta=" + deltaMs + " playerPositionMs=" + played
                 + " playerBufferedMs=" + (player.getBufferedPosition() - player.getCurrentPosition())
                 + " readerPos=" + timeShift.readerPos() + " written=" + timeShift.written()
                 + " newOffsetMs=" + shiftMs);
@@ -299,11 +302,11 @@ public class ExoPlayerWrapper implements PlayerWrapper, IcyDataSource.IcyDataSou
         long now = System.currentTimeMillis();
         while (!recoveries.isEmpty() && now - recoveries.peekFirst() > 60_000) recoveries.removeFirst();
         if (recoveries.size() >= 5) {
-            Log.d(TimeShiftBuffer.LOG, "too many decoder errors, giving up: " + error.getErrorCodeName());
+            AppLog.d(TimeShiftBuffer.LOG, "too many decoder errors, giving up: " + error.getErrorCodeName());
             return false;
         }
         recoveries.addLast(now);
-        Log.d(TimeShiftBuffer.LOG, "decoder/parser error " + error.getErrorCodeName() + ", recovering", error);
+        AppLog.d(TimeShiftBuffer.LOG, "decoder/parser error " + error.getErrorCodeName() + ", recovering", error);
         final long played = Math.max(0, player.getCurrentPosition());
         playerThreadHandler.post(() -> {
             if (!canTimeShift()) return;
@@ -348,7 +351,7 @@ public class ExoPlayerWrapper implements PlayerWrapper, IcyDataSource.IcyDataSou
 
     @Override
     public void pause() {
-        Log.i(TAG, "Pause. Stopping exoplayer.");
+        AppLog.i(TAG, "Pause. Stopping exoplayer.");
         stopTimeShift();
         if (localFile && player != null) {
             localResumeMs = Math.max(0, player.getCurrentPosition());
@@ -366,8 +369,9 @@ public class ExoPlayerWrapper implements PlayerWrapper, IcyDataSource.IcyDataSou
 
     @Override
     public void stop() {
-        Log.i(TAG, "Stopping exoplayer.");
+        AppLog.i(TAG, "Stopping exoplayer.");
         stopTimeShift();
+        currentLiveInfo = null;
         localResumeMs = 0;
         localResumeUrl = null;
 
@@ -448,39 +452,26 @@ public class ExoPlayerWrapper implements PlayerWrapper, IcyDataSource.IcyDataSou
 
     @Override
     public void onMetadata(@NonNull Metadata metadata) {
-        if (BuildConfig.DEBUG) Log.d(TAG, "META: " + metadata);
+        if (BuildConfig.DEBUG) AppLog.d(TAG, "META: " + metadata);
         final int length = metadata.length();
-        if (length > 0) {
-            for (int i = 0; i < length; i++) {
-                final Metadata.Entry entry = metadata.get(i);
-                if (entry == null) {
-                    continue;
-                }
-                if (entry instanceof IcyInfo) {
-                    final IcyInfo icyInfo = ((IcyInfo) entry);
-                    Log.d(TAG, "IcyInfo: " + icyInfo);
-                    if (icyInfo.title != null) {
-                        Map<String, String> rawMetadata = new HashMap<>() {{
-                            put("StreamTitle", icyInfo.title);
-                        }};
-                        StreamLiveInfo streamLiveInfo = new StreamLiveInfo(rawMetadata);
-                        onDataSourceStreamLiveInfo(streamLiveInfo);
-                    }
-                } else if (entry instanceof IcyHeaders) {
-                    final IcyHeaders icyHeaders = ((IcyHeaders) entry);
-                    Log.d(TAG, "IcyHeaders: " + icyHeaders);
-                    onDataSourceShoutcastInfo(new ShoutcastInfo(icyHeaders));
-                } else if (entry instanceof Id3Frame) {
-                    final Id3Frame id3Frame = ((Id3Frame) entry);
-                    Log.d(TAG, "id3 metadata: " + id3Frame);
-                }
+        for (int i = 0; i < length; i++) {
+            final Metadata.Entry entry = metadata.get(i);
+            if (entry instanceof IcyHeaders) {
+                final IcyHeaders icyHeaders = (IcyHeaders) entry;
+                AppLog.d(TAG, "IcyHeaders: " + icyHeaders);
+                onDataSourceShoutcastInfo(new ShoutcastInfo(icyHeaders));
             }
+        }
+        StreamLiveInfo merged = LiveMetadata.merge(currentLiveInfo, LiveMetadata.from(metadata));
+        if (merged != null && merged != currentLiveInfo) {
+            currentLiveInfo = merged;
+            onDataSourceStreamLiveInfo(merged);
         }
     }
 
     @Override
     public void onDataSourceConnectionLostIrrecoverably() {
-        Log.i(TAG, "Connection lost irrecoverably.");
+        AppLog.i(TAG, "Connection lost irrecoverably.");
     }
 
     void resumeWhenNetworkConnected() {
@@ -488,7 +479,7 @@ public class ExoPlayerWrapper implements PlayerWrapper, IcyDataSource.IcyDataSou
             SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
             int resumeWithin = sharedPref.getInt("settings_resume_within", 60);
             if (resumeWithin > 0) {
-                Log.d(TAG, "Trying to resume playback within " + resumeWithin + "s.");
+                AppLog.d(TAG, "Trying to resume playback within " + resumeWithin + "s.");
 
                 // We want user to be able to paused during connection loss.
                 // TODO: Find a way to notify user that even if current state is Playing
@@ -553,7 +544,7 @@ public class ExoPlayerWrapper implements PlayerWrapper, IcyDataSource.IcyDataSou
         }
 
         if (BuildConfig.DEBUG) {
-            Log.d(TAG, "Source audio format: mime=" + format.sampleMimeType
+            AppLog.d(TAG, "Source audio format: mime=" + format.sampleMimeType
                     + ", codecs=" + format.codecs
                     + ", sampleRate=" + format.sampleRate
                     + ", channels=" + format.channelCount
@@ -624,7 +615,7 @@ public class ExoPlayerWrapper implements PlayerWrapper, IcyDataSource.IcyDataSou
 
     @Override
     public void onPlayerErrorChanged(PlaybackException error) {
-        Log.d(TAG, "Player error: ", error);
+        AppLog.d(TAG, "Player error: ", error);
         if (error != null && tryRecoverTimeShift(error)) return;
         // Stop playing since it is either irrecoverable error in the player or our data source failed to reconnect.
         if (fullStopTask != null) {
@@ -659,7 +650,7 @@ public class ExoPlayerWrapper implements PlayerWrapper, IcyDataSource.IcyDataSou
                 // The time-shift ring is local: retrying the same bytes every few ms can never
                 // succeed (this looped forever in BUFFERING). Surface it so the decoder-error
                 // recovery reopens on a clean boundary, or playback stops after 5 tries.
-                Log.d(TimeShiftBuffer.LOG, "parser error on time-shift data, not retrying: " + exception);
+                AppLog.d(TimeShiftBuffer.LOG, "parser error on time-shift data, not retrying: " + exception);
                 return C.TIME_UNSET;
             }
             if (exception instanceof HttpDataSource.InvalidContentTypeException) {
@@ -676,7 +667,7 @@ public class ExoPlayerWrapper implements PlayerWrapper, IcyDataSource.IcyDataSou
             }
 
             if (BuildConfig.DEBUG) {
-                Log.d(TAG, "Providing retry delay of " + retryDelay + "ms " +
+                AppLog.d(TAG, "Providing retry delay of " + retryDelay + "ms " +
                         "error count: " + loadErrorInfo.errorCount + ", " +
                         "exception " + exception.getClass() + ", " +
                         "message: " + exception.getMessage());
@@ -707,7 +698,7 @@ public class ExoPlayerWrapper implements PlayerWrapper, IcyDataSource.IcyDataSou
                 if (playbackState == Player.STATE_READY) {
                     shifting = false;
                     cancelStopTask();
-                    Log.d(TimeShiftBuffer.LOG, "re-prepared after shift, behind=" + shiftMs + " ms");
+                    AppLog.d(TimeShiftBuffer.LOG, "re-prepared after shift, behind=" + shiftMs + " ms");
                 }
                 if (playbackState != Player.STATE_ENDED) return;
                 shifting = false;

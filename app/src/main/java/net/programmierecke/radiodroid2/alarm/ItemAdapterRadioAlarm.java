@@ -1,7 +1,7 @@
 package net.programmierecke.radiodroid2.alarm;
 
 import android.content.Context;
-import android.util.Log;
+import net.programmierecke.radiodroid2.utils.AppLog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -78,7 +78,7 @@ public class ItemAdapterRadioAlarm extends ArrayAdapter<DataRadioStationAlarm> {
 			s.setChecked(aData.enabled);
 			s.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 				public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-					if(BuildConfig.DEBUG) { Log.d("ALARM","new state:"+isChecked); }
+					if(BuildConfig.DEBUG) { AppLog.d("ALARM","new state:"+isChecked); }
 					ram.setEnabled(aData.id, isChecked);
 				}
 			});

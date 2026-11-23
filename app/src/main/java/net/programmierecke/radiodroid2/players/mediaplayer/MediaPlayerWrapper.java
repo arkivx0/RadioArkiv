@@ -4,7 +4,7 @@ import android.content.Context;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Handler;
-import android.util.Log;
+import net.programmierecke.radiodroid2.utils.AppLog;
 
 import androidx.annotation.NonNull;
 
@@ -58,13 +58,13 @@ public class MediaPlayerWrapper implements PlayerWrapper, StreamProxyListener {
         this.context = context;
         this.isAlarm = isAlarm;
 
-        Log.v(TAG, "Stream url:" + streamUrl);
+        AppLog.v(TAG, "Stream url:" + streamUrl);
 
         isHls = Utils.urlIndicatesHlsStream(streamUrl);
 
         if (!isHls) {
             if (proxy != null) {
-                if (BuildConfig.DEBUG) Log.d(TAG, "stopping old proxy.");
+                if (BuildConfig.DEBUG) AppLog.d(TAG, "stopping old proxy.");
                 stopProxy();
             }
 
@@ -109,13 +109,13 @@ public class MediaPlayerWrapper implements PlayerWrapper, StreamProxyListener {
                 return true;
             });
         } catch (IllegalArgumentException e) {
-            Log.e(TAG, "" + e);
+            AppLog.e(TAG, "" + e);
             stateListener.onPlayerError(R.string.error_stream_url);
         } catch (IOException e) {
-            Log.e(TAG, "" + e);
+            AppLog.e(TAG, "" + e);
             stateListener.onPlayerError(R.string.error_caching_stream);
         } catch (Exception e) {
-            Log.e(TAG, "" + e);
+            AppLog.e(TAG, "" + e);
             stateListener.onPlayerError(R.string.error_play_stream);
         }
     }
@@ -275,7 +275,7 @@ public class MediaPlayerWrapper implements PlayerWrapper, StreamProxyListener {
             try {
                 proxy.stop();
             } catch (Exception e) {
-                Log.e(TAG, "proxy stop exception: ", e);
+                AppLog.e(TAG, "proxy stop exception: ", e);
             }
             proxy = null;
         }

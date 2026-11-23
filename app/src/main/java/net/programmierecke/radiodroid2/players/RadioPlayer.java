@@ -6,7 +6,7 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
-import android.util.Log;
+import net.programmierecke.radiodroid2.utils.AppLog;
 
 import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
@@ -70,7 +70,7 @@ public class RadioPlayer implements PlayerWrapper.PlayListener, Recordable {
 
             playerListener.onBufferedTimeUpdate(bufferTimeMs);
 
-            if (BuildConfig.DEBUG) Log.d(TAG, String.format("buffered %d ms.", bufferTimeMs));
+            if (BuildConfig.DEBUG) AppLog.d(TAG, String.format("buffered %d ms.", bufferTimeMs));
 
             playerThreadHandler.postDelayed(this, 2000);
         }
@@ -211,7 +211,7 @@ public class RadioPlayer implements PlayerWrapper.PlayListener, Recordable {
             try {
                 currentPlayer.pause();
             } catch (Exception e) {
-                Log.w(TAG, "teardown before restart failed", e);
+                AppLog.w(TAG, "teardown before restart failed", e);
             }
         });
         if (station.playableUrl != null && !station.playableUrl.isEmpty()) {
@@ -339,7 +339,7 @@ public class RadioPlayer implements PlayerWrapper.PlayListener, Recordable {
     }
 
     private void setState(PlayState state, int audioSessionId) {
-        if (BuildConfig.DEBUG) Log.d(TAG, String.format("set state '%s'", state.name()));
+        if (BuildConfig.DEBUG) AppLog.d(TAG, String.format("set state '%s'", state.name()));
 
         if (playState == state) {
             return;

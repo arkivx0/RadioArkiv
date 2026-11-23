@@ -1,6 +1,5 @@
 package net.programmierecke.radiodroid2.utils;
 
-import android.util.Log;
 
 import net.programmierecke.radiodroid2.BuildConfig;
 

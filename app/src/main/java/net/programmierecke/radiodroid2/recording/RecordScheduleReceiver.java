@@ -3,7 +3,7 @@ package net.programmierecke.radiodroid2.recording;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
+import net.programmierecke.radiodroid2.utils.AppLog;
 
 import androidx.core.content.ContextCompat;
 
@@ -41,7 +41,7 @@ public class RecordScheduleReceiver extends BroadcastReceiver {
             // Exact alarms grant a temporary exemption to start a foreground service.
             ContextCompat.startForegroundService(context, svc);
         } catch (Exception e) {
-            Log.e("RecSched", "could not start service", e);
+            AppLog.e("RecSched", "could not start service", e);
         }
     }
 }

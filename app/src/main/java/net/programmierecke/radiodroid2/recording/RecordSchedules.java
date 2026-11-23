@@ -6,7 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
-import android.util.Log;
+import net.programmierecke.radiodroid2.utils.AppLog;
 
 import androidx.preference.PreferenceManager;
 
@@ -61,7 +61,7 @@ public class RecordSchedules {
                 out.add(it);
             }
         } catch (Exception e) {
-            Log.e("RecSched", "load", e);
+            AppLog.e("RecSched", "load", e);
         }
         return out;
     }
@@ -78,7 +78,7 @@ public class RecordSchedules {
                 a.put(o);
             }
         } catch (Exception e) {
-            Log.e("RecSched", "save", e);
+            AppLog.e("RecSched", "save", e);
         }
         prefs(c).edit().putString(PREF, a.toString()).apply();
     }
@@ -168,8 +168,10 @@ public class RecordSchedules {
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !am.canScheduleExactAlarms()) {
                 am.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, when, p);
-            } else {
+            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, when, p);
+            } else {
+                am.setExact(AlarmManager.RTC_WAKEUP, when, p);
             }
         } catch (SecurityException e) {
             am.set(AlarmManager.RTC_WAKEUP, when, p);

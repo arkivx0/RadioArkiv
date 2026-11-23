@@ -9,7 +9,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Environment;
 import android.preference.PreferenceManager;
-import android.util.Log;
+import net.programmierecke.radiodroid2.utils.AppLog;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -33,7 +33,7 @@ import java.util.List;
 import java.util.Observable;
 import java.util.Vector;
 
-import info.debatty.java.stringsimilarity.Cosine;
+import me.xdrop.fuzzywuzzy.FuzzySearch;
 import okhttp3.OkHttpClient;
 
 public class StationSaveManager extends Observable {
@@ -193,14 +193,16 @@ public class StationSaveManager extends Observable {
     DataRadioStation getBestNameMatch(String query) {
         DataRadioStation bestStation = null;
         query = query.toUpperCase();
-        double smallesDistance = Double.MAX_VALUE;
+        int bestScore = -1;
 
-        Cosine distMeasure = new Cosine(); // must be in the loop for some measures (e.g. Sift4)
         for (DataRadioStation station : listStations) {
-            double distance = distMeasure.distance(station.Name.toUpperCase(), query);
-            if (distance < smallesDistance) {
+            if (station.Name == null) {
+                continue;
+            }
+            int score = FuzzySearch.ratio(station.Name.toUpperCase(), query);
+            if (score > bestScore) {
                 bestStation = station;
-                smallesDistance = distance;
+                bestScore = score;
             }
         }
 
@@ -338,7 +340,7 @@ public class StationSaveManager extends Observable {
                 refreshStationsFromServer();
             }
         } else {
-            Log.w("SAVE", "Load() no stations to load");
+            AppLog.w("SAVE", "Load() no stations to load");
         }
     }
 
@@ -352,7 +354,7 @@ public class StationSaveManager extends Observable {
         SharedPreferences.Editor editor = sharedPref.edit();
         String str = arr.toString();
         if (BuildConfig.DEBUG) {
-            Log.d("SAVE", "wrote: " + str);
+            AppLog.d("SAVE", "wrote: " + str);
         }
         editor.putString(getSaveId(), str);
         editor.commit();
@@ -363,7 +365,7 @@ public class StationSaveManager extends Observable {
         File folder = new File(path);
         if (!folder.exists()) {
             if (!folder.mkdirs()) {
-                Log.e("SAVE", "could not create dir:" + path);
+                AppLog.e("SAVE", "could not create dir:" + path);
             }
         }
         return path;
@@ -382,11 +384,11 @@ public class StationSaveManager extends Observable {
             @Override
             protected void onPostExecute(Boolean result) {
                 if (result.booleanValue()) {
-                    Log.i("SAVE", "OK");
+                    AppLog.i("SAVE", "OK");
                     Toast toast = Toast.makeText(context, context.getResources().getString(R.string.notify_save_playlist_ok, filePath, fileName), Toast.LENGTH_LONG);
                     toast.show();
                 } else {
-                    Log.i("SAVE", "NOK");
+                    AppLog.i("SAVE", "NOK");
                     Toast toast = Toast.makeText(context, context.getResources().getString(R.string.notify_save_playlist_nok, filePath, fileName), Toast.LENGTH_LONG);
                     toast.show();
                 }
@@ -408,11 +410,11 @@ public class StationSaveManager extends Observable {
             @Override
             protected void onPostExecute(Boolean result) {
                 if (result.booleanValue()) {
-                    Log.i("SAVE", "OK");
+                    AppLog.i("SAVE", "OK");
                     Toast toast = Toast.makeText(context, context.getResources().getString(R.string.notify_save_playlist_ok, filePath, fileName), Toast.LENGTH_LONG);
                     toast.show();
                 } else {
-                    Log.i("SAVE", "NOK");
+                    AppLog.i("SAVE", "NOK");
                     Toast toast = Toast.makeText(context, context.getResources().getString(R.string.notify_save_playlist_nok, filePath, fileName), Toast.LENGTH_LONG);
                     toast.show();
                 }
@@ -434,12 +436,12 @@ public class StationSaveManager extends Observable {
             @Override
             protected void onPostExecute(List<DataRadioStation> result) {
                 if (result != null) {
-                    Log.i("LOAD", "Loaded " + result.size() + "stations");
+                    AppLog.i("LOAD", "Loaded " + result.size() + "stations");
                     addMultiple(result);
                     Toast toast = Toast.makeText(context, context.getResources().getString(R.string.notify_load_playlist_ok, result.size(), filePath, fileName), Toast.LENGTH_LONG);
                     toast.show();
                 } else {
-                    Log.e("LOAD", "Load failed");
+                    AppLog.e("LOAD", "Load failed");
                     Toast toast = Toast.makeText(context, context.getResources().getString(R.string.notify_load_playlist_nok, filePath, fileName), Toast.LENGTH_LONG);
                     toast.show();
                 }
@@ -464,12 +466,12 @@ public class StationSaveManager extends Observable {
             @Override
             protected void onPostExecute(List<DataRadioStation> result) {
                 if (result != null) {
-                    Log.i("LOAD", "Loaded " + result.size() + "stations");
+                    AppLog.i("LOAD", "Loaded " + result.size() + "stations");
                     addMultiple(result);
                     Toast toast = Toast.makeText(context, context.getResources().getString(R.string.notify_load_playlist_ok, result.size(), "", ""), Toast.LENGTH_LONG);
                     toast.show();
                 } else {
-                    Log.e("LOAD", "Load failed");
+                    AppLog.e("LOAD", "Load failed");
                     Toast toast = Toast.makeText(context, context.getResources().getString(R.string.notify_load_playlist_nok, "", ""), Toast.LENGTH_LONG);
                     toast.show();
                 }
@@ -499,7 +501,7 @@ public class StationSaveManager extends Observable {
             }
             return r;
         } catch (Exception e) {
-            Log.e("Exception", "File write failed: " + e.toString());
+            AppLog.e("Exception", "File write failed: " + e.toString());
             return false;
         }
     }
@@ -520,7 +522,7 @@ public class StationSaveManager extends Observable {
 
             return true;
         } catch (Exception e) {
-            Log.e("Exception", "File write failed: " + e.toString());
+            AppLog.e("Exception", "File write failed: " + e.toString());
             return false;
         }
     }
@@ -531,7 +533,7 @@ public class StationSaveManager extends Observable {
             FileReader fr = new FileReader(f);
             return LoadM3UReader(fr);
         } catch (Exception e) {
-            Log.e("LOAD", "File read failed: " + e.toString());
+            AppLog.e("LOAD", "File read failed: " + e.toString());
             return null;
         }
     }
@@ -547,7 +549,7 @@ public class StationSaveManager extends Observable {
 
             BufferedReader br = new BufferedReader(reader);
             while ((line = br.readLine()) != null) {
-                Log.v("LOAD", "line: "+line);
+                AppLog.v("LOAD", "line: "+line);
                 if (line.startsWith(M3U_PREFIX)) {
                     try {
                         String uuid = line.substring(M3U_PREFIX.length()).trim();
@@ -557,7 +559,7 @@ public class StationSaveManager extends Observable {
                             loadedItems.add(station);
                         }
                     } catch (Exception e) {
-                        Log.e("LOAD", e.toString());
+                        AppLog.e("LOAD", e.toString());
                     }
                 }
             }
@@ -578,7 +580,7 @@ public class StationSaveManager extends Observable {
             }
             return listStationsSorted;
         } catch (Exception e) {
-            Log.e("LOAD", "File read failed: " + e.toString());
+            AppLog.e("LOAD", "File read failed: " + e.toString());
             return null;
         }
     }

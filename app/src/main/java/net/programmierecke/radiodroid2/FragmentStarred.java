@@ -21,7 +21,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
-import android.util.Log;
+import net.programmierecke.radiodroid2.utils.AppLog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,11 +59,11 @@ public class FragmentStarred extends Fragment implements IAdapterRefreshable, Ob
     }
 
     public void RefreshListGui() {
-        if (BuildConfig.DEBUG) Log.d(TAG, "refreshing the stations list.");
+        if (BuildConfig.DEBUG) AppLog.d(TAG, "refreshing the stations list.");
 
         ItemAdapterStation adapter = (ItemAdapterStation) rvStations.getAdapter();
 
-        if (BuildConfig.DEBUG) Log.d(TAG, "stations count:" + favouriteManager.listStations.size());
+        if (BuildConfig.DEBUG) AppLog.d(TAG, "stations count:" + favouriteManager.listStations.size());
 
         adapter.updateList(this, favouriteManager.listStations);
     }
@@ -138,7 +138,7 @@ public class FragmentStarred extends Fragment implements IAdapterRefreshable, Ob
                         @Override
                         public void onRefresh() {
                             if (BuildConfig.DEBUG) {
-                                Log.d(TAG, "onRefresh called from SwipeRefreshLayout");
+                                AppLog.d(TAG, "onRefresh called from SwipeRefreshLayout");
                             }
                             RefreshDownloadList();
                         }
@@ -158,7 +158,7 @@ public class FragmentStarred extends Fragment implements IAdapterRefreshable, Ob
         for (DataRadioStation station : favouriteManager.listStations){
             listUUids.add(station.StationUuid);
         }
-        Log.d(TAG, "Search for items: "+listUUids.size());
+        AppLog.d(TAG, "Search for items: "+listUUids.size());
 
         task = new AsyncTask<Void, Void, List<DataRadioStation>>() {
             @Override
@@ -172,13 +172,13 @@ public class FragmentStarred extends Fragment implements IAdapterRefreshable, Ob
                 if(getContext() != null)
                     LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent(ActivityMain.ACTION_HIDE_LOADING));
                 if (BuildConfig.DEBUG) {
-                    Log.d(TAG, "Download relativeUrl finished");
+                    AppLog.d(TAG, "Download relativeUrl finished");
                 }
                 if (result != null) {
                     if (BuildConfig.DEBUG) {
-                        Log.d(TAG, "Download relativeUrl OK");
+                        AppLog.d(TAG, "Download relativeUrl OK");
                     }
-                    Log.d(TAG, "Found items: "+result.size());
+                    AppLog.d(TAG, "Found items: "+result.size());
                     SyncList(result);
                     RefreshListGui();
                 } else {
@@ -187,7 +187,7 @@ public class FragmentStarred extends Fragment implements IAdapterRefreshable, Ob
                         toast.show();
                     }
                     catch(Exception e){
-                        Log.e("ERR",e.toString());
+                        AppLog.e("ERR",e.toString());
                     }
                 }
                 super.onPostExecute(result);
@@ -205,14 +205,14 @@ public class FragmentStarred extends Fragment implements IAdapterRefreshable, Ob
                 }
             }
             if (!found){
-                Log.d(TAG,"Remove station: " + station_current.StationUuid + " - " + station_current.Name);
+                AppLog.d(TAG,"Remove station: " + station_current.StationUuid + " - " + station_current.Name);
                 to_remove.add(station_current.StationUuid);
                 station_current.DeletedOnServer = true;
             }
         }
-        Log.d(TAG,"replace items");
+        AppLog.d(TAG,"replace items");
         favouriteManager.replaceList(list_new);
-        Log.d(TAG,"fin save");
+        AppLog.d(TAG,"fin save");
 
         if (to_remove.size() > 0) {
             Toast toast = Toast.makeText(getContext(), getResources().getString(R.string.notify_sync_list_deleted_entries, to_remove.size(), favouriteManager.size()), Toast.LENGTH_LONG);

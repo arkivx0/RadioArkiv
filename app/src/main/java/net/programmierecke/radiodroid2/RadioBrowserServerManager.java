@@ -1,6 +1,6 @@
 package net.programmierecke.radiodroid2;
 
-import android.util.Log;
+import net.programmierecke.radiodroid2.utils.AppLog;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -24,7 +24,7 @@ public class RadioBrowserServerManager {
      * Blocking: do dns request do get a list of all available servers
      */
     private static String[] doDnsServerListing() {
-        Log.d("DNS", "doDnsServerListing()");
+        AppLog.d("DNS", "doDnsServerListing()");
         Vector<String> listResult = new Vector<String>();
         try {
             // add all round robin servers one by one to select them separately
@@ -33,10 +33,10 @@ public class RadioBrowserServerManager {
                 // do not use original variable, it could fall back to "all.api.radio-browser.info"
                 String currentHostAddress = item.getHostAddress();
                 InetAddress new_item = InetAddress.getByName(currentHostAddress);
-                Log.i("DNS", "Found: " + new_item.toString() + " -> " + new_item.getCanonicalHostName());
+                AppLog.i("DNS", "Found: " + new_item.toString() + " -> " + new_item.getCanonicalHostName());
                 String name = item.getCanonicalHostName();
                 if (!name.equals("all.api.radio-browser.info") && !name.equals(currentHostAddress)) {
-                    Log.i("DNS", "Added entry: '" + name+"'");
+                    AppLog.i("DNS", "Added entry: '" + name+"'");
                     listResult.add(name);
                 }
             }
@@ -49,7 +49,7 @@ public class RadioBrowserServerManager {
                 listResult.add(mirror);
             }
         }
-        Log.d("DNS", "doDnsServerListing() Found servers: " + listResult.size());
+        AppLog.d("DNS", "doDnsServerListing() Found servers: " + listResult.size());
         return listResult.toArray(new String[0]);
     }
 
@@ -72,9 +72,9 @@ public class RadioBrowserServerManager {
             if (serverList.length > 0){
                 Random rand = new Random();
                 currentServer = serverList[rand.nextInt(serverList.length)];
-                Log.d("SRV", "Selected new default server: " + currentServer);
+                AppLog.d("SRV", "Selected new default server: " + currentServer);
             }else{
-                Log.e("SRV", "no servers found");
+                AppLog.e("SRV", "no servers found");
             }
         }
         return currentServer;

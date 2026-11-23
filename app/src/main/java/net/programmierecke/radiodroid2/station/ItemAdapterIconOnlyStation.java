@@ -1,7 +1,6 @@
 package net.programmierecke.radiodroid2.station;
 
 import android.content.SharedPreferences;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;

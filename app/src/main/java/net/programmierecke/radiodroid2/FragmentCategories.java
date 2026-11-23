@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.util.Log;
+import net.programmierecke.radiodroid2.utils.AppLog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,7 +50,7 @@ public class FragmentCategories extends FragmentBase {
             return;
         }
 
-        if (BuildConfig.DEBUG) Log.d(TAG, "refreshing the categories list.");
+        if (BuildConfig.DEBUG) AppLog.d(TAG, "refreshing the categories list.");
 
         Context ctx = getContext();
         if (sharedPref == null) {
@@ -62,7 +62,7 @@ public class FragmentCategories extends FragmentBase {
         ArrayList<DataCategory> filteredCategoriesList = new ArrayList<>();
         DataCategory[] data = DataCategory.DecodeJson(getUrlResult());
 
-        if (BuildConfig.DEBUG) Log.d(TAG, "categories count:" + data.length);
+        if (BuildConfig.DEBUG) AppLog.d(TAG, "categories count:" + data.length);
         CountryCodeDictionary countryDict = CountryCodeDictionary.getInstance();
         CountryFlagsLoader flagsDict = CountryFlagsLoader.getInstance();
 
@@ -111,7 +111,7 @@ public class FragmentCategories extends FragmentBase {
                         @Override
                         public void onRefresh() {
                             if (BuildConfig.DEBUG) {
-                                Log.d(TAG, "onRefresh called from SwipeRefreshLayout");
+                                AppLog.d(TAG, "onRefresh called from SwipeRefreshLayout");
                             }
                             //RefreshListGui();
                             DownloadUrl(true, false);

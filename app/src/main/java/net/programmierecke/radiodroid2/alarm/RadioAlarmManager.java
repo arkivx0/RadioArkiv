@@ -7,7 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.preference.PreferenceManager;
-import android.util.Log;
+import net.programmierecke.radiodroid2.utils.AppLog;
 
 import net.programmierecke.radiodroid2.BuildConfig;
 import net.programmierecke.radiodroid2.station.DataRadioStation;
@@ -58,7 +58,7 @@ public class RadioAlarmManager {
     }
 
     public void add(DataRadioStation station, int hour, int minute){
-        if(BuildConfig.DEBUG) { Log.d("ALARM","added station:"+station.Name); }
+        if(BuildConfig.DEBUG) { AppLog.d("ALARM","added station:"+station.Name); }
         DataRadioStationAlarm alarm = new DataRadioStationAlarm();
         alarm.station = station;
         alarm.hour = hour;
@@ -81,7 +81,7 @@ public class RadioAlarmManager {
         while (!checkIdFree(i)){
             i++;
         }
-        if(BuildConfig.DEBUG) { Log.d("ALARM","new free id:"+i); }
+        if(BuildConfig.DEBUG) { AppLog.d("ALARM","new free id:"+i); }
         return i;
     }
 
@@ -101,7 +101,7 @@ public class RadioAlarmManager {
         String items = "";
 
         for (DataRadioStationAlarm alarm: list){
-            if(BuildConfig.DEBUG) { Log.d("ALARM","save item:"+alarm.id+"/"+alarm.station.Name); }
+            if(BuildConfig.DEBUG) { AppLog.d("ALARM","save item:"+alarm.id+"/"+alarm.station.Name); }
             editor.putString("alarm."+alarm.id+".station",alarm.station.toJson().toString());
             editor.putInt("alarm."+alarm.id+".timeHour",alarm.hour);
             editor.putInt("alarm."+alarm.id+".timeMinutes",alarm.minute);
@@ -127,13 +127,13 @@ public class RadioAlarmManager {
 
     public void load(){
         list.clear();
-        if(BuildConfig.DEBUG) { Log.d("ALARM","load()"); }
+        if(BuildConfig.DEBUG) { AppLog.d("ALARM","load()"); }
 
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
         String ids = sharedPref.getString("alarm.ids", "");
         if (!ids.equals("")) {
             String[] idsArr = ids.split(",");
-            if(BuildConfig.DEBUG) { Log.d("ALARM", "load() - " + idsArr.length); }
+            if(BuildConfig.DEBUG) { AppLog.d("ALARM", "load() - " + idsArr.length); }
             for (String id : idsArr) {
                 DataRadioStationAlarm alarm = new DataRadioStationAlarm();
 
@@ -152,11 +152,11 @@ public class RadioAlarmManager {
                         list.add(alarm);
                     }
                 } catch (Exception e) {
-                    Log.e("ALARM", "could not decode:" + id);
+                    AppLog.e("ALARM", "could not decode:" + id);
                 }
             }
         }else{
-            Log.w("ALARM","empty load() string");
+            AppLog.w("ALARM","empty load() string");
         }
     }
 
@@ -204,7 +204,7 @@ public class RadioAlarmManager {
             // if new calendar is in the past, move it 1 day ahead
             // add 1 min, to ignore already fired events
             if (calendar.getTimeInMillis() < System.currentTimeMillis() + 60){
-                if(BuildConfig.DEBUG) { Log.d("ALARM","moved ahead one day"); }
+                if(BuildConfig.DEBUG) { AppLog.d("ALARM","moved ahead one day"); }
                 calendar.setTimeInMillis(calendar.getTimeInMillis() + ONE_DAY_IN_MILLIS);
             }
 
@@ -218,7 +218,7 @@ public class RadioAlarmManager {
                     limiter--;
                 }
             }
-            Log.d(
+            AppLog.d(
                     "ALARM","started:" +alarmId + " "
                     + calendar.get(Calendar.DAY_OF_WEEK) + " "
                     + calendar.get(Calendar.DAY_OF_MONTH)
@@ -227,7 +227,7 @@ public class RadioAlarmManager {
             );
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                if(BuildConfig.DEBUG) { Log.d("ALARM","START setAlarmClock"); }
+                if(BuildConfig.DEBUG) { AppLog.d("ALARM","START setAlarmClock"); }
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !alarmMgr.canScheduleExactAlarms()) {
                     // No exact-alarm permission: fall back instead of crashing with SecurityException
                     alarmMgr.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), alarmIntent);
@@ -235,10 +235,10 @@ public class RadioAlarmManager {
                     alarmMgr.setAlarmClock(new AlarmManager.AlarmClockInfo(calendar.getTimeInMillis(),alarmIntent),alarmIntent);
                 }
             }else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                if(BuildConfig.DEBUG) { Log.d("ALARM","START setExact"); }
+                if(BuildConfig.DEBUG) { AppLog.d("ALARM","START setExact"); }
                 alarmMgr.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), alarmIntent);
             }else{
-                if(BuildConfig.DEBUG) { Log.d("ALARM","START set"); }
+                if(BuildConfig.DEBUG) { AppLog.d("ALARM","START set"); }
                 alarmMgr.set(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),alarmIntent);
             }
         }
@@ -247,7 +247,7 @@ public class RadioAlarmManager {
     void stop(int alarmId) {
         DataRadioStationAlarm alarm = getById(alarmId);
         if (alarm != null) {
-            if(BuildConfig.DEBUG) { Log.d("ALARM","stopped:"+alarmId); }
+            if(BuildConfig.DEBUG) { AppLog.d("ALARM","stopped:"+alarmId); }
             Intent intent = new Intent(context, AlarmReceiver.class);
             PendingIntent alarmIntent = PendingIntent.getBroadcast(context, alarmId, intent, pendingIntentFlag);
             AlarmManager alarmMgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
@@ -306,7 +306,7 @@ public class RadioAlarmManager {
     public void resetAllAlarms() {
         for(DataRadioStationAlarm alarm: list){
             if (alarm.enabled){
-                if(BuildConfig.DEBUG) { Log.d("ALARM","started alarm with id:"+alarm.id); }
+                if(BuildConfig.DEBUG) { AppLog.d("ALARM","started alarm with id:"+alarm.id); }
                 start(alarm.id);
             }
         }

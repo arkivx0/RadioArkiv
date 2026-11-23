@@ -1,7 +1,7 @@
 package net.programmierecke.radiodroid2.players.mpd;
 
 import android.text.TextUtils;
-import android.util.Log;
+import net.programmierecke.radiodroid2.utils.AppLog;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -95,7 +95,7 @@ public class MPDAsyncTask implements Runnable {
             if (readStage != null) {
                 int read = reader.read(readBuffer);
                 readBuffer.position(0);
-                Log.d(TAG, readBuffer.toString());
+                AppLog.d(TAG, readBuffer.toString());
                 c = readStage.onRead(MPDAsyncTask.this, readBuffer.toString());
             } else {
                 c = false;

@@ -15,7 +15,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.PowerManager;
-import android.util.Log;
+import net.programmierecke.radiodroid2.utils.AppLog;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
@@ -70,7 +70,7 @@ public class SilentRecordService extends Service {
         try {
             ContextCompat.startForegroundService(context, i);
         } catch (Exception e) {
-            Log.e(TAG, "could not start silent recording", e);
+            AppLog.e(TAG, "could not start silent recording", e);
         }
     }
 
@@ -104,7 +104,7 @@ public class SilentRecordService extends Service {
             try {
                 record(station, endTime);
             } catch (Exception e) {
-                Log.e(TAG, "silent recording failed", e);
+                AppLog.e(TAG, "silent recording failed", e);
             } finally {
                 main.post(this::finish);
             }
@@ -138,7 +138,7 @@ public class SilentRecordService extends Service {
                     String ct = resp.header("Content-Type");
                     String finalUrl = resp.request().url().toString();
                     if (StreamRecordUtils.isHls(ct, finalUrl)) {
-                        Log.e(TAG, "HLS streams cannot be recorded silently");
+                        AppLog.e(TAG, "HLS streams cannot be recorded silently");
                         return;
                     }
                     if (StreamRecordUtils.isPlaylist(ct, finalUrl)) {
@@ -159,7 +159,7 @@ public class SilentRecordService extends Service {
                     }
                 } catch (java.io.IOException e) {
                     if (stopRequested || System.currentTimeMillis() >= endTime) break;
-                    Log.w(TAG, "stream interrupted, retrying: " + e);
+                    AppLog.w(TAG, "stream interrupted, retrying: " + e);
                     Thread.sleep(3000);
                 }
             }

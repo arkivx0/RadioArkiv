@@ -1,7 +1,7 @@
 package net.programmierecke.radiodroid2.players.exoplayer;
 
 import android.net.Uri;
-import android.util.Log;
+import net.programmierecke.radiodroid2.utils.AppLog;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -84,7 +84,7 @@ public class TimeShiftBuffer {
     /** Bitrate seen by the decoder (more reliable than the directory's value). */
     public synchronized void setBitrateKbps(int kbps) {
         if (kbps > 0 && Math.abs(kbps * 125.0 - knownBytesPerSecond) > 1) {
-            Log.d(LOG, "bitrate " + (knownBytesPerSecond / 125.0) + " -> " + kbps + " kbps");
+            AppLog.d(LOG, "bitrate " + (knownBytesPerSecond / 125.0) + " -> " + kbps + " kbps");
             // keep live where it is when the rate changes
             if (liveAnchorPos >= 0) {
                 long now = clock.nowMs();
@@ -136,7 +136,7 @@ public class TimeShiftBuffer {
                 return;
             } catch (IOException e) {
                 if (stopped) return;
-                Log.w(TAG, "feeder error", e);
+                AppLog.w(TAG, "feeder error", e);
                 if (++failures > 5) {
                     error = e;
                     synchronized (this) { notifyAll(); }
@@ -146,7 +146,7 @@ public class TimeShiftBuffer {
                 try { src.close(); } catch (Exception ignored) { }
             }
             if (!stopped) {
-                Log.d(LOG, "stream reconnect (partial frame dropped)");
+                AppLog.d(LOG, "stream reconnect (partial frame dropped)");
                 try { Thread.sleep(1000); } catch (InterruptedException ignored) { }
             }
         }
@@ -188,7 +188,7 @@ public class TimeShiftBuffer {
             System.arraycopy(b, 0, pend, len, n);
             len += n;
             if (mode == 0 && detectSeen == 0 && len >= 4 && OggPages.isPage(pend, 0)) {
-                Log.d(LOG, "framer: Ogg stream, storing whole pages");
+                AppLog.d(LOG, "framer: Ogg stream, storing whole pages");
                 mode = 3;
             }
             if (mode == 3) { pushOgg(); return; }
@@ -214,7 +214,7 @@ public class TimeShiftBuffer {
                         if (len - p > keep) { dropped += len - keep - p; p = len - keep; }
                         break;
                     }
-                    if (sync > p) Log.d(LOG, "framer: skipped " + (sync - p) + " non-audio bytes");
+                    if (sync > p) AppLog.d(LOG, "framer: skipped " + (sync - p) + " non-audio bytes");
                     dropped += sync - p;
                     p = sync;
                     synced = true;
@@ -223,7 +223,7 @@ public class TimeShiftBuffer {
             }
             if (p > 0) { System.arraycopy(pend, p, pend, 0, len - p); len -= p; }
             if (mode == 0 && detectSeen > DETECT_LIMIT) {
-                Log.d(LOG, "framer: not MPEG/ADTS, passing through");
+                AppLog.d(LOG, "framer: not MPEG/ADTS, passing through");
                 mode = 2;
                 write(pend, 0, len);
                 len = 0;
@@ -260,7 +260,7 @@ public class TimeShiftBuffer {
                 if (!f.oggHeadersDone) {
                     f.oggHeadersDone = true;
                     f.oggHeaders = f.oggHeaderBuf != null ? f.oggHeaderBuf.toByteArray() : new byte[0];
-                    Log.d(LOG, "ogg headers: " + f.oggHeaders.length + " bytes");
+                    AppLog.d(LOG, "ogg headers: " + f.oggHeaders.length + " bytes");
                 }
                 write(f.pend, p, pl);
             }
@@ -296,7 +296,7 @@ public class TimeShiftBuffer {
             long room = writableNow();
             if (room <= 0) {
                 if (!logged) {
-                    Log.d(LOG, "backpressure: read-ahead full, written=" + written + " readerPos=" + readerPos);
+                    AppLog.d(LOG, "backpressure: read-ahead full, written=" + written + " readerPos=" + readerPos);
                     logged = true;
                 }
                 wait(500);
@@ -348,7 +348,7 @@ public class TimeShiftBuffer {
         liveAnchorPos = playhead(playedMs);
         liveAnchorTime = clock.nowMs();
         anchorPending = false;
-        Log.d(LOG, "live anchored at " + liveAnchorPos + " (written=" + written + ")");
+        AppLog.d(LOG, "live anchored at " + liveAnchorPos + " (written=" + written + ")");
     }
 
     /** Where an uninterrupted player would be now (see class doc). */
@@ -424,7 +424,7 @@ public class TimeShiftBuffer {
         startPos = target;
         if (anchorPending && deltaMs != Long.MIN_VALUE) { liveAnchorPos = head; liveAnchorTime = now; }
         anchorPending = deltaMs == Long.MIN_VALUE; // Go live re-anchors when sound starts
-        Log.d(LOG, "shift delta=" + deltaMs + " ring=" + capacity + " written=" + written
+        AppLog.d(LOG, "shift delta=" + deltaMs + " ring=" + capacity + " written=" + written
                 + " oldest=" + oldest() + " playedMs=" + playedMs + " playhead=" + head + " live=" + live
                 + " bps=" + (long) bytesPerSecond() + " target=" + target
                 + " offset " + ms(live - head) + " -> " + ms(live - target) + " ms");
@@ -481,7 +481,7 @@ public class TimeShiftBuffer {
         generation++;
         readerPos = target;
         startPos = target;
-        Log.d(LOG, "recover after decoder error: playhead=" + head + " -> " + target + " written=" + written
+        AppLog.d(LOG, "recover after decoder error: playhead=" + head + " -> " + target + " written=" + written
                 + " droppedBytes=" + framer.dropped);
         notifyAll();
         return ms(Math.max(0, live - target));
@@ -517,7 +517,7 @@ public class TimeShiftBuffer {
                 prefixPos = 0;
                 pos = Math.max(oldest(), startPos + requested);
                 readerPos = pos;
-                Log.d(LOG, "reader open: startPos=" + startPos + " written=" + written + " pos=" + pos
+                AppLog.d(LOG, "reader open: startPos=" + startPos + " written=" + written + " pos=" + pos
                         + " oldest=" + oldest() + " requested=" + requested);
                 TimeShiftBuffer.this.notifyAll();
             }

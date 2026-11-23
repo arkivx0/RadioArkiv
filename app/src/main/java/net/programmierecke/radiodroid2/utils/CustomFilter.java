@@ -20,7 +20,7 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
 import android.os.Message;
-import android.util.Log;
+import net.programmierecke.radiodroid2.utils.AppLog;
 
 /**
  * This is a copy of {@link net.programmierecke.radiodroid2.utils.CustomFilter} with @hide removed from delayer.
@@ -222,7 +222,7 @@ public abstract class CustomFilter {
                         args.results = performFiltering(args.constraint);
                     } catch (Exception e) {
                         args.results = new net.programmierecke.radiodroid2.utils.CustomFilter.FilterResults();
-                        Log.w(LOG_TAG, "An exception occured during performFiltering()!", e);
+                        AppLog.w(LOG_TAG, "An exception occured during performFiltering()!", e);
                     } finally {
                         message = mResultHandler.obtainMessage(what);
                         message.obj = args;

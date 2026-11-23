@@ -18,7 +18,7 @@ import android.os.Bundle;
 import android.support.v4.media.MediaBrowserCompat;
 import android.support.v4.media.MediaDescriptionCompat;
 import android.support.v4.media.MediaMetadataCompat;
-import android.util.Log;
+import net.programmierecke.radiodroid2.utils.AppLog;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -193,12 +193,12 @@ public class RadioDroidBrowser {
        Bundle extras = new Bundle();
        extras.putInt(DESCRIPTION_EXTRAS_KEY_CONTENT_STYLE_BROWSABLE, DESCRIPTION_EXTRAS_VALUE_CONTENT_STYLE_LIST_ITEM);
        if (sharedPref.getBoolean("load_icons", false) && sharedPref.getBoolean("icons_only_favorites_style", false)) {
-           Log.d(TAG, "Setting grid style for playables");
+           AppLog.d(TAG, "Setting grid style for playables");
            extras.putInt(
                    DESCRIPTION_EXTRAS_KEY_CONTENT_STYLE_PLAYABLE,
                    DESCRIPTION_EXTRAS_VALUE_CONTENT_STYLE_GRID_ITEM);
        } else {
-           Log.d(TAG, "Setting list style for playables");
+           AppLog.d(TAG, "Setting list style for playables");
            extras.putInt(
                    DESCRIPTION_EXTRAS_KEY_CONTENT_STYLE_PLAYABLE,
                    DESCRIPTION_EXTRAS_VALUE_CONTENT_STYLE_LIST_ITEM);

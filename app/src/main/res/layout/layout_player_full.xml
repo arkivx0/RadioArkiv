@@ -13,239 +13,154 @@
         android:layout_height="1dp"
         android:background="?android:attr/dividerVertical" />
 
-    <net.programmierecke.radiodroid2.views.RecyclerAwareNestedScrollView
-        android:id="@+id/scrollViewContent"
+    <TextView
+        android:id="@+id/textViewGeneralInfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:ellipsize="end"
+        android:gravity="center_horizontal"
+        android:maxLines="2"
+        android:minHeight="32dp"
+        android:textAlignment="center"
+        android:autoSizeMaxTextSize="22sp"
+        android:autoSizeMinTextSize="14sp"
+        android:autoSizeTextType="uniform"
+        tools:text="Info" />
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/pagerArtAndInfo"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+        <androidx.viewpager.widget.PagerTabStrip
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top" />
+    </androidx.viewpager.widget.ViewPager>
 
-
-            <!--<TextView-->
-            <!--android:id="@+id/textViewCurrentPlaying"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_marginStart="8dp"-->
-            <!--android:layout_marginEnd="8dp"-->
-            <!--android:gravity="center"-->
-            <!--android:textSize="24sp"-->
-            <!--app:layout_constraintBottom_toTopOf="@+id/textViewStation"-->
-            <!--app:layout_constraintEnd_toEndOf="parent"-->
-            <!--app:layout_constraintStart_toStartOf="parent"-->
-            <!--app:layout_constraintTop_toTopOf="parent"-->
-            <!--tools:text="Test" />-->
-
-            <!--<TextView-->
-            <!--android:id="@+id/textViewStation"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_marginStart="8dp"-->
-            <!--android:layout_marginLeft="8dp"-->
-            <!--android:layout_marginEnd="8dp"-->
-            <!--android:layout_marginRight="8dp"-->
-            <!--android:layout_marginBottom="8dp"-->
-            <!--android:text="Station"-->
-            <!--android:textSize="18sp"-->
-            <!--app:layout_constraintBottom_toTopOf="@+id/textViewGeneralInfo"-->
-            <!--app:layout_constraintEnd_toEndOf="parent"-->
-            <!--app:layout_constraintStart_toStartOf="parent"-->
-            <!--app:layout_constraintTop_toBottomOf="@+id/textViewCurrentPlaying" />-->
-
-            <TextView
-                android:id="@+id/textViewGeneralInfo"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
-                android:gravity="center_horizontal"
-                android:maxHeight="72sp"
-                android:minHeight="36sp"
-                android:textAlignment="center"
-                android:autoSizeMaxTextSize="30sp"
-                android:autoSizeMinTextSize="14sp"
-                android:autoSizeTextType="uniform"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="Info" />
-
-            <androidx.viewpager.widget.ViewPager
-                android:id="@+id/pagerArtAndInfo"
-                android:layout_width="match_parent"
-                android:layout_height="215dp"
-                app:layout_constraintBottom_toTopOf="@+id/space"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textViewGeneralInfo">
-
-                <androidx.viewpager.widget.PagerTabStrip
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="top" />
-            </androidx.viewpager.widget.ViewPager>
-
-            <Space
-                android:id="@+id/space"
-                android:layout_width="wrap_content"
-                android:layout_height="20dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/pagerArtAndInfo" />
-
-            <TextView
-                android:id="@+id/textViewTimePlayed"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginTop="8dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/space"
-                tools:text="3:44" />
-
-            <TextView
-                android:id="@+id/textViewNetworkUsageInfo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginRight="16dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/space"
-                tools:text="1mb" />
-
-            <TextView
-                android:id="@+id/textViewTimeCached"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/space"
-                tools:text="-10s" />
-
-            <TextView
-                android:id="@+id/textViewSourceAudioInfo"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="4dp"
-                android:layout_marginEnd="16dp"
-                android:gravity="center"
-                android:visibility="gone"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textViewTimeCached"
-                tools:text="AAC-LC · 44.1 kHz · stereo"
-                tools:visibility="visible" />
-
-            <View
-                android:id="@+id/divider1"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                android:background="?android:attr/dividerVertical"
-                app:layout_constraintTop_toBottomOf="@+id/textViewSourceAudioInfo" />
-
-            <ImageView
-                android:id="@+id/imgRecordingIcon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
-                app:layout_constraintBottom_toTopOf="@+id/divider2"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/divider1"
-                app:srcCompat="@drawable/ic_start_recording"
-                tools:ignore="ContentDescription" />
-
-            <TextView
-                android:id="@+id/textViewRecordingSize"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
-                android:minWidth="75dp"
-                app:layout_constraintBottom_toTopOf="@+id/divider2"
-                app:layout_constraintStart_toEndOf="@+id/imgRecordingIcon"
-                app:layout_constraintTop_toBottomOf="@+id/divider1"
-                tools:text="2.5 mb" />
-
-            <TextView
-                android:id="@+id/textViewRecordingName"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/textViewRecordingSize"
-                app:layout_constraintTop_toBottomOf="@+id/divider1"
-                tools:text="Long long long long long long long long long long long long long long long long long long long long long long recording name" />
-
-            <View
-                android:id="@+id/divider2"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                android:background="?android:attr/dividerVertical"
-                app:layout_constraintTop_toBottomOf="@+id/textViewRecordingName" />
-
-            <androidx.constraintlayout.widget.Group
-                android:id="@+id/group_recording_info"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:constraint_referenced_ids="divider2,imgRecordingIcon,textViewRecordingSize,textViewRecordingName" />
-
-            <androidx.viewpager.widget.ViewPager
-                android:id="@+id/pagerHistoryAndRecordings"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                app:layout_constraintTop_toBottomOf="@+id/divider2">
-
-                <androidx.viewpager.widget.PagerTabStrip
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="top" />
-            </androidx.viewpager.widget.ViewPager>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </net.programmierecke.radiodroid2.views.RecyclerAwareNestedScrollView>
-
-    <View
-        android:id="@+id/dividerBottom"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="?android:attr/dividerVertical" />
+        android:layout_height="wrap_content"
+        android:paddingTop="4dp">
+
+        <TextView
+            android:id="@+id/textViewTimePlayed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="3:44" />
+
+        <TextView
+            android:id="@+id/textViewNetworkUsageInfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="1mb" />
+
+        <TextView
+            android:id="@+id/textViewTimeCached"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="-10s" />
+
+        <TextView
+            android:id="@+id/textViewSourceAudioInfo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginEnd="16dp"
+            android:gravity="center"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewTimeCached"
+            tools:text="AAC-LC · 44.1 kHz · stereo"
+            tools:visibility="visible" />
+
+        <View
+            android:id="@+id/divider1"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="4dp"
+            android:background="?android:attr/dividerVertical"
+            app:layout_constraintTop_toBottomOf="@+id/textViewSourceAudioInfo" />
+
+        <ImageView
+            android:id="@+id/imgRecordingIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:contentDescription="@string/image_button_record"
+            app:layout_constraintBottom_toTopOf="@+id/divider2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/divider1"
+            app:srcCompat="@drawable/ic_start_recording" />
+
+        <TextView
+            android:id="@+id/textViewRecordingSize"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:minWidth="75dp"
+            app:layout_constraintBottom_toTopOf="@+id/divider2"
+            app:layout_constraintStart_toEndOf="@+id/imgRecordingIcon"
+            app:layout_constraintTop_toBottomOf="@+id/divider1"
+            tools:text="2.5 mb" />
+
+        <TextView
+            android:id="@+id/textViewRecordingName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/textViewRecordingSize"
+            app:layout_constraintTop_toBottomOf="@+id/divider1"
+            tools:text="Recording name" />
+
+        <View
+            android:id="@+id/divider2"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="4dp"
+            android:background="?android:attr/dividerVertical"
+            app:layout_constraintTop_toBottomOf="@+id/textViewRecordingName" />
+
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/group_recording_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:constraint_referenced_ids="divider2,imgRecordingIcon,textViewRecordingSize,textViewRecordingName" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
         android:id="@+id/layoutTimeShift"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
+        android:minHeight="48dp"
         android:orientation="horizontal">
 
         <Button
             android:id="@+id/buttonBack5"
             style="@style/Widget.MaterialComponents.Button.TextButton"
             android:layout_width="wrap_content"
-            android:layout_height="40dp"
+            android:layout_height="wrap_content"
+            android:minWidth="48dp"
+            android:minHeight="48dp"
             android:text="-5s"
             app:icon="@drawable/ic_replay5_24dp" />
 
@@ -256,13 +171,17 @@
             android:layout_marginStart="12dp"
             android:layout_marginEnd="12dp"
             android:fontFamily="monospace"
+            android:minHeight="48dp"
+            android:gravity="center"
             android:text="LIVE" />
 
         <Button
             android:id="@+id/buttonGoLive"
             style="@style/Widget.MaterialComponents.Button.TextButton"
             android:layout_width="wrap_content"
-            android:layout_height="40dp"
+            android:layout_height="wrap_content"
+            android:minWidth="48dp"
+            android:minHeight="48dp"
             android:text="Live"
             app:icon="@drawable/ic_golive_24dp" />
     </LinearLayout>
@@ -341,9 +260,6 @@
             app:layout_constraintStart_toEndOf="@+id/buttonNext"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_star_24dp" />
-
-
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 
 </LinearLayout>

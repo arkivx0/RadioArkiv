@@ -39,7 +39,7 @@ import androidx.media.session.MediaButtonReceiver;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 import android.text.TextUtils;
-import android.util.Log;
+import net.programmierecke.radiodroid2.utils.AppLog;
 import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.widget.Toast;
@@ -376,21 +376,21 @@ public class PlayerService extends JobIntentService implements RadioPlayer.Playe
 
                     switch (focusChange) {
                         case AudioManager.AUDIOFOCUS_GAIN:
-                            if (BuildConfig.DEBUG) Log.d(TAG, "audio focus gain");
+                            if (BuildConfig.DEBUG) AppLog.d(TAG, "audio focus gain");
 
                             if (pauseReason == PauseReason.FOCUS_LOSS_TRANSIENT) {
                                 try {
                                     enableMediaSession();
                                     resumeAfterFocusGain();
                                 } catch (Exception e) {
-                                    Log.e(TAG, "resume after focus gain failed", e);
+                                    AppLog.e(TAG, "resume after focus gain failed", e);
                                 }
                             }
 
                             radioPlayer.setVolume(FULL_VOLUME);
                             break;
                         case AudioManager.AUDIOFOCUS_LOSS:
-                            if (BuildConfig.DEBUG) Log.d(TAG, "audio focus loss");
+                            if (BuildConfig.DEBUG) AppLog.d(TAG, "audio focus loss");
 
                             if (radioPlayer.isPlaying()) {
                                 pause(PauseReason.FOCUS_LOSS);
@@ -398,7 +398,7 @@ public class PlayerService extends JobIntentService implements RadioPlayer.Playe
 
                             break;
                         case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
-                            if (BuildConfig.DEBUG) Log.d(TAG, "audio focus loss transient");
+                            if (BuildConfig.DEBUG) AppLog.d(TAG, "audio focus loss transient");
 
                             if (radioPlayer.isPlaying()) {
                                 pause(PauseReason.FOCUS_LOSS_TRANSIENT);
@@ -407,7 +407,7 @@ public class PlayerService extends JobIntentService implements RadioPlayer.Playe
                             break;
                         case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
                             if (BuildConfig.DEBUG)
-                                Log.d(TAG, "audio focus loss transient can duck");
+                                AppLog.d(TAG, "audio focus loss transient can duck");
 
                             radioPlayer.setVolume(DUCK_VOLUME);
                             break;
@@ -450,7 +450,7 @@ public class PlayerService extends JobIntentService implements RadioPlayer.Playe
         timer = new CountDownTimer(seconds * 1000, 1000) {
             public void onTick(long millisUntilFinished) {
                 seconds = millisUntilFinished / 1000;
-                if (BuildConfig.DEBUG) Log.d(TAG, "" + seconds);
+                if (BuildConfig.DEBUG) AppLog.d(TAG, "" + seconds);
 
                 sendBroadCast(PLAYER_SERVICE_TIMER_UPDATE);
             }
@@ -525,7 +525,7 @@ public class PlayerService extends JobIntentService implements RadioPlayer.Playe
 
     @Override
     public void onDestroy() {
-        if (BuildConfig.DEBUG) Log.d(TAG, "PlayService should be destroyed.");
+        if (BuildConfig.DEBUG) AppLog.d(TAG, "PlayService should be destroyed.");
         cancelFocusResumeWatchdog();
 
         stop();
@@ -677,7 +677,7 @@ public class PlayerService extends JobIntentService implements RadioPlayer.Playe
 
     public void pause(PauseReason pauseReason) {
         if (BuildConfig.DEBUG) {
-            Log.d(TAG, String.format("pausing playback, reason %s", pauseReason.toString()));
+            AppLog.d(TAG, String.format("pausing playback, reason %s", pauseReason.toString()));
         }
 
         this.pauseReason = pauseReason;
@@ -765,7 +765,7 @@ public class PlayerService extends JobIntentService implements RadioPlayer.Playe
                 return;
             }
             if (focusResumeAttempt >= FOCUS_RESUME_MAX_RETRIES) {
-                Log.w(TAG, "resume after focus gain failed, stopping");
+                AppLog.w(TAG, "resume after focus gain failed, stopping");
                 cancelFocusResumeWatchdog();
                 stop();
                 return;
@@ -825,7 +825,7 @@ public class PlayerService extends JobIntentService implements RadioPlayer.Playe
     }
 
     public void resume() {
-        if (BuildConfig.DEBUG) Log.d(TAG, "resuming playback.");
+        if (BuildConfig.DEBUG) AppLog.d(TAG, "resuming playback.");
 
         forceStopAudioWarning();
 
@@ -865,7 +865,7 @@ public class PlayerService extends JobIntentService implements RadioPlayer.Playe
     }
 
     public void stop() {
-        if (BuildConfig.DEBUG) Log.d(TAG, "stopping playback.");
+        if (BuildConfig.DEBUG) AppLog.d(TAG, "stopping playback.");
         cancelFocusResumeWatchdog();
         if (scheduledStop != null) {
             handler.removeCallbacks(scheduledStop);
@@ -939,7 +939,7 @@ public class PlayerService extends JobIntentService implements RadioPlayer.Playe
                 try {
                     error = itsContext.getResources().getString(lastErrorFromPlayer);
                 } catch (Resources.NotFoundException ex) {
-                    Log.e(TAG, String.format("Unknown play error: %d", lastErrorFromPlayer), ex);
+                    AppLog.e(TAG, String.format("Unknown play error: %d", lastErrorFromPlayer), ex);
                 }
             }
 
@@ -963,7 +963,7 @@ public class PlayerService extends JobIntentService implements RadioPlayer.Playe
 
     private void enableMediaSession() {
         if (!mediaSession.isActive()) {
-            if (BuildConfig.DEBUG) Log.d(TAG, "enabling media session.");
+            if (BuildConfig.DEBUG) AppLog.d(TAG, "enabling media session.");
 
             IntentFilter becomingNoisyFilter = new IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY);
             registerReceiver(becomingNoisyReceiver, becomingNoisyFilter);
@@ -978,7 +978,7 @@ public class PlayerService extends JobIntentService implements RadioPlayer.Playe
     private void disableMediaSession() {
 
         if (mediaSession.isActive()) {
-            if (BuildConfig.DEBUG) Log.d(TAG, "disabling media session.");
+            if (BuildConfig.DEBUG) AppLog.d(TAG, "disabling media session.");
 
             mediaSession.setActive(false);
 
@@ -987,7 +987,7 @@ public class PlayerService extends JobIntentService implements RadioPlayer.Playe
     }
 
     private int acquireAudioFocus() {
-        if (BuildConfig.DEBUG) Log.d(TAG, "acquiring audio focus.");
+        if (BuildConfig.DEBUG) AppLog.d(TAG, "acquiring audio focus.");
 
         int result = audioManager.requestAudioFocus(afChangeListener,
                 // Use the music stream.
@@ -995,7 +995,7 @@ public class PlayerService extends JobIntentService implements RadioPlayer.Playe
                 // Request permanent focus.
                 AudioManager.AUDIOFOCUS_GAIN);
         if (result != AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
-            Log.e(TAG, "acquiring audio focus failed!");
+            AppLog.e(TAG, "acquiring audio focus failed!");
             toastOnUi(R.string.error_grant_audiofocus);
         }
 
@@ -1003,13 +1003,13 @@ public class PlayerService extends JobIntentService implements RadioPlayer.Playe
     }
 
     private void releaseAudioFocus() {
-        if (BuildConfig.DEBUG) Log.d(TAG, "releasing audio focus.");
+        if (BuildConfig.DEBUG) AppLog.d(TAG, "releasing audio focus.");
 
         audioManager.abandonAudioFocus(afChangeListener);
     }
 
     void acquireWakeLockAndWifiLock() {
-        if (BuildConfig.DEBUG) Log.d(TAG, "acquiring wake lock and wifi lock.");
+        if (BuildConfig.DEBUG) AppLog.d(TAG, "acquiring wake lock and wifi lock.");
 
         if (wakeLock == null) {
             wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "PlayerService:");
@@ -1017,7 +1017,7 @@ public class PlayerService extends JobIntentService implements RadioPlayer.Playe
         if (!wakeLock.isHeld()) {
             wakeLock.acquire();
         } else {
-            if (BuildConfig.DEBUG) Log.d(TAG, "wake lock is already acquired.");
+            if (BuildConfig.DEBUG) AppLog.d(TAG, "wake lock is already acquired.");
         }
 
         WifiManager wm = (WifiManager) itsContext.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
@@ -1032,15 +1032,15 @@ public class PlayerService extends JobIntentService implements RadioPlayer.Playe
             if (!wifiLock.isHeld()) {
                 wifiLock.acquire();
             } else {
-                if (BuildConfig.DEBUG) Log.d(TAG, "wifi lock is already acquired.");
+                if (BuildConfig.DEBUG) AppLog.d(TAG, "wifi lock is already acquired.");
             }
         } else {
-            Log.e(TAG, "could not acquire wifi lock, WifiManager does not exist!");
+            AppLog.e(TAG, "could not acquire wifi lock, WifiManager does not exist!");
         }
     }
 
     private void releaseWakeLockAndWifiLock() {
-        if (BuildConfig.DEBUG) Log.d(TAG, "releasing wake lock and wifi lock.");
+        if (BuildConfig.DEBUG) AppLog.d(TAG, "releasing wake lock and wifi lock.");
 
         if (wakeLock != null) {
             if (wakeLock.isHeld()) {
@@ -1084,7 +1084,7 @@ public class PlayerService extends JobIntentService implements RadioPlayer.Playe
             try {
                 theMessage = itsContext.getResources().getString(lastErrorFromPlayer);
             } catch (Resources.NotFoundException ex) {
-                Log.e(TAG, String.format("Unknown play error: %d", lastErrorFromPlayer), ex);
+                AppLog.e(TAG, String.format("Unknown play error: %d", lastErrorFromPlayer), ex);
             }
         }
 
@@ -1164,7 +1164,7 @@ public class PlayerService extends JobIntentService implements RadioPlayer.Playe
             }
             return true;
         } catch (Exception e) {
-            Log.e(TAG, "startForeground not allowed, posting plain notification", e);
+            AppLog.e(TAG, "startForeground not allowed, posting plain notification", e);
             try {
                 NotificationManagerCompat.from(this).notify(NOTIFY_ID, notification);
             } catch (Exception ignored) {
@@ -1200,11 +1200,11 @@ public class PlayerService extends JobIntentService implements RadioPlayer.Playe
                     } else if (System.currentTimeMillis() < deadline) {
                         handler.postDelayed(this, 2000);
                     } else {
-                        Log.e(TAG, "scheduled recording: stream never started");
+                        AppLog.e(TAG, "scheduled recording: stream never started");
                         stop();
                     }
                 } catch (Exception e) {
-                    Log.e(TAG, "scheduled recording failed", e);
+                    AppLog.e(TAG, "scheduled recording failed", e);
                 }
             }
         });
@@ -1233,7 +1233,7 @@ public class PlayerService extends JobIntentService implements RadioPlayer.Playe
         try {
             if (radioPlayer.isRecording()) itsBinder.stopRecording(); else itsBinder.startRecording();
         } catch (Exception e) {
-            Log.e(TAG, "record toggle failed", e);
+            AppLog.e(TAG, "record toggle failed", e);
         }
         updateNotification();
     }
@@ -1267,7 +1267,7 @@ public class PlayerService extends JobIntentService implements RadioPlayer.Playe
             case Playing:
                 final String title = liveInfo.getTitle();
                 if (!TextUtils.isEmpty(title)) {
-                    if (BuildConfig.DEBUG) Log.d(TAG, "update message:" + title);
+                    if (BuildConfig.DEBUG) AppLog.d(TAG, "update message:" + title);
                     sendMessage(currentStation.Name, title, title);
                 } else {
                     sendMessage(currentStation.Name, itsContext.getResources().getString(R.string.notify_play), currentStation.Name);
@@ -1480,7 +1480,7 @@ public class PlayerService extends JobIntentService implements RadioPlayer.Playe
                         enableMediaSession();
 
                         if (BuildConfig.DEBUG) {
-                            Log.d(TAG, "Open audio effect control session, session id=" + audioSessionId);
+                            AppLog.d(TAG, "Open audio effect control session, session id=" + audioSessionId);
                         }
 
                         lastPlayStartTime = System.currentTimeMillis();
@@ -1498,7 +1498,7 @@ public class PlayerService extends JobIntentService implements RadioPlayer.Playe
 
                         if (audioSessionId > 0) {
                             if (BuildConfig.DEBUG) {
-                                Log.d(TAG, "Close audio effect control session, session id=" + audioSessionId);
+                                AppLog.d(TAG, "Close audio effect control session, session id=" + audioSessionId);
                             }
 
                             Intent i = new Intent(AudioEffect.ACTION_CLOSE_AUDIO_EFFECT_CONTROL_SESSION);
@@ -1573,12 +1573,12 @@ public class PlayerService extends JobIntentService implements RadioPlayer.Playe
 //            }
 
             if (BuildConfig.DEBUG) {
-                Log.d(TAG, "Metadata offset:" + info.metadataOffset);
-                Log.d(TAG, "Bitrate:" + info.bitrate);
-                Log.d(TAG, "Name:" + info.audioName);
-                Log.d(TAG, "Hls:" + isHls);
-                Log.d(TAG, "Server:" + info.serverName);
-                Log.d(TAG, "AudioInfo:" + info.audioInfo);
+                AppLog.d(TAG, "Metadata offset:" + info.metadataOffset);
+                AppLog.d(TAG, "Bitrate:" + info.bitrate);
+                AppLog.d(TAG, "Name:" + info.audioName);
+                AppLog.d(TAG, "Hls:" + isHls);
+                AppLog.d(TAG, "Server:" + info.serverName);
+                AppLog.d(TAG, "AudioInfo:" + info.audioInfo);
             }
         }
         sendBroadCast(PLAYER_SERVICE_META_UPDATE);
@@ -1592,7 +1592,7 @@ public class PlayerService extends JobIntentService implements RadioPlayer.Playe
         if (BuildConfig.DEBUG) {
             Map<String, String> rawMetadata = liveInfo.getRawMetadata();
             for (String key : rawMetadata.keySet()) {
-                Log.i(TAG, "INFO:" + key + "=" + rawMetadata.get(key));
+                AppLog.i(TAG, "INFO:" + key + "=" + rawMetadata.get(key));
             }
         }
 
@@ -1628,6 +1628,6 @@ public class PlayerService extends JobIntentService implements RadioPlayer.Playe
 
     @Override
     protected void onHandleWork(@NonNull Intent intent) {
-        Log.d(TAG, "onHandleWork called with intent: " + intent.toString());
+        AppLog.d(TAG, "onHandleWork called with intent: " + intent.toString());
     }
 }

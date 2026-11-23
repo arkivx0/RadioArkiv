@@ -18,7 +18,7 @@ import android.os.Build;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.os.RemoteException;
-import android.util.Log;
+import net.programmierecke.radiodroid2.utils.AppLog;
 import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
@@ -48,14 +48,14 @@ public class AlarmReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        if(BuildConfig.DEBUG) { Log.d(TAG,"received broadcast"); }
+        if(BuildConfig.DEBUG) { AppLog.d(TAG,"received broadcast"); }
         aquireLocks(context);
         
         Toast toast = Toast.makeText(context, context.getResources().getText(R.string.alert_alarm_working), Toast.LENGTH_SHORT);
         toast.show();
 
         alarmId = intent.getIntExtra("id",-1);
-        if(BuildConfig.DEBUG) { Log.d(TAG,"alarm id:"+alarmId); }
+        if(BuildConfig.DEBUG) { AppLog.d(TAG,"alarm id:"+alarmId); }
 
         RadioDroidApp radioDroidApp = (RadioDroidApp)context.getApplicationContext();
         RadioAlarmManager ram = radioDroidApp.getAlarmManager();
@@ -63,7 +63,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         ram.resetAllAlarms();
 
         if (station != null && alarmId >= 0) {
-            if(BuildConfig.DEBUG) { Log.d(TAG,"radio id:"+alarmId); }
+            if(BuildConfig.DEBUG) { AppLog.d(TAG,"radio id:"+alarmId); }
 
             SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(radioDroidApp);
             final boolean warnOnMetered = sharedPref.getBoolean("warn_no_wifi", false);
@@ -84,7 +84,7 @@ public class AlarmReceiver extends BroadcastReceiver {
             wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "AlarmReceiver:");
         }
         if (!wakeLock.isHeld()) {
-            if(BuildConfig.DEBUG) { Log.d(TAG,"acquire wakelock"); }
+            if(BuildConfig.DEBUG) { AppLog.d(TAG,"acquire wakelock"); }
             wakeLock.acquire();
         }
         WifiManager wm = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
@@ -97,11 +97,11 @@ public class AlarmReceiver extends BroadcastReceiver {
                 }
             }
             if (!wifiLock.isHeld()) {
-                if(BuildConfig.DEBUG) { Log.d(TAG,"acquire wifilock"); }
+                if(BuildConfig.DEBUG) { AppLog.d(TAG,"acquire wifilock"); }
                 wifiLock.acquire();
             }
         }else{
-            Log.e(TAG,"could not acquire wifi lock");
+            AppLog.e(TAG,"could not acquire wifi lock");
         }
     }
 
@@ -109,19 +109,19 @@ public class AlarmReceiver extends BroadcastReceiver {
         if (wakeLock != null) {
             wakeLock.release();
             wakeLock = null;
-            if(BuildConfig.DEBUG) { Log.d(TAG,"release wakelock"); }
+            if(BuildConfig.DEBUG) { AppLog.d(TAG,"release wakelock"); }
         }
         if (wifiLock != null) {
             wifiLock.release();
             wifiLock = null;
-            if(BuildConfig.DEBUG) { Log.d(TAG,"release wifilock"); }
+            if(BuildConfig.DEBUG) { AppLog.d(TAG,"release wifilock"); }
         }
     }
 
     IPlayerService itsPlayerService;
     private ServiceConnection svcConn = new ServiceConnection() {
         public void onServiceConnected(ComponentName className, IBinder binder) {
-            if(BuildConfig.DEBUG) { Log.d(TAG, "Service came online"); }
+            if(BuildConfig.DEBUG) { AppLog.d(TAG, "Service came online"); }
             itsPlayerService = IPlayerService.Stub.asInterface(binder);
             try {
                 station.playableUrl = url;
@@ -130,14 +130,14 @@ public class AlarmReceiver extends BroadcastReceiver {
                 // default timeout 1 hour
                 itsPlayerService.addTimer(timeout*60);
             } catch (RemoteException e) {
-                Log.e(TAG,"play error:"+e);
+                AppLog.e(TAG,"play error:"+e);
             }
 
             releaseLocks();
         }
 
         public void onServiceDisconnected(ComponentName className) {
-            if(BuildConfig.DEBUG) { Log.d(TAG, "Service offline"); }
+            if(BuildConfig.DEBUG) { AppLog.d(TAG, "Service offline"); }
             itsPlayerService = null;
         }
     };
@@ -160,7 +160,7 @@ public class AlarmReceiver extends BroadcastReceiver {
                     try {
                         Thread.sleep(500);
                     } catch (InterruptedException e) {
-                        Log.e(TAG,"Play() "+e);
+                        AppLog.e(TAG,"Play() "+e);
                     }
                 }
                 return result;
@@ -201,11 +201,11 @@ public class AlarmReceiver extends BroadcastReceiver {
                             context.getApplicationContext().startService(anIntent);
                         }
                     } catch (Exception e) {
-                        Log.e(TAG, "Error starting alarm intent "+e);
+                        AppLog.e(TAG, "Error starting alarm intent "+e);
                         PlaySystemAlarm(context);
                     }
                 } else {
-                    Log.e(TAG, "Could not connect to radio station");
+                    AppLog.e(TAG, "Could not connect to radio station");
                     Toast toast = Toast.makeText(context, context.getResources().getText(R.string.error_station_load), Toast.LENGTH_SHORT);
                     toast.show();
                     PlaySystemAlarm(context);
@@ -224,7 +224,7 @@ public class AlarmReceiver extends BroadcastReceiver {
     }
 
     private void PlaySystemAlarm(Context context) {
-        if(BuildConfig.DEBUG) { Log.d(TAG, "Starting system alarm"); }
+        if(BuildConfig.DEBUG) { AppLog.d(TAG, "Starting system alarm"); }
 
         Uri soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
 

@@ -1,8 +1,18 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
+// jcenter() is last and deprecated. mavenCentral() plus official Maven Central mirrors
+// keep AGP 7.3.1 resolvable after JCenter shut down. A machine-local third_party/m2
+// cache is used when present (gitignored) so flaky remote 404s cannot pin modules.
 buildscript {
     repositories {
-        jcenter()
+        def localM2 = file("${rootProject.projectDir}/third_party/m2")
+        if (localM2.directory) {
+            maven { url uri(localM2) }
+        }
         google()
+        maven { url 'https://repo1.maven.org/maven2/' }
+        maven { url 'https://maven-central.storage-download.googleapis.com/maven2/' }
+        mavenCentral()
+        jcenter()
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:7.3.1'
@@ -12,9 +22,15 @@ buildscript {
 
 allprojects {
     repositories {
-        jcenter()
-        mavenCentral()
+        def localM2 = file("${rootProject.projectDir}/third_party/m2")
+        if (localM2.directory) {
+            maven { url uri(localM2) }
+        }
         google()
+        maven { url 'https://repo1.maven.org/maven2/' }
+        maven { url 'https://maven-central.storage-download.googleapis.com/maven2/' }
         maven { url 'https://jitpack.io' }
+        mavenCentral()
+        jcenter()
     }
 }

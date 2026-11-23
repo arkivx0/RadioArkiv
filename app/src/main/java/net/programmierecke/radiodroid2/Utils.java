@@ -13,7 +13,7 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.text.TextUtils;
-import android.util.Log;
+import net.programmierecke.radiodroid2.utils.AppLog;
 import android.util.TypedValue;
 import android.webkit.MimeTypeMap;
 
@@ -106,7 +106,7 @@ public class Utils {
             long hours = mins / 60;
 
             if (BuildConfig.DEBUG) {
-                Log.d("UTIL", "File last modified : " + lastModDate.toString() + " secs=" + secs + "  mins=" + mins + " hours=" + hours);
+                AppLog.d("UTIL", "File last modified : " + lastModDate.toString() + " secs=" + secs + "  mins=" + mins + " hours=" + hours);
             }
 
             if (hours < 1) {
@@ -118,16 +118,16 @@ public class Utils {
                 }
                 rd.close();
                 if (BuildConfig.DEBUG) {
-                    Log.d("UTIL", "used cache for:" + theURI);
+                    AppLog.d("UTIL", "used cache for:" + theURI);
                 }
                 return chaine.toString();
             }
             if (BuildConfig.DEBUG) {
-                Log.d("UTIL", "do not use cache, because too old:" + theURI);
+                AppLog.d("UTIL", "do not use cache, because too old:" + theURI);
             }
             return null;
         } catch (Exception e) {
-            Log.e("UTIL", "getCacheFile() " + e);
+            AppLog.e("UTIL", "getCacheFile() " + e);
         }
         return null;
     }
@@ -143,19 +143,19 @@ public class Utils {
             aStream.write(content.getBytes("utf-8"));
             aStream.close();
         } catch (Exception e) {
-            Log.e("UTIL", "writeFileCache() could not write to cache file for:" + theURI);
+            AppLog.e("UTIL", "writeFileCache() could not write to cache file for:" + theURI);
         }
     }
 
     private static String downloadFeed(OkHttpClient httpClient, Context ctx, String theURI, boolean forceUpdate, Map<String, String> dictParams) {
-        Log.i("DOWN", "Url=" + theURI);
+        AppLog.i("DOWN", "Url=" + theURI);
         if (!forceUpdate) {
             String cache = getCacheFile(ctx, theURI);
             if (cache != null) {
                 return cache;
             }
         }
-        Log.i("DOWN", "Url=" + theURI + " (not cached)");
+        AppLog.i("DOWN", "Url=" + theURI + " (not cached)");
 
         try {
             HttpUrl url = HttpUrl.parse(theURI);
@@ -180,17 +180,17 @@ public class Utils {
             String responseStr = response.body().string();
 
             if (!response.isSuccessful()) {
-                Log.e("UTIL", "Unsuccessful response: " + response.message() + "\n" + responseStr);
+                AppLog.e("UTIL", "Unsuccessful response: " + response.message() + "\n" + responseStr);
                 return null;
             }
 
             writeFileCache(ctx, theURI, responseStr);
             if (BuildConfig.DEBUG) {
-                Log.d("UTIL", "wrote cache file for:" + theURI);
+                AppLog.d("UTIL", "wrote cache file for:" + theURI);
             }
             return responseStr;
         } catch (Exception e) {
-            Log.e("UTIL", "downloadFeed() " + e);
+            AppLog.e("UTIL", "downloadFeed() " + e);
         }
 
         return null;
@@ -251,16 +251,16 @@ public class Utils {
     }
 
     public static String getRealStationLink(OkHttpClient httpClient, Context ctx, String stationId) {
-        Log.i("UTIL", "StationUUID:" + stationId);
+        AppLog.i("UTIL", "StationUUID:" + stationId);
         String result = Utils.downloadFeedRelative(httpClient, ctx, "json/url/" + stationId, true, null);
         if (result != null) {
-            Log.i("UTIL", result);
+            AppLog.i("UTIL", result);
             JSONObject jsonObj;
             try {
                 jsonObj = new JSONObject(result);
                 return jsonObj.getString("url");
             } catch (Exception e) {
-                Log.e("UTIL", "getRealStationLink() " + e);
+                AppLog.e("UTIL", "getRealStationLink() " + e);
             }
         }
         return null;
@@ -268,7 +268,7 @@ public class Utils {
 
     @Deprecated
     public static DataRadioStation getStationById(OkHttpClient httpClient, Context ctx, String stationId) {
-        Log.w("UTIL", "Search by id:" + stationId);
+        AppLog.w("UTIL", "Search by id:" + stationId);
         String result = Utils.downloadFeed(httpClient, ctx, "json/stations/byid/" + stationId, true, null);
         if (result != null) {
             try {
@@ -277,17 +277,17 @@ public class Utils {
                     if (list.size() == 1) {
                         return list.get(0);
                     }
-                    Log.e("UTIL", "stations by id did have length:" + list.size());
+                    AppLog.e("UTIL", "stations by id did have length:" + list.size());
                 }
             } catch (Exception e) {
-                Log.e("UTIL", "getStationByid() " + e);
+                AppLog.e("UTIL", "getStationByid() " + e);
             }
         }
         return null;
     }
 
     public static DataRadioStation getStationByUuid(OkHttpClient httpClient, Context ctx, String stationUuid) {
-        Log.w("UTIL", "Search by uuid:" + stationUuid);
+        AppLog.w("UTIL", "Search by uuid:" + stationUuid);
         String result = Utils.downloadFeedRelative(httpClient, ctx, "json/stations/byuuid/" + stationUuid, true, null);
         if (result != null) {
             try {
@@ -296,10 +296,10 @@ public class Utils {
                     if (list.size() == 1) {
                         return list.get(0);
                     }
-                    Log.e("UTIL", "stations by uuid did have length:" + list.size());
+                    AppLog.e("UTIL", "stations by uuid did have length:" + list.size());
                 }
             } catch (Exception e) {
-                Log.e("UTIL", "getStationByUuid() " + e);
+                AppLog.e("UTIL", "getStationByUuid() " + e);
             }
         }
         return null;
@@ -307,7 +307,7 @@ public class Utils {
 
     public static List<DataRadioStation> getStationsByUuid(OkHttpClient httpClient, Context ctx, Iterable<String> listUUids) {
         String uuids = TextUtils.join(",", listUUids);
-        Log.d("UTIL", "Search by uuid for items");
+        AppLog.d("UTIL", "Search by uuid for items");
         HashMap<String, String> p = new HashMap<String, String>();
         p.put("uuids", uuids);
         String result = Utils.downloadFeedRelative(httpClient, ctx, "json/stations/byuuid", true, p);
@@ -317,10 +317,10 @@ public class Utils {
                 if (list != null) {
                     return list;
                 }else{
-                    Log.e("UTIL", "stations by uuid was null");
+                    AppLog.e("UTIL", "stations by uuid was null");
                 }
             } catch (Exception e) {
-                Log.e("UTIL", "getStationsByUuid() " + e);
+                AppLog.e("UTIL", "getStationsByUuid() " + e);
             }
         }
         return null;
@@ -697,7 +697,7 @@ public class Utils {
                 TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
                 trustManagerFactory.init((KeyStore)null);
                 TrustManager[] tmList = trustManagerFactory.getTrustManagers();
-                Log.i("OkHttpTLSCompat", "Found trustmanagers:"+tmList.length);
+                AppLog.i("OkHttpTLSCompat", "Found trustmanagers:"+tmList.length);
                 X509TrustManager tm = (X509TrustManager)tmList[0];
 
                 SSLContext sc = SSLContext.getInstance("TLSv1.2");
@@ -715,7 +715,7 @@ public class Utils {
 
                 client.connectionSpecs(specs);
             } catch (Exception exc) {
-                Log.e("OkHttpTLSCompat", "Error while setting TLS 1.2", exc);
+                AppLog.e("OkHttpTLSCompat", "Error while setting TLS 1.2", exc);
             }
         }
 

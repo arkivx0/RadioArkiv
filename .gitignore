@@ -49,3 +49,6 @@ build/*
 *.pass
 sign.sh
 *-keys/
+
+# Local Maven prefetch cache (build machine only)
+/third_party/

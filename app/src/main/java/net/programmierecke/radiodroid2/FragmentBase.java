@@ -6,7 +6,7 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
+import net.programmierecke.radiodroid2.utils.AppLog;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
@@ -69,7 +69,7 @@ public class FragmentBase extends Fragment {
     /*
     public void SetDownloadUrl(String theUrl) {
         if (BuildConfig.DEBUG) {
-            Log.d(TAG, "new relativeUrl " + theUrl);
+            AppLog.d(TAG, "new relativeUrl " + theUrl);
         }
         relativeUrl = theUrl;
         DownloadUrl(false);
@@ -93,7 +93,7 @@ public class FragmentBase extends Fragment {
         final boolean show_broken = sharedPref.getBoolean("show_broken", false);
 
         if (BuildConfig.DEBUG) {
-            Log.d(TAG, "Download relativeUrl:" + relativeUrl);
+            AppLog.d(TAG, "Download relativeUrl:" + relativeUrl);
         }
 
         if (TextUtils.isGraphic(relativeUrl)) {
@@ -120,11 +120,11 @@ public class FragmentBase extends Fragment {
                         if(getContext() != null)
                             LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent(ActivityMain.ACTION_HIDE_LOADING));
                         if (BuildConfig.DEBUG) {
-                            Log.d(TAG, "Download relativeUrl finished:" + relativeUrl);
+                            AppLog.d(TAG, "Download relativeUrl finished:" + relativeUrl);
                         }
                         if (result != null) {
                             if (BuildConfig.DEBUG) {
-                                Log.d(TAG, "Download relativeUrl OK:" + relativeUrl);
+                                AppLog.d(TAG, "Download relativeUrl OK:" + relativeUrl);
                             }
                             urlResult = result;
                             RefreshListGui();
@@ -134,7 +134,7 @@ public class FragmentBase extends Fragment {
                                 toast.show();
                             }
                             catch(Exception e){
-                                Log.e("ERR",e.toString());
+                                AppLog.e("ERR",e.toString());
                             }
                         }
                         super.onPostExecute(result);

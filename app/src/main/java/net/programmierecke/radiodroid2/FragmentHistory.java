@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
+import net.programmierecke.radiodroid2.utils.AppLog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,11 +49,11 @@ public class FragmentHistory extends Fragment implements IAdapterRefreshable {
 
     @Override
     public void RefreshListGui() {
-        if (BuildConfig.DEBUG) Log.d(TAG, "refreshing the stations list.");
+        if (BuildConfig.DEBUG) AppLog.d(TAG, "refreshing the stations list.");
 
         ItemAdapterStation adapter = (ItemAdapterStation) rvStations.getAdapter();
 
-        if (BuildConfig.DEBUG) Log.d(TAG, "stations count:" + historyManager.listStations.size());
+        if (BuildConfig.DEBUG) AppLog.d(TAG, "stations count:" + historyManager.listStations.size());
 
         if( adapter != null )
             adapter.updateList(null, historyManager.listStations);
@@ -122,7 +122,7 @@ public class FragmentHistory extends Fragment implements IAdapterRefreshable {
                         @Override
                         public void onRefresh() {
                             if (BuildConfig.DEBUG) {
-                                Log.d(TAG, "onRefresh called from SwipeRefreshLayout");
+                                AppLog.d(TAG, "onRefresh called from SwipeRefreshLayout");
                             }
                             RefreshDownloadList();
                         }
@@ -142,7 +142,7 @@ public class FragmentHistory extends Fragment implements IAdapterRefreshable {
         for (DataRadioStation station : historyManager.listStations){
             listUUids.add(station.StationUuid);
         }
-        Log.d(TAG, "Search for items: "+listUUids.size());
+        AppLog.d(TAG, "Search for items: "+listUUids.size());
 
         task = new AsyncTask<Void, Void, List<DataRadioStation>>() {
             @Override
@@ -156,13 +156,13 @@ public class FragmentHistory extends Fragment implements IAdapterRefreshable {
                 if(getContext() != null)
                     LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent(ActivityMain.ACTION_HIDE_LOADING));
                 if (BuildConfig.DEBUG) {
-                    Log.d(TAG, "Download relativeUrl finished");
+                    AppLog.d(TAG, "Download relativeUrl finished");
                 }
                 if (result != null) {
                     if (BuildConfig.DEBUG) {
-                        Log.d(TAG, "Download relativeUrl OK");
+                        AppLog.d(TAG, "Download relativeUrl OK");
                     }
-                    Log.d(TAG, "Found items: "+result.size());
+                    AppLog.d(TAG, "Found items: "+result.size());
                     SyncList(result);
                     RefreshListGui();
                 } else {
@@ -171,7 +171,7 @@ public class FragmentHistory extends Fragment implements IAdapterRefreshable {
                         toast.show();
                     }
                     catch(Exception e){
-                        Log.e("ERR",e.toString());
+                        AppLog.e("ERR",e.toString());
                     }
                 }
                 super.onPostExecute(result);
@@ -189,14 +189,14 @@ public class FragmentHistory extends Fragment implements IAdapterRefreshable {
                 }
             }
             if (!found){
-                Log.d(TAG,"Remove station: " + station_current.StationUuid + " - " + station_current.Name);
+                AppLog.d(TAG,"Remove station: " + station_current.StationUuid + " - " + station_current.Name);
                 to_remove.add(station_current.StationUuid);
                 station_current.DeletedOnServer = true;
             }
         }
-        Log.d(TAG,"replace items");
+        AppLog.d(TAG,"replace items");
         historyManager.replaceList(list_new);
-        Log.d(TAG,"fin save");
+        AppLog.d(TAG,"fin save");
 
         if (to_remove.size() > 0) {
             Toast toast = Toast.makeText(getContext(), getResources().getString(R.string.notify_sync_list_deleted_entries, to_remove.size(), historyManager.size()), Toast.LENGTH_LONG);

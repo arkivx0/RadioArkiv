@@ -1,5 +1,7 @@
 package net.programmierecke.radiodroid2.history;
 
+import net.programmierecke.radiodroid2.utils.AppLog;
+
 import android.content.ActivityNotFoundException;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -110,7 +112,7 @@ public class TrackHistoryInfoDialog extends BottomSheetDialogFragment {
                 CharSequence toastText = getContext().getResources().getText(R.string.notify_track_info_copied);
                 Toast.makeText(getContext().getApplicationContext(), toastText, Toast.LENGTH_SHORT).show();
             } else {
-                //Log.e(TAG, "Clipboard is NULL!");
+                //AppLog.e(TAG, "Clipboard is NULL!");
                 // TODO: toast general error
             }
         });
