@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FragmentTabs extends Fragment implements IFragmentRefreshable, IFragmentSearchable {
-    private String itsAdressWWWLocal = "json/stations/bycountryexact/internet?order=clickcount&reverse=true";
+    private String itsAdressWWWLocal = "json/stations/bycountryexact/internet?order=clickcount&reverse=true&limit=1000";
     private String itsAdressWWWTopClick = "json/stations/topclick/100";
     private String itsAdressWWWTopVote = "json/stations/topvote/100";
     private String itsAdressWWWChangedLately = "json/stations/lastchange/100";
@@ -130,7 +130,7 @@ public class FragmentTabs extends Fragment implements IFragmentRefreshable, IFra
                 return countryCode;
             }
             countryCode = ctx.getResources().getConfiguration().locale.getCountry();
-            addresses[IDX_LOCAL] = "json/stations/bycountrycodeexact/?order=clickcount&reverse=true";
+            addresses[IDX_LOCAL] = "json/stations/bycountrycodeexact/?order=clickcount&reverse=true&limit=1000";
             AppLog.d("MAIN", "Locale: '" + countryCode + "'");
             if (countryCode != null && countryCode.length() == 2) {
                 return countryCode;
@@ -142,7 +142,7 @@ public class FragmentTabs extends Fragment implements IFragmentRefreshable, IFra
     private void setupViewPager(ViewPager viewPager) {
         String countryCode = getCountryCode();
         if (countryCode != null){
-            addresses[IDX_LOCAL] = "json/stations/bycountrycodeexact/" + countryCode + "?order=clickcount&reverse=true";
+            addresses[IDX_LOCAL] = "json/stations/bycountrycodeexact/" + countryCode + "?order=clickcount&reverse=true&limit=1000";
         }
 
         fragments[IDX_LOCAL] = new FragmentStations();

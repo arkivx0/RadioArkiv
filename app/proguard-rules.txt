@@ -6,10 +6,15 @@
 -keep class net.programmierecke.radiodroid2.IPlayerService { *; }
 -keep class net.programmierecke.radiodroid2.IPlayerService$* { *; }
 
-# Gson / JSON models
--keepclassmembers class * {
+# Gson / JSON models. Field names must stay stable so 1.0.6 prefs and
+# countries.json still deserialize after R8.
+-keepclassmembers,allowobfuscation class * {
     @com.google.gson.annotations.SerializedName <fields>;
 }
+-keep class net.programmierecke.radiodroid2.CountryCodeDictionary$Country { <fields>; <init>(...); }
+-keepclassmembers class net.programmierecke.radiodroid2.players.mpd.MPDServerData { <fields>; }
+-keep enum net.programmierecke.radiodroid2.players.mpd.MPDServerData$Status { *; }
+-keepclassmembers class net.programmierecke.radiodroid2.proxy.ProxySettings { <fields>; }
 -keep class net.programmierecke.radiodroid2.station.DataRadioStation { *; }
 -keep class net.programmierecke.radiodroid2.alarm.DataRadioStationAlarm { *; }
 -keep class net.programmierecke.radiodroid2.station.live.** { *; }

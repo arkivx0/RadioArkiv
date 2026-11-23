@@ -2,6 +2,8 @@ package net.programmierecke.radiodroid2.players.mpd;
 
 import androidx.annotation.NonNull;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,17 +15,26 @@ public class MPDServerData {
     }
 
     // Persistent data
+    @SerializedName("id")
     public int id = -1;
+    @SerializedName("name")
     public String name;
+    @SerializedName("hostname")
     public String hostname;
+    @SerializedName("port")
     public int port;
+    @SerializedName("password")
     public String password;
 
     // Runtime status
+    @SerializedName("isReachable")
     public boolean isReachable = false;
+    @SerializedName("status")
     public Status status = MPDServerData.Status.Idle;
+    @SerializedName("volume")
     public int volume = 0;
 
+    @SerializedName("connected")
     public boolean connected = false;
 
     public MPDServerData(@NonNull String name, @NonNull String hostname, int port, String password) {

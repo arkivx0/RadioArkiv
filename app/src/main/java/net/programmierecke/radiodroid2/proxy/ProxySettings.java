@@ -3,16 +3,22 @@ package net.programmierecke.radiodroid2.proxy;
 import android.content.SharedPreferences;
 
 import com.google.gson.Gson;
+import com.google.gson.annotations.SerializedName;
 
 import java.net.Proxy;
 
 public class ProxySettings {
     private final static String PREFERENCES_KEY = "proxySettings";
 
+    @SerializedName("host")
     public String host;
+    @SerializedName("port")
     public int port;
+    @SerializedName("login")
     public String login;
+    @SerializedName("password")
     public String password;
+    @SerializedName("type")
     public Proxy.Type type;
 
     public static ProxySettings fromPreferences(SharedPreferences sharedPref) {

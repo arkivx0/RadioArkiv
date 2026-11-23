@@ -16,7 +16,7 @@ All credit for the app itself goes to the RadioDroid project. Licensed GPL-3.0 l
 <p align="center"><em>Stations shown are a random selection picked from the public directory for screenshots and testing, not an endorsement.</em></p>
 
 ## What this fork adds
-- **1.0.7 player and catalogue polish**: the full player fits a typical phone screen without scrolling (swipe for track history and recordings), song titles are shown from Vorbis/Ogg comments and ID3 (including HLS ID3) as well as ICY, tag/country/language searches no longer crash on huge result lists, and dark themes have clearer secondary text and link colors with larger touch targets.
+- **1.0.7 player and catalogue polish**: the full player fits a typical phone screen without scrolling (swipe for track history and recordings), song titles are shown from Vorbis/Ogg comments and ID3 (including HLS ID3) as well as ICY, tag/country/language searches no longer crash on huge result lists, and dark themes have clearer secondary text and link colors with larger touch targets. Voice search may pick a slightly different station when several names are close matches.
 - **Offline station backup** (new in 1.0.5/1.0.6): station lists and browse results are kept on the device, so
   the app keeps working when the Radio Browser servers are unreachable (other mirrors are tried first, and a
   short hint shows when an offline copy is used). Favourites, history and recordings never depend on the servers.
@@ -77,7 +77,7 @@ Download `RadioArkiv.apk` from [Releases](../../releases). APKs are signed with 
 - Signing certificate SHA-256:
   `291e1bccf7a19a6d0542a0a4c1af02aef42d305216534d798a85dc4187254861`
 - APK SHA-256 for 1.0.7:
-  `0073a9d70d9f45a9369a1d2e810e061a595b95d566be07da07db3990405e35a9`
+  `3bf8945c04528405bc1dbf6a4451c65a30ce4a8f267ebf30fd20c5bb4b8fb19e`
 
 Verify before installing:
 ```

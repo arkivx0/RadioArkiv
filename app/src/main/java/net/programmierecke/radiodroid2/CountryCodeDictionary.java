@@ -5,6 +5,7 @@ import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 
 import com.google.gson.Gson;
+import com.google.gson.annotations.SerializedName;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.BufferedReader;
@@ -30,8 +31,10 @@ public class CountryCodeDictionary {
     private CountryCodeDictionary() {
     }
 
-    private class Country {
+    static class Country {
+        @SerializedName("name")
         private String name;
+        @SerializedName("code")
         private String code;
 
         public String getName() {

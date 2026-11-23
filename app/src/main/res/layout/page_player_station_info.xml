@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:drawablePadding="4sp"
         android:ellipsize="end"
-        android:maxLines="1"
+        android:maxLines="3"
         android:minLines="1"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
@@ -24,7 +24,7 @@
         android:textSize="16sp"
         app:cornerRadius="8dp"
         app:tagBackgroundColor="?attr/tagBackgroundColor"
-        app:tagHeight="25sp"
+        app:tagHeight="32dp"
         app:textHorizontalPadding="8dp"
-        app:textVerticalMargin="4dp" />
+        app:textVerticalMargin="8dp" />
 </LinearLayout>

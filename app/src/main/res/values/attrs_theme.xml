@@ -18,6 +18,7 @@
     <attr name="swipeDeleteBackgroundColor" format="reference" />
 
     <attr name="colorAccentMy" format="reference" />
+    <attr name="snackBarButtonColor" format="reference|color" />
     <!-- Radio fork: background behind station logos / placeholder, and the placeholder icon tint -->
     <attr name="stationIconBackground" format="reference|color" />
     <attr name="stationIconPlaceholderTint" format="reference|color" />

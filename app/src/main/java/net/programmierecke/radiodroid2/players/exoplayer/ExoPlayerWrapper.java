@@ -110,6 +110,7 @@ public class ExoPlayerWrapper implements PlayerWrapper, IcyDataSource.IcyDataSou
         this.context = context;
         this.streamUrl = streamUrl;
         isHls = Utils.urlIndicatesHlsStream(streamUrl);
+        // Drop the previous station's title so merge() cannot keep it.
         currentLiveInfo = null;
 
         cancelStopTask();

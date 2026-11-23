@@ -51,6 +51,7 @@
 
         <!-- workaround for lower API -->
         <item name="colorAccentMy">@color/colorAccent</item>
+        <item name="snackBarButtonColor">@color/snackBarButtonColor</item>
 
         <item name="viewInflaterClass">androidx.appcompat.app.AppCompatViewInflater</item>
     </style>
@@ -101,6 +102,7 @@
 
         <!-- workaround for lower API -->
         <item name="colorAccentMy">@color/colorAccentDark</item>
+        <item name="snackBarButtonColor">@color/snackBarButtonColorDark</item>
 
         <item name="viewInflaterClass">androidx.appcompat.app.AppCompatViewInflater</item>
     </style>
@@ -154,10 +156,10 @@
     </style>
 
     <style name="SnackBarButton" parent="@style/Widget.MaterialComponents.Button.TextButton.Snackbar">
-        <item name="android:textColor">@color/snackBarButtonColor</item>
+        <item name="android:textColor">?attr/snackBarButtonColor</item>
     </style>
 
     <style name="SnackBarButtonDark" parent="@style/Widget.MaterialComponents.Button.TextButton.Snackbar">
-        <item name="android:textColor">@color/snackBarButtonColor</item>
+        <item name="android:textColor">?attr/snackBarButtonColor</item>
     </style>
 </resources>

@@ -68,8 +68,8 @@
                             android:visibility="gone"
                             app:tabIndicatorColor="?attr/colorTabUnderline"
                             app:tabMode="scrollable"
-                            app:tabSelectedTextColor="@color/windowBackground"
-                            app:tabTextColor="@color/windowBackground" />
+                            app:tabSelectedTextColor="?attr/menuBottomTextColorSelected"
+                            app:tabTextColor="?attr/menuBottomTextColorDefault" />
                     </LinearLayout>
 
 

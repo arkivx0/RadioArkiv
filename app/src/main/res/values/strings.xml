@@ -277,9 +277,9 @@
         <item quantity="other">%1$d channels</item>
     </plurals>
 
-    <string name="tab_player_art">Album art</string>
+    <string name="tab_player_art">Art</string>
     <string name="tab_player_info">Info</string>
-    <string name="tab_player_history">Track history</string>
+    <string name="tab_player_history">History</string>
     <string name="tab_player_recordings">Recordings</string>
 
     <string name="station_detail_bitrate">%1$1d kbps</string>
@@ -385,6 +385,9 @@
     <string name="settings_rec_silent_default">Record silently by default</string>
     <string name="settings_rec_silent_default_summary">New scheduled recordings don\'t play aloud</string>
     <string name="open_audio_file_hint">Play a recording or any audio file on this phone</string>
+    <string name="player_skip_back_5s">-5s</string>
+    <string name="player_go_live">Live</string>
+    <string name="player_live">LIVE</string>
     <string name="player_back_30s">Back 30 s</string>
     <string name="settings_timeshift">Skip-back buffer</string>
     <string name="settings_timeshift_summary">%1$s · about %2$s at %3$d kbps (%4$s)</string>

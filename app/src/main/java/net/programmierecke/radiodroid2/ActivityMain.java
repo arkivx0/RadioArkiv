@@ -266,8 +266,8 @@ public class ActivityMain extends AppCompatActivity implements SearchView.OnQuer
             }
         });
 
-        // Disable ability of ToolBar to follow bottom sheet because it doesn't work well with
-        // our custom RecyclerAwareNestedScrollView
+        // Disable the ToolBar following the bottom sheet; it fights the player sheet's
+        // nested scrolling (history and recordings lists).
         CoordinatorLayout.LayoutParams coordinatorLayoutParams = (CoordinatorLayout.LayoutParams) appBarLayout.getLayoutParams();
         AppBarLayout.Behavior appBarLayoutBehavior = new AppBarLayout.Behavior() {
             @Override

@@ -55,7 +55,6 @@ public final class LiveMetadata {
                 if (isBlank(comment.key) || comment.value == null) {
                     continue;
                 }
-                raw.put(comment.key, comment.value);
                 String key = comment.key.toUpperCase(Locale.ROOT);
                 String value = comment.value.trim();
                 if (value.isEmpty()) {
@@ -64,13 +63,16 @@ public final class LiveMetadata {
                 switch (key) {
                     case "TITLE":
                         vorbisTitle = value;
+                        raw.put("TITLE", value);
                         break;
                     case "ARTIST":
                         vorbisArtist = value;
+                        raw.put("ARTIST", value);
                         break;
                     case "COMMENT":
                     case "DESCRIPTION":
                         vorbisComment = value;
+                        raw.put("COMMENT", value);
                         break;
                     default:
                         break;
@@ -82,9 +84,6 @@ public final class LiveMetadata {
                     continue;
                 }
                 value = value.trim();
-                if (frame.id != null) {
-                    raw.put(frame.id, value);
-                }
                 if ("TIT2".equals(frame.id) || "TT2".equals(frame.id)) {
                     id3Title = value;
                 } else if ("TPE1".equals(frame.id) || "TP1".equals(frame.id)) {
@@ -98,7 +97,6 @@ public final class LiveMetadata {
                 CommentFrame frame = (CommentFrame) entry;
                 if (!isBlank(frame.text)) {
                     id3Comment = frame.text.trim();
-                    raw.put("COMM", id3Comment);
                 }
             }
         }

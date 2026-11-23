@@ -36,6 +36,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import com.google.android.material.tabs.TabLayout;
+
 import com.squareup.picasso.Picasso;
 
 import net.programmierecke.radiodroid2.history.TrackHistoryAdapter;
@@ -114,6 +116,8 @@ public class FragmentPlayerFull extends Fragment {
     private static final int PAGE_RECORDINGS = 3;
 
     private ViewPager pagerArtAndInfo;
+    private TabLayout tabArtAndInfo;
+    private View layoutTimeShift;
     private ArtAndInfoPagerAdapter artAndInfoPagerAdapter;
 
     private TextView textViewGeneralInfo;
@@ -178,8 +182,20 @@ public class FragmentPlayerFull extends Fragment {
         View view = inflater.inflate(R.layout.layout_player_full, container, false);
 
         pagerArtAndInfo = view.findViewById(R.id.pagerArtAndInfo);
+        tabArtAndInfo = view.findViewById(R.id.tabArtAndInfo);
+        layoutTimeShift = view.findViewById(R.id.layoutTimeShift);
         artAndInfoPagerAdapter = new ArtAndInfoPagerAdapter(requireContext(), pagerArtAndInfo);
         pagerArtAndInfo.setAdapter(artAndInfoPagerAdapter);
+        if (tabArtAndInfo != null) {
+            tabArtAndInfo.setupWithViewPager(pagerArtAndInfo);
+        }
+        pagerArtAndInfo.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+            @Override
+            public void onPageSelected(int position) {
+                updatePagerNestedScrolling(position);
+            }
+        });
+        updatePagerNestedScrolling(pagerArtAndInfo.getCurrentItem());
 
         textViewGeneralInfo = view.findViewById(R.id.textViewGeneralInfo);
         textViewTimePlayed = view.findViewById(R.id.textViewTimePlayed);
@@ -425,6 +441,31 @@ public class FragmentPlayerFull extends Fragment {
         favouriteManager.deleteObserver(favouritesObserver);
     }
 
+
+    private void updatePagerNestedScrolling(int page) {
+        if (artAndInfoPagerAdapter == null) {
+            return;
+        }
+        if (artAndInfoPagerAdapter.recyclerViewSongHistory != null) {
+            artAndInfoPagerAdapter.recyclerViewSongHistory.setNestedScrollingEnabled(page == PAGE_HISTORY);
+        }
+        if (artAndInfoPagerAdapter.recyclerViewRecordings != null) {
+            artAndInfoPagerAdapter.recyclerViewRecordings.setNestedScrollingEnabled(page == PAGE_RECORDINGS);
+        }
+        View sheet = getActivity() != null ? getActivity().findViewById(R.id.bottom_sheet) : null;
+        if (sheet != null) {
+            sheet.requestLayout();
+        }
+    }
+
+    private void updateTimeShiftVisibility() {
+        if (layoutTimeShift == null) {
+            return;
+        }
+        boolean show = PlayerServiceUtil.isPlaying() && !PlayerServiceUtil.getIsHls();
+        layoutTimeShift.setVisibility(show ? View.VISIBLE : View.GONE);
+    }
+
     public void resetScroll() {
         if (pagerArtAndInfo != null) {
             pagerArtAndInfo.setCurrentItem(PAGE_ART, false);
@@ -467,6 +508,7 @@ public class FragmentPlayerFull extends Fragment {
         DataRadioStation station = Utils.getCurrentOrLastStation(requireContext());
         final ShoutcastInfo shoutcastInfo = PlayerServiceUtil.getShoutcastInfo();
         updateSourceAudioInfo(shoutcastInfo);
+        updateTimeShiftVisibility();
 
         if (station != null) {
             final StreamLiveInfo liveInfo = PlayerServiceUtil.getMetadataLive();
@@ -889,8 +931,9 @@ public class FragmentPlayerFull extends Fragment {
                 long behind = PlayerServiceUtil.getBehindLiveMs();
                 fragmentPlayerFull.textBehindLive.setText(behind > 0
                         ? String.format(java.util.Locale.US, "-%d:%02d", behind / 60000, (behind / 1000) % 60)
-                        : "LIVE");
+                        : fragmentPlayerFull.getString(R.string.player_live));
             }
+            fragmentPlayerFull.updateTimeShiftVisibility();
         }
     }
 

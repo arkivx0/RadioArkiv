@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/colorPlayerBackground"
-    android:orientation="vertical">
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
     <View
         android:id="@+id/dividerTop"
@@ -19,27 +24,36 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
-        android:ellipsize="end"
-        android:gravity="center_horizontal"
-        android:maxLines="2"
-        android:minHeight="32dp"
-        android:textAlignment="center"
         android:autoSizeMaxTextSize="22sp"
         android:autoSizeMinTextSize="14sp"
         android:autoSizeTextType="uniform"
+        android:ellipsize="end"
+        android:gravity="center_horizontal"
+        android:maxHeight="48dp"
+        android:maxLines="2"
+        android:minHeight="32dp"
+        android:textAlignment="center"
         tools:text="Info" />
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabArtAndInfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/colorPlayerBackground"
+            app:tabGravity="fill"
+            app:tabIndicatorColor="?attr/colorTabUnderline"
+            app:tabIndicatorHeight="2dp"
+            app:tabMinWidth="0dp"
+            app:tabMode="scrollable"
+            app:tabPaddingEnd="8dp"
+            app:tabPaddingStart="8dp"
+            app:tabSelectedTextColor="?android:attr/textColorPrimary"
+            app:tabTextColor="?android:attr/textColorSecondary" />
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/pagerArtAndInfo"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
-
-        <androidx.viewpager.widget.PagerTabStrip
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="top" />
-    </androidx.viewpager.widget.ViewPager>
+        android:layout_height="200dp"
+        android:minHeight="160dp" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -51,27 +65,36 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
+            android:maxLines="1"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="3:44" />
 
         <TextView
-            android:id="@+id/textViewNetworkUsageInfo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="1mb" />
-
-        <TextView
             android:id="@+id/textViewTimeCached"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:maxLines="1"
+            app:layout_constraintEnd_toStartOf="@+id/textViewNetworkUsageInfo"
+            app:layout_constraintStart_toEndOf="@+id/textViewTimePlayed"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="-10s" />
+
+        <TextView
+            android:id="@+id/textViewNetworkUsageInfo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:ellipsize="end"
+            android:gravity="end"
+            android:maxLines="1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/textViewTimeCached"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_min="48dp"
+            tools:text="1mb" />
 
         <TextView
             android:id="@+id/textViewSourceAudioInfo"
@@ -80,7 +103,9 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="2dp"
             android:layout_marginEnd="16dp"
+            android:ellipsize="end"
             android:gravity="center"
+            android:maxLines="1"
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -101,7 +126,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:contentDescription="@string/image_button_record"
+            android:contentDescription="@null"
+            android:importantForAccessibility="no"
             app:layout_constraintBottom_toTopOf="@+id/divider2"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/divider1"
@@ -152,7 +178,8 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:minHeight="48dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:visibility="gone">
 
         <Button
             android:id="@+id/buttonBack5"
@@ -161,7 +188,7 @@
             android:layout_height="wrap_content"
             android:minWidth="48dp"
             android:minHeight="48dp"
-            android:text="-5s"
+            android:text="@string/player_skip_back_5s"
             app:icon="@drawable/ic_replay5_24dp" />
 
         <TextView
@@ -171,9 +198,9 @@
             android:layout_marginStart="12dp"
             android:layout_marginEnd="12dp"
             android:fontFamily="monospace"
-            android:minHeight="48dp"
             android:gravity="center"
-            android:text="LIVE" />
+            android:minHeight="48dp"
+            android:text="@string/player_live" />
 
         <Button
             android:id="@+id/buttonGoLive"
@@ -182,7 +209,7 @@
             android:layout_height="wrap_content"
             android:minWidth="48dp"
             android:minHeight="48dp"
-            android:text="Live"
+            android:text="@string/player_go_live"
             app:icon="@drawable/ic_golive_24dp" />
     </LinearLayout>
 
@@ -262,4 +289,5 @@
             app:srcCompat="@drawable/ic_star_24dp" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-</LinearLayout>
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

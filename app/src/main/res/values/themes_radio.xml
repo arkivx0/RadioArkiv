@@ -4,6 +4,7 @@
     <color name="skin_omarchy_bg">#1a1b26</color>
     <color name="skin_omarchy_bar">#16161e</color>
     <color name="skin_omarchy_surface">#24283b</color>
+    <color name="skin_omarchy_tag">#414868</color>
     <color name="skin_omarchy_fg">#c0caf5</color>
     <color name="skin_omarchy_accent">#7aa2f7</color>
     <color name="skin_omarchy_muted">#8c94c0</color>
@@ -36,7 +37,7 @@
         <item name="fontFamily">monospace</item>
         <item name="colorPlayerBackground">@color/skin_omarchy_surface</item>
         <item name="colorPlayerShadow">@color/skin_omarchy_bar</item>
-        <item name="tagBackgroundColor">@color/skin_omarchy_surface</item>
+        <item name="tagBackgroundColor">@color/skin_omarchy_tag</item>
         <item name="menuTextColorSelected">@color/skin_omarchy_accent</item>
         <item name="menuTextColorDefault">@color/skin_omarchy_fg</item>
         <item name="menuBottomTextColorSelected">@color/skin_omarchy_accent</item>
@@ -45,6 +46,7 @@
         <item name="swipeDeleteIconColor">@color/skin_omarchy_bg</item>
         <item name="swipeDeleteBackgroundColor">@color/skin_omarchy_danger</item>
         <item name="colorTabUnderline">@color/skin_omarchy_accent</item>
+        <item name="snackBarButtonColor">@color/skin_omarchy_accent2</item>
         <item name="iconsInItemBackgroundColor">@color/skin_omarchy_accent2</item>
         <item name="dialogTheme">@style/DialogTheme.SkinOmarchy</item>
         <item name="alertDialogTheme">@style/AlertTheme.SkinOmarchy</item>
@@ -115,6 +117,7 @@
         <item name="swipeDeleteIconColor">@color/skin_amoled_bg</item>
         <item name="swipeDeleteBackgroundColor">@color/skin_amoled_danger</item>
         <item name="colorTabUnderline">@color/skin_amoled_accent</item>
+        <item name="snackBarButtonColor">@color/skin_amoled_accent2</item>
         <item name="iconsInItemBackgroundColor">@color/skin_amoled_accent2</item>
         <item name="dialogTheme">@style/DialogTheme.SkinAmoled</item>
         <item name="alertDialogTheme">@style/AlertTheme.SkinAmoled</item>
@@ -146,9 +149,9 @@
     <color name="skin_gruvbox_surface">#3c3836</color>
     <color name="skin_gruvbox_fg">#ebdbb2</color>
     <color name="skin_gruvbox_accent">#fabd2f</color>
-    <color name="skin_gruvbox_muted">#a89984</color>
+    <color name="skin_gruvbox_muted">#aea18d</color>
     <color name="skin_gruvbox_accent2">#8ec07c</color>
-    <color name="skin_gruvbox_danger">#fb4934</color>
+    <color name="skin_gruvbox_danger">#fc7b6c</color>
     <style name="MyMaterialTheme.SkinGruvbox" parent="MyMaterialTheme.Dark">
         <item name="android:windowBackground">@color/skin_gruvbox_bg</item>
         <item name="android:itemBackground">@color/skin_gruvbox_bg</item>
@@ -185,6 +188,7 @@
         <item name="swipeDeleteIconColor">@color/skin_gruvbox_bg</item>
         <item name="swipeDeleteBackgroundColor">@color/skin_gruvbox_danger</item>
         <item name="colorTabUnderline">@color/skin_gruvbox_accent</item>
+        <item name="snackBarButtonColor">@color/skin_gruvbox_accent2</item>
         <item name="iconsInItemBackgroundColor">@color/skin_gruvbox_accent2</item>
         <item name="dialogTheme">@style/DialogTheme.SkinGruvbox</item>
         <item name="alertDialogTheme">@style/AlertTheme.SkinGruvbox</item>
@@ -216,7 +220,7 @@
     <color name="skin_catppuccin_surface">#313244</color>
     <color name="skin_catppuccin_fg">#cdd6f4</color>
     <color name="skin_catppuccin_accent">#cba6f7</color>
-    <color name="skin_catppuccin_muted">#9399b2</color>
+    <color name="skin_catppuccin_muted">#959bb3</color>
     <color name="skin_catppuccin_accent2">#89dceb</color>
     <color name="skin_catppuccin_danger">#f38ba8</color>
     <style name="MyMaterialTheme.SkinCatppuccin" parent="MyMaterialTheme.Dark">
@@ -255,6 +259,7 @@
         <item name="swipeDeleteIconColor">@color/skin_catppuccin_bg</item>
         <item name="swipeDeleteBackgroundColor">@color/skin_catppuccin_danger</item>
         <item name="colorTabUnderline">@color/skin_catppuccin_accent</item>
+        <item name="snackBarButtonColor">@color/skin_catppuccin_accent2</item>
         <item name="iconsInItemBackgroundColor">@color/skin_catppuccin_accent2</item>
         <item name="dialogTheme">@style/DialogTheme.SkinCatppuccin</item>
         <item name="alertDialogTheme">@style/AlertTheme.SkinCatppuccin</item>
@@ -286,9 +291,9 @@
     <color name="skin_nord_surface">#3b4252</color>
     <color name="skin_nord_fg">#eceff4</color>
     <color name="skin_nord_accent">#88c0d0</color>
-    <color name="skin_nord_muted">#8a96b3</color>
-    <color name="skin_nord_accent2">#81a1c1</color>
-    <color name="skin_nord_danger">#bf616a</color>
+    <color name="skin_nord_muted">#a5afc5</color>
+    <color name="skin_nord_accent2">#97b2cc</color>
+    <color name="skin_nord_danger">#d89fa4</color>
     <style name="MyMaterialTheme.SkinNord" parent="MyMaterialTheme.Dark">
         <item name="android:windowBackground">@color/skin_nord_bg</item>
         <item name="android:itemBackground">@color/skin_nord_bg</item>
@@ -325,6 +330,7 @@
         <item name="swipeDeleteIconColor">@color/skin_nord_bg</item>
         <item name="swipeDeleteBackgroundColor">@color/skin_nord_danger</item>
         <item name="colorTabUnderline">@color/skin_nord_accent</item>
+        <item name="snackBarButtonColor">@color/skin_nord_accent2</item>
         <item name="iconsInItemBackgroundColor">@color/skin_nord_accent2</item>
         <item name="dialogTheme">@style/DialogTheme.SkinNord</item>
         <item name="alertDialogTheme">@style/AlertTheme.SkinNord</item>
@@ -356,9 +362,9 @@
     <color name="skin_dracula_surface">#44475a</color>
     <color name="skin_dracula_fg">#f8f8f2</color>
     <color name="skin_dracula_accent">#bd93f9</color>
-    <color name="skin_dracula_muted">#9aa3cf</color>
+    <color name="skin_dracula_muted">#aeb6d9</color>
     <color name="skin_dracula_accent2">#8be9fd</color>
-    <color name="skin_dracula_danger">#ff5555</color>
+    <color name="skin_dracula_danger">#ff9a9a</color>
     <style name="MyMaterialTheme.SkinDracula" parent="MyMaterialTheme.Dark">
         <item name="android:windowBackground">@color/skin_dracula_bg</item>
         <item name="android:itemBackground">@color/skin_dracula_bg</item>
@@ -395,6 +401,7 @@
         <item name="swipeDeleteIconColor">@color/skin_dracula_bg</item>
         <item name="swipeDeleteBackgroundColor">@color/skin_dracula_danger</item>
         <item name="colorTabUnderline">@color/skin_dracula_accent</item>
+        <item name="snackBarButtonColor">@color/skin_dracula_accent2</item>
         <item name="iconsInItemBackgroundColor">@color/skin_dracula_accent2</item>
         <item name="dialogTheme">@style/DialogTheme.SkinDracula</item>
         <item name="alertDialogTheme">@style/AlertTheme.SkinDracula</item>
@@ -428,7 +435,7 @@
     <color name="skin_enclave_accent">#5f8fd6</color>
     <color name="skin_enclave_muted">#8b9bb8</color>
     <color name="skin_enclave_accent2">#5f8fd6</color>
-    <color name="skin_enclave_danger">#c0392b</color>
+    <color name="skin_enclave_danger">#cd6256</color>
     <style name="MyMaterialTheme.SkinEnclave" parent="MyMaterialTheme.Dark">
         <item name="android:windowBackground">@color/skin_enclave_bg</item>
         <item name="android:itemBackground">@color/skin_enclave_bg</item>
@@ -465,6 +472,7 @@
         <item name="swipeDeleteIconColor">@color/skin_enclave_bg</item>
         <item name="swipeDeleteBackgroundColor">@color/skin_enclave_danger</item>
         <item name="colorTabUnderline">@color/skin_enclave_accent</item>
+        <item name="snackBarButtonColor">@color/skin_enclave_accent2</item>
         <item name="iconsInItemBackgroundColor">@color/skin_enclave_accent2</item>
         <item name="dialogTheme">@style/DialogTheme.SkinEnclave</item>
         <item name="alertDialogTheme">@style/AlertTheme.SkinEnclave</item>
@@ -536,6 +544,7 @@
         <item name="swipeDeleteIconColor">@color/skin_terminal_bg</item>
         <item name="swipeDeleteBackgroundColor">@color/skin_terminal_danger</item>
         <item name="colorTabUnderline">@color/skin_terminal_accent</item>
+        <item name="snackBarButtonColor">@color/skin_terminal_accent2</item>
         <item name="iconsInItemBackgroundColor">@color/skin_terminal_accent2</item>
         <item name="dialogTheme">@style/DialogTheme.SkinTerminal</item>
         <item name="alertDialogTheme">@style/AlertTheme.SkinTerminal</item>
@@ -570,7 +579,7 @@
     <color name="skin_vintage_accent">#ffb347</color>
     <color name="skin_vintage_muted">#b08a62</color>
     <color name="skin_vintage_accent2">#c9a24a</color>
-    <color name="skin_vintage_danger">#b5452f</color>
+    <color name="skin_vintage_danger">#ca7b6b</color>
     <style name="MyMaterialTheme.SkinVintage" parent="MyMaterialTheme.Dark">
         <item name="android:windowBackground">@color/skin_vintage_bg</item>
         <item name="android:itemBackground">@color/skin_vintage_bg</item>
@@ -607,6 +616,7 @@
         <item name="swipeDeleteIconColor">@color/skin_vintage_bg</item>
         <item name="swipeDeleteBackgroundColor">@color/skin_vintage_danger</item>
         <item name="colorTabUnderline">@color/skin_vintage_accent</item>
+        <item name="snackBarButtonColor">@color/skin_vintage_accent2</item>
         <item name="iconsInItemBackgroundColor">@color/skin_vintage_accent2</item>
         <item name="dialogTheme">@style/DialogTheme.SkinVintage</item>
         <item name="alertDialogTheme">@style/AlertTheme.SkinVintage</item>

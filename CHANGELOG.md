@@ -10,11 +10,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Tag, country and language searches are capped like name search, avoiding crashes on huge result lists
 - Song titles are taken from Vorbis/Ogg comments and ID3 (including HLS ID3), not only ICY metadata, without replacing a good title with an empty one
 - Settings → Alarm "Sleep timer" is now labelled "Alarm play timeout" in English, so it is not confused with the overflow-menu sleep timer
+- The Local stations tab is capped like other catalogue searches, avoiding crashes on huge country lists
 
 ### Changed
 - The full player fits a typical phone screen without scrolling; track history and recordings are extra swipe pages
 - Dark themes use higher-contrast muted text and themed link colors; mini-player and time-shift controls have 48 dp touch targets
 - Release builds are minified with R8 and unused resources are stripped; debug/info logs are omitted from release
+- Voice search may pick a slightly different station when several names are close matches
 
 ## [0.86] - 2023-09-28
 ### Added
