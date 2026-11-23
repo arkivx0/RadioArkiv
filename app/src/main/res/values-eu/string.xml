@@ -270,7 +270,7 @@
 
     <string name="media_route_menu_title">GoogleCast</string>
     <string name="app_id">5A97BAE4</string>
-    <string name="app_name">RadioDroid</string>
+    <string name="app_name">Radio Arkiv</string>
 
     <string name="settings_mpd">Musika erreproduzitzeko demonioa (Music Player Daemon, MPD)</string>
     <string name="settings_mpd_port">MPD-ren ataka</string>
