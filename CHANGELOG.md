@@ -17,6 +17,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Dark themes use higher-contrast muted text and themed link colors; mini-player and time-shift controls have 48 dp touch targets
 - Release builds are minified with R8 and unused resources are stripped; debug/info logs are omitted from release
 - Voice search may pick a slightly different station when several names are close matches
+- The skip-back and Go live row is hidden for HLS streams, where time-shift is not available
 
 ## [0.86] - 2023-09-28
 ### Added

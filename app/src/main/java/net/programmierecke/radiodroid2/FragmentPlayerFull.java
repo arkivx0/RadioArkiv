@@ -462,8 +462,11 @@ public class FragmentPlayerFull extends Fragment {
         if (layoutTimeShift == null) {
             return;
         }
-        boolean show = PlayerServiceUtil.isPlaying() && !PlayerServiceUtil.getIsHls();
-        layoutTimeShift.setVisibility(show ? View.VISIBLE : View.GONE);
+        DataRadioStation current = PlayerServiceUtil.getCurrentStation();
+        boolean supportsTimeShift = current != null
+                && !current.isLocalFile()
+                && !PlayerServiceUtil.getIsHls();
+        layoutTimeShift.setVisibility(supportsTimeShift ? View.VISIBLE : View.GONE);
     }
 
     public void resetScroll() {

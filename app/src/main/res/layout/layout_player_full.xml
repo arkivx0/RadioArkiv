@@ -131,6 +131,7 @@
             app:layout_constraintBottom_toTopOf="@+id/divider2"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/divider1"
+            app:tint="?attr/colorError"
             app:srcCompat="@drawable/ic_start_recording" />
 
         <TextView
@@ -230,6 +231,7 @@
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:tint="?attr/colorError"
             app:srcCompat="@drawable/ic_start_recording" />
 
         <ImageButton
