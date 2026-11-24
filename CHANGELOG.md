@@ -5,6 +5,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [1.0.8] - 2026-11-23
+### Fixed
+- Fixed a startup crash on Android devices.
+
 ## [1.0.7] - 2026-11-23
 ### Fixed
 - Tag, country and language searches are capped like name search, avoiding crashes on huge result lists
